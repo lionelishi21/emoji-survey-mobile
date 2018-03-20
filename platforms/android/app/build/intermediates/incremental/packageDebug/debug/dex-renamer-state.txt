@@ -1,0 +1,4 @@
+#Thu Mar 15 12:06:40 EST 2018
+base.0=/var/www/html/vue/happreply_app/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex

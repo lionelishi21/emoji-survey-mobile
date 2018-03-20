@@ -1,0 +1,18 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "name": "HappyReply",
+  "short_name": "HappyReply",
+  "version": "io.cordova.hellocordova",
+  "description": "Emoji survey app",
+  "author": "Usage Technologies",
+  "icons": [
+    {
+      "src": "static/icon/happyreply.png",
+      "type": "image/png",
+      "sizes": "57x57"
+    }
+  ],
+  "orientation": "landscape",
+  "start_url": "index.html"
+}
