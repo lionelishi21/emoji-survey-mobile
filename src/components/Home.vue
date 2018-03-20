@@ -149,7 +149,7 @@ export default {
       },
       goToSurvey() {
          this.$router.push({name: 'Survey'});
-
+         location.reload();
       },
       showButtonTwo(value) {
         if (value > 0) {

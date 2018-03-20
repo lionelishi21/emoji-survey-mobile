@@ -51,8 +51,8 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
-    addToFeedback (state, feedbacks) {
-      state.feedbacks = feedbacks
+    addToFeedback (state, feedback) {
+      state.feedbacks = feedback
     },
     addToQuestion (state, question) {
       state.questions = question

@@ -13,7 +13,6 @@ import Icon from 'vue-awesome/components/Icon'
 Vue.component('icon', Icon)
 
 import Vue from 'vue'
-import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import BootstrapVue from 'bootstrap-vue'
@@ -35,21 +34,14 @@ import Framework7 from 'framework7'
 import Framework7Vue from 'framework7-vue'
 import Framework7Theme from 'framework7/dist/css/framework7.material.min.css'
 import Framework7ThemeColors from 'framework7/dist/css/framework7.material.colors.min.css'
-
-
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue)
 Vue.use(Framework7)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(BootstrapVue)
-// Vue.http.headers.common['X-CSRF-TOKEN'] = document.getElementsByName('csrf-token')[0].getAttribute('content');
+
 Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
-// if (window.localStorage) {
-//   Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
-// } else {
-//   // can't be used
-// }
 Vue.http.options.root = 'https://happyreply.com/'
 
 export var router = new VueRouter({

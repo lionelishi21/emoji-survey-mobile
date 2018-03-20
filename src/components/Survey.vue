@@ -6,6 +6,7 @@
          <img  v-if="!online" src="static/offline.png"  class="position_offline">
           <div class="question-overlay">
               <div class="inner text-center">
+                {{all_feedback[0]}}
                   <h1>{{all_feedback[0]['feedback_title']}}</h1>
                   <p>{{all_feedback[0]['feedback_desc']}}</p>
                   <ul>
@@ -303,7 +304,7 @@ export default {
       }
     },
     created() {
-      this.initilizeDatabase();
+      this.init();
     },
     components: {
       vueSlider,
@@ -324,7 +325,7 @@ export default {
                 return answer
             }
         },
-      initilizeDatabase() {
+      init() {
         //  this.$router.reload()
         VueOnline.isOnline;
         console.log('creating database')
@@ -332,10 +333,11 @@ export default {
         db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         console.log(db)
         this.db = db
+         this.getSelectedSurvey();
         this.db.transaction(this.queryFeedbackDatabase, this.errorHandler);
         this.db.transaction(this.queryQuestionDatabase, this.errorHandler);
         this.db.transaction(this.queryAnswerDatabase, this.errorHandler);
-        this.getSurveySliders( localStorage.getItem("user_id"));
+        this.getSurveySliders(localStorage.getItem("user_id"));
         this.getSurveyMatrix();
       },
       showSubmit() {
@@ -353,61 +355,62 @@ export default {
         //  localStorage.setItem("user_id", '');
          this.$router.push({name: 'Home'});
       },
-          formSubmit(fb_id) {
-      // created response database
-      this.db.transaction(this.createResponseDatabase, this.errorHandler)
+     formSubmit(fb_id) {
 
-      var mc_question = this.mc_responses
-      for (var key in mc_question) {
-        // check if the property/key is defined in the object itself, not in parent
-        var question_id = key;
-        var answer_id = mc_question[key];
-        this.saveResponses('Multiple Choice', '', answer_id, question_id, fb_id, '', '', 0);
-      }
-      var matrix_question = this.matrix_responses;
-      for (var key in matrix_question) {
-        // check if the property/key is defined in the object itself, not in parent
-        if (matrix_question.hasOwnProperty(key)) {
-          var field = matrix_question[key];
-          console.log(field);
-          var fields = field.split('-');
-          var answer_id = key;
-          var question_id = fields[0];
-          var matrix_id = fields[1];
-          this.saveResponses('Matrix Question', matrix_id, answer_id, question_id, fb_id, '', '', 0);
-        }
-      }
-      var slider_question = this.slider_questions;
-      for (var key in slider_question) {
+        // created response database
+        this.db.transaction(this.createResponseDatabase, this.errorHandler)
 
-        if (slider_question.hasOwnProperty(key)) {
-          // this.mcQuestion(key, slider_question[key]);
+        var mc_question = this.mc_responses
+        for (var key in mc_question) {
+          // check if the property/key is defined in the object itself, not in parent
           var question_id = key;
-          var slider = slider_question[key];
-
-          this.saveResponses('Slider Question', '', '', question_id, fb_id, slider, '', 0);
+          var answer_id = mc_question[key];
+          this.saveResponses('Multiple Choice', '', answer_id, question_id, fb_id, '', '', 0);
         }
-      }
-      var suggesstion_question = this.comments_response;
-      for (var key in suggesstion_question) {
+        var matrix_question = this.matrix_responses;
+        for (var key in matrix_question) {
+          // check if the property/key is defined in the object itself, not in parent
+          if (matrix_question.hasOwnProperty(key)) {
+            var field = matrix_question[key];
+            console.log(field);
+            var fields = field.split('-');
+            var answer_id = key;
+            var question_id = fields[0];
+            var matrix_id = fields[1];
+            this.saveResponses('Matrix Question', matrix_id, answer_id, question_id, fb_id, '', '', 0);
+          }
+        }
+        var slider_question = this.slider_questions;
+        for (var key in slider_question) {
 
-        if (suggesstion_question.hasOwnProperty(key)) {
-          // this.mcQuestion(key, suggesstion_question[key]);
+          if (slider_question.hasOwnProperty(key)) {
+            // this.mcQuestion(key, slider_question[key]);
+            var question_id = key;
+            var slider = slider_question[key];
+
+            this.saveResponses('Slider Question', '', '', question_id, fb_id, slider, '', 0);
+          }
+        }
+        var suggesstion_question = this.comments_response;
+        for (var key in suggesstion_question) {
+
+          if (suggesstion_question.hasOwnProperty(key)) {
+            // this.mcQuestion(key, suggesstion_question[key]);
+            var question_id = key;
+            var comments = suggesstion_question[key];
+
+            this.saveResponses(comments, '', '', question_id, fb_id, '', '', 0);
+          }
+        }
+        var range_question = this.range_questions;
+        for (var key in range_question) {
           var question_id = key;
-          var comments = suggesstion_question[key];
+          var answer_id = range_question[key];
 
-          this.saveResponses(comments, '', '', question_id, fb_id, '', '', 0);
+          this.saveResponses('Range Questions', '', answer_id, question_id, fb_id, '', '', 0);
         }
-      }
-      var range_question = this.range_questions;
-      for (var key in range_question) {
-        var question_id = key;
-        var answer_id = range_question[key];
-
-        this.saveResponses('Range Questions', '', answer_id, question_id, fb_id, '', '', 0);
-      }
-      this.$router.push({name: 'Survey'});
-      location.reload();
+        this.$router.push({name: 'Survey'});
+        location.reload();
     },
    changeEmoji(value){
         if  (value == 1) {
