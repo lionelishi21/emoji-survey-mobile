@@ -142,6 +142,7 @@ export default {
         }
 }
 </script>
+
 <style lang="css" scoped>
 /*---------------------------------------------*/
 input {
@@ -200,7 +201,7 @@ iframe {
 [ Utility ]*/
 .txt1 {
   font-family: Montserrat-Regular;
-  font-size: 16px;
+  font-size: 14px;
   color: #cccccc;
   line-height: 1.4;
 }
@@ -260,8 +261,10 @@ iframe {
 }
 
 .wrap-login100 {
+  background: #fff;
+  border-radius: 1px;
+  padding: 25px;
   width: 390px;
-  background: transparent;
 }
 
 
@@ -319,7 +322,7 @@ iframe {
 
   display: block;
   width: 100%;
-  background: #fff;
+  background: #f2f2f2;
   height: 50px;
   border-radius: 25px;
   padding: 0 30px 0 53px;

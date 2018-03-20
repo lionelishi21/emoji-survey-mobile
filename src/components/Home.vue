@@ -1,80 +1,95 @@
 <template>
-<div>
+    <div id="home-preview-container">
+        <!-- Sidebar -->
+        <section id="sidebar">
+            <div class="logo text-center">
+                <img src="static/logo/logo.png" alt="logo">
+            </div>
+            <div class="inner">
+                <nav>
+                    <ul>
+                        <li class="active"><a  @click="gotToSurvey()">Survey</a></li>
+                        <li><a @click="goToResponse()">Response</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section>
 
-  <!-- Sidebar -->
-    <section id="sidebar">
-      <div class="inner">
-        <nav>
-          <ul>
-            <li class="active"><a  @click="gotToSurvey()">Survey</a></li>
-            <li><a @click="goToResponse()">Response</a></li>
-          </ul>
-        </nav>
-      </div>
-    </section>
-
-   <!-- Wrapper -->
-	 <div id="wrapper" class="center-bg" v-if="showSurveyTabHome()">
-      <div class="row">
-          <h2 class="h1_color_primary">Welcome to HappyReply</h2>
-      </div>
-      <div class="row">
-          <div class="logo">
-            <img src="static/logo/logo.png" alt="logo">
-          </div>
-      </div>
-        <div class="content_box_sm">
-            <div class="row" v-if="all_feedback[0]">
-                  <div class="question question--numeric" @click="goToSurvey()">
-                    <div class="question__text-container">
-                      <p class="question__title">{{all_feedback[0]['feedback_title']}}</p>
-                      <p class="question__text">{{all_feedback[0]['feedback_desc']}}</p>
-                      <p class="question__answers">Questions: {{question_count}}</p>
+        <!-- Wrapper -->
+        <div id="wrapper" class="center-bg" v-if="showSurveyTabHome()">
+            <div class="row text-center pt-4">
+                <div class="col-md-12 pt-5">
+                    <h1 class="h1_color_primary text-uppercase text-white mb-0">Welcome</h1>
+                    <h3 class="text-white fw-200">The panels below displays a list of all your surveys along with the total questions within each.</h3>
+                    <h3 class="fw-300">Select a survey panel of your choosing to begin the survey.</h3>
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-12">
+                    <div class="logo text-center">
+                        <img src="static/logo/logo.png" alt="logo">
                     </div>
-                  </div>
+                </div>
+            </div> -->
+            <div class="content_box_sm">
+                <div class="row" v-if="all_feedback[0]">
+                    <div class="question question--numeric" @click="goToSurvey()">
+                        <div class="question__text-container pt-3">
+                        <p class="question__title">{{all_feedback[0]['feedback_title']}}</p>
+                        <p class="question__text">{{all_feedback[0]['feedback_desc']}}</p>
+                        <p class="question__answers">Questions: {{question_count}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div v-else class="row p-t-20 text-center">
+                    <div class="col-md-12">
+                        <button @click="loadSurveys()" class="button">Load Survey</button>
+                    </div>
+                </div>
             </div>
-            <div v-else class="row p-t-20">
-                <button @click="loadSurveys()" class="button">Load Survey</button>
+        </div>
+
+        <div id="wrapper" class="center-bg" v-else>
+            <div class="row text-center pt-4">
+                <div class="col-md-12 pt-5">
+                    <h1 class="h1_color_primary text-uppercase text-white">Welcome</h1>
+                    <h3 class="text-white fw-200">The panels below displays a list of all your survey responses</h3>
+                </div>
             </div>
-        </div>
-			</div>
-      	 <div id="wrapper" class="center-bg" v-else>
-        <div class="row">
-          <h2 class="h1_color_primary">Welcome to HappyReply</h2>
-        </div>
-        <div class="row">
-          <div class="logo">
-              <img src="static/logo/logo.png" alt="logo">
-          </div>
-        </div>
+            <!-- <div class="row">
+                <div class="col-md-12">
+                    <div class="logo text-center">
+                        <img src="static/logo/logo.png" alt="logo">
+                    </div>
+                </div>
+            </div> -->
             <OfflineIndicator message="Oh no, you're offline :("></OfflineIndicator>
-        <div class="content_box_sm">
-            <div class="row" v-if="all_feedback[0]">
-                  <div class="question question--numeric">
-                    <div class="question__text-container">
-                      <p class="question__title">{{all_feedback[0]['feedback_title']}}</p>
-                      <p class="question__text">{{all_feedback[0]['feedback_desc']}}</p>
-                      <p class="question__answers">Responses: {{response_count}}</p>
+            <div class="content_box_sm">
+                <div class="row" v-if="all_feedback[0]">
+                    <div class="question question--numeric">
+                        <div class="question__text-container pt-3">
+                        <p class="question__title">{{all_feedback[0]['feedback_title']}}</p>
+                        <p class="question__text">{{all_feedback[0]['feedback_desc']}}</p>
+                        <p class="question__answers">Responses: {{response_count}}</p>
+                        </div>
                     </div>
-                  </div>
-            </div>
-            <div class="row p-t-20">
-                 <vue-ladda
-                   v-if="online"
-                   @click="postResponseOffline()"
-                    class="button"
-                   :loading="button.loading"
-                   :data-style="button.dataStyle"
-                   :progress="button.progress"
-                   @click.prevent="submitForm()">
-                   Post Responses
-                 </vue-ladda>
-                <button v-else  @click="postResponseOffline()" class="button" disabled>Post Responses</button>
+                </div>
+                <div class="row p-t-20">
+                    <vue-ladda
+                    v-if="online"
+                    @click="postResponseOffline()"
+                        class="button"
+                    :loading="button.loading"
+                    :data-style="button.dataStyle"
+                    :progress="button.progress"
+                    @click.prevent="submitForm()">
+                    Post Responses
+                    </vue-ladda>
+                    <button v-else  @click="postResponseOffline()" class="button" disabled>Post Responses</button>
+                </div>
             </div>
         </div>
-			</div>
-
-</div>
+    </div>
 </template>
 <script>
 import Feedback from '../databases/feedback';
@@ -182,16 +197,31 @@ export default {
     }
 }
 </script>
+
 <style>
-.question {
-  font-family: 'Open Sans', sans-serif;
-  width: 30%;
-  min-height: 50px;
-  background: white;
-  /* padding: 35px 55px; */
-  box-shadow: 3px 0px 8px rgba(0, 0, 0, 0.07);
-  border-radius: 2px;
+#home-preview-container {
+    background-image: url('/static/survey-themes/breeze-cotton.jpg');
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
+
+.question {
+    font-family: 'Open Sans', sans-serif;
+    width: 30%;
+    min-height: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 3px 0px 8px rgba(0, 0, 0, 0.07);
+    border-radius: 2px;
+    cursor: pointer;
+    margin-left: 2%;
+}
+
+.question:hover {
+    background: white;
+}
+
 .question__title, .question__text, .question__answers {
   font-size: 1rem;
   font-weight: bold;
@@ -247,8 +277,22 @@ export default {
   /* width: 90%; */
 }
 
-.sidebar {
- background: #000 !important;
+#sidebar {
+ /* background: #000 !important; */
+    background: rgba(255, 255, 255, 0.9) !important;
+    width: 16em !important;
+}
+
+#sidebar > .inner {
+    min-height: 50vh !important;
+}
+
+#sidebar nav a {
+    color: rgba(0, 0, 0, 0.5) !important
+}
+
+#sidebar nav a:before {
+    background:#2196f3 !important;
 }
 
 .bg-white {
@@ -256,7 +300,7 @@ export default {
 }
 .center-bg {
   height: 100vh;
-  background: #E4F1FE;
+  /* background: #E4F1FE; */
   /* -webkit-box-pack: center;
    -ms-flex-pack: center;
    justify-content: center;
@@ -284,9 +328,9 @@ export default {
   /* background: #F2F1EF; */
 }
 
-.button {
+/* .button {
   background: red !important;
-}
+} */
 
 .h1_color_primary {
   color: #000
