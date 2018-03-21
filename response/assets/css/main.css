@@ -2249,7 +2249,7 @@
 		}
 
 		@media screen and (max-width: 980px) {
-      .features {
+      		.features {
 				height: 50%;
 			}
 			/* .features {
@@ -3879,9 +3879,13 @@
 			}
 
 			.question_content {
-				height: 350px;
+				height: 400px;
 				overflow-y: scroll;
 				overflow-x: hidden;
+			}
+
+			.nextPrevious{
+				margin-top: 30px;
 			}
 
 		}
@@ -3972,7 +3976,7 @@
 
 .nextPrevious{
 
-	margin-top: 100px;
+	margin-top: 50px;
 }
 
 
@@ -4021,7 +4025,7 @@
 		width: 65px;
 	}
 	.nextPrevious {
-		margin-top: 35px;
+		margin-top: 15px;
 	}
 
 	.question_content {
@@ -4045,6 +4049,14 @@
 
 	label.matrix_ques {
 		margin: 0.4em 0 0 0;
+	}
+}
+
+@media screen and (max-width: 1024px) {
+	.question_content {
+		height: 300px;
+		overflow-y: scroll;
+		overflow-x: hidden;
 	}
 }
 

@@ -346,7 +346,6 @@ export default {
          this.$router.push({name: 'Home'});
       },
      formSubmit(fb_id) {
-
         // created response database
         this.db.transaction(this.createResponseDatabase, this.errorHandler)
 
