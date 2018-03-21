@@ -77,6 +77,9 @@ export const store = new Vuex.Store({
     },
     countResponse (state, count) {
       state.count_responses = count
+    },
+    countMatrix(state, count){
+      state.count_matrixs = count
     }
   }
 })

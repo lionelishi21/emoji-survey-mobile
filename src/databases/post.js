@@ -30,14 +30,54 @@ export default {
     },
     postResponse (response, answer_id, question_id, feedback_id, matrix, slider) {
       console.log('saving to server')
-      this.$http.get(
-        'https://happyreply.com/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
+      this.$http
+        .get('https://happyreply.com/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
         .then(response => {
           this.success = true;
           this.connectionStatus = 'true';
         }, response => {
           this.success = false;
         })
+    },
+    newSaveResponse (multpleChoice, matrix, slider, range, comments, fbId) {
+      var check = VueOnline.isOnline;
+      if (check == true) {
+        this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId)
+      }
+    },
+    newPostResponse (mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId) {
+      var action = 'https://happyreply.com/post-survey-responses2'
+      var csrfToken = $('meta[name=csrf-token]').attr('content')
+
+      this.$http.post(action, { params:
+          {
+            feedback_id: fbId,
+            mc: mcArray,
+            matrix: matrixArray,
+            slider: sliderArray,
+            range: rangeArray,
+            comment: commentArray } },
+         {
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        })
+        .then(function (data) {
+          console.log(data)
+          // this.button.loading = false
+        })
+        .catch(function (data, status, request) {
+          console.log(data);
+          console.log(status);
+          console.log(request);
+
+          // var errors = data.data;
+          // if (errors != null) {
+
+          // }
+          // this.formErrors = errors;
+          // this.button.loading = false;
+        });
 
     },
     queryResponsesDatabase (tx) {
@@ -54,6 +94,7 @@ export default {
         var feedback_id = results.rows.item(i).feedback_id;
         var matrix = results.rows.item(i).matrix;
         var slider = results.rows.item(i).slider;
+
         var res = {
           response: results.rows.item(i).response,
           answer_id: results.rows.item(i).answer_id,
