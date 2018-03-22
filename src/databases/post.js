@@ -96,6 +96,7 @@ export default {
     newPostResponse (mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId) {
       var action = 'https://happyreply.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
+      this.button.loading = true;
 
       this.$http.post(action, { params:
           {
@@ -112,19 +113,11 @@ export default {
         })
         .then(function (data) {
           console.log(data)
-          // this.button.loading = false
+          location.reload();
+          this.button.loading = false
         })
         .catch(function (data, status, request) {
-          console.log(data);
-          console.log(status);
-          console.log(request);
-
-          // var errors = data.data;
-          // if (errors != null) {
-
-          // }
-          // this.formErrors = errors;
-          // this.button.loading = false;
+          this.button.loading = false;
         });
 
     },
