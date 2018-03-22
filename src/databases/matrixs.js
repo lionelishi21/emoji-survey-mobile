@@ -36,8 +36,9 @@ export default {
         var res = { id: results.rows.item(i).id, matrix: results.rows.item(i).matrix, emoji: results.rows.item(i).emoji, question_id: results.rows.item(i).question_id }
         resultsArray.push(res);
       }
+
       this.$store.commit('addToMatrix', resultsArray)
-      this.$store.commit('countMatrix', resultsArray)
+      this.$store.commit('countMatrix', len)
     }
   }
 }
