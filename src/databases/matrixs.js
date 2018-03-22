@@ -11,6 +11,7 @@ export default {
             this.saveMatrixs(data[key]['id'], data[key]['emoji'], data[key]['matrix'], data[key]['question_id'])
           }
         })
+      this.button.loading = false;
     },
     getSurveyMatrix () {
       this.db.transaction(this.queryMatrixDatabase, this.errorHandler)

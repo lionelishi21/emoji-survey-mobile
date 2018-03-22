@@ -45,7 +45,12 @@
                             <div class="nextPrevious">
                                 <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
                                 <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                                <a v-if="key == all_questions.length-1" href="#submitSurvey" class="button pull-right">Submit</a>
+                                <a v-if="key == all_questions.length-1"
+
+                                   @click="goTSubmit()"
+                                   class="button pull-right">
+                                  Submit
+                                </a>
                                 <a v-else @click="getNextPage(key)" class="button pull-right">Next Questions</a>
                             </div>
                         </div>
@@ -97,7 +102,7 @@
                     <div class="nextPrevious">
                             <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
                             <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                            <a v-if="key == all_questions.length-1" href="#submitSurvey" class="button pull-right">Submit</a>
+                            <a v-if="key == all_questions.length-1"  @click="goTSubmit()" class="button pull-right">Submit</a>
                             <a v-else  @click="getNextPage(key)" class="button pull-right">Next Questions</a>
                     </div>
                  </div>
@@ -114,7 +119,7 @@
                           <div class="nextPrevious">
                                <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
                                     <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                                    <a v-if="key == all_questions.length-1" href="#submitSurvey" class="button pull-right">Submit</a>
+                                    <a v-if="key == all_questions.length-1"  @click="goTSubmit()" class="button pull-right">Submit</a>
                                     <a v-else  @click="getNextPage(key)" class="button pull-right">Next Questions</a>
                           </div>
                       </div>
@@ -138,7 +143,7 @@
                             <div class="nextPrevious">
                                 <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
                                 <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                                <a v-if="key == all_questions.length-1" href="#submitSurvey" class="button pull-right">Submit</a>
+                                <a v-if="key == all_questions.length-1"  @click="goTSubmit()" class="button pull-right">Submit</a>
                                 <a v-else  @click="getNextPage(key)" class="button pull-right">Next Questions</a>
                           </div>
                       </div>
@@ -164,7 +169,7 @@
                             <div class="nextPrevious">
                                 <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
                                 <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                                 <a v-if="key == all_questions.length-1" href="#submitSurvey" class="button pull-right">Submit</a>
+                                 <a v-if="key == all_questions.length-1"  @click="goTSubmit()" class="button pull-right">Submit</a>
                                 <a v-else=""  @click="getNextPage(key)" class="button pull-right">Next Questions</a>
                             </div>
                       </div>
@@ -177,13 +182,14 @@
                 <div class="inner text-center">
                     <h1>Congratulations on making it this far !</h1>
                     <p>
+                      {{this.mc_responses}}
                         Click button below to submit your survey results
                     </p>
                   <vue-ladda
-                  class="button beginButton"
-                   :loading="button.loading"
-                   :data-style="button.dataStyle"
-                   :progress="button.progress"
+                   class="button beginButton"
+                   :loading="this.button.loading"
+                   :data-style="this.button.dataStyle"
+                   :progress="this.button.progress"
                    @click="formSubmit(all_feedback[0]['feedback_id'])">
                    Submit Survey
                  </vue-ladda>
@@ -220,13 +226,6 @@ export default {
 			return {
         step: -1,
         feedback_title: '',
-      //   survey: {
-      //     survey: null,
-      //     sliders: {},
-      //     matrixs: null,
-      //     answers: {},
-      //     questions: null,
-			//  },
         sliderValue: 50,
         success: false,
         amount_answer: '',
@@ -311,6 +310,7 @@ export default {
       vueSlider,
       swiper,
       swiperSlide,
+      'vue-ladda': VueLadda,
       RangeSlider
     },
   	methods: {
@@ -318,6 +318,10 @@ export default {
          // this.db.transaction(this.queryResponsesDatabase, this.errorHandler);
          // this.db.transaction(this.dropResponsesDatabase, this.errorHandler);
          console.log(this.connectionStatus);
+      },
+      goTSubmit(){
+        alert('wroking')
+        windows.location('#submitSurvey');
       },
       modifyAnswers(answer) {
             if (answer == '') {
@@ -358,12 +362,35 @@ export default {
       },
      formSubmit(fbId) {
       // created response database
-       this.db.transaction(this.createResponseDatabase, this.errorHandler)
-       this.newSaveResponse(this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, fbId)
+      this.button.loading = true;
+       var check = this.checkForNull();
+       if (check) {
+          this.db.transaction(this.createResponseDatabase, this.errorHandler)
+          this.newSaveResponse(this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, fbId)
+       }
+      this.button.loading = false;
+
+    },
+    isEmpty(obj) {
+      for(var key in obj) {
+          if(obj.hasOwnProperty(key))
+              return false;
+      }
+      return true;
+    },
+
+    checkForNull() {
 
 
-        this.$router.push({name: 'Survey'});
-        location.reload();
+      if (
+      this.isEmpty(this.mc_responses) === true &&
+      this.isEmpty(this.matrix_responses) === true &&
+      this.isEmpty(this.slider_questions) === true &&
+      this.isEmpty(this.range_questions) === true &&
+      this.isEmpty(this.comments_response) === true) {
+        return false;
+      }
+      return true;
     },
    changeEmoji(value){
         if  (value == 1) {

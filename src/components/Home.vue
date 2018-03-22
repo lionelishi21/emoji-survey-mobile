@@ -1,5 +1,5 @@
 <template>
-    <div id="home-preview-container">
+    <pull-to :top-load-method="refresh" id="home-preview-container">
         <!-- Sidebar -->
         <section id="sidebar">
             <div class="logo text-center">
@@ -9,7 +9,7 @@
                 <nav>
                     <ul>
                         <li class="active"><a  @click="gotToSurvey()">Survey</a></li>
-                        <li><a @click="goToResponse()">Response</a></li>
+                        <li><a @click="goToResponse(all_feedback[0]['feedback_id'])">Response</a></li>
                     </ul>
                 </nav>
             </div>
@@ -43,7 +43,14 @@
                 </div>
                 <div v-else class="row p-t-20 text-center">
                     <div class="col-md-12">
-                        <button @click="loadSurveys()" class="button">Load Survey</button>
+                         <vue-ladda
+                           class="button"
+                          :loading="button.loading"
+                          :data-style="button.dataStyle"
+                          :progress="button.progress"
+                          @click="loadSurveys()">
+                          Load Survey
+                        </vue-ladda>
                     </div>
                 </div>
             </div>
@@ -75,21 +82,20 @@
                     </div>
                 </div>
                 <div class="row p-t-20">
-                    <vue-ladda
-                    v-if="online"
-                    @click="postResponseOffline()"
-                        class="button"
-                    :loading="button.loading"
-                    :data-style="button.dataStyle"
-                    :progress="button.progress"
-                    @click.prevent="submitForm()">
-                    Post Responses
-                    </vue-ladda>
-                    <button v-else  @click="postResponseOffline()" class="button" disabled>Post Responses</button>
+                  <vue-ladda
+                      v-if="online"
+                      @click="postResponseOffline()"
+                      class="button"
+                      :loading="loadButton.loading"
+                      :data-style="loadButton.dataStyle"
+                      :progress="loadButton.progress">
+                      Post Responses
+                  </vue-ladda>
+                  <button v-else class="button" disabled>Post Response</button>
                 </div>
             </div>
         </div>
-    </div>
+    </pull-to>
 </template>
 <script>
 import Feedback from '../databases/feedback';
@@ -102,11 +108,14 @@ import { OfflineIndicator, VueOnline } from 'vue-online'
 import { mapGetters } from 'vuex';
 import VueLadda from 'vue-ladda'
 import Snackbar from 'vue-snackbar'
+import PullTo from 'vue-pull-to'
+
 
 export default {
   mixins: [Feedback, Question, Answer, Matrix, Slider, Post],
     data() {
       return {
+        feedback_id: "",
         database: 'SurveyDb',
         version: '1.0',
         dbDisplay: 'ServeyDatabase',
@@ -117,7 +126,12 @@ export default {
             loading: false,
             'dataStyle': 'expand-left',
             progress: 0,
-          }
+        },
+        loadButton: {
+          loading: false,
+          'dataStyle': 'expand-left',
+          progress: 0
+        }
       }
     },
     created(){
@@ -128,6 +142,7 @@ export default {
     components: {
       OfflineIndicator,
      'vue-ladda': VueLadda,
+      PullTo
     },
     computed: {
       ...mapGetters([
@@ -149,11 +164,16 @@ export default {
         this.db = db
 
       },
+      refresh(loaded) {
+
+      },
       loadSurveys() {
+        this.button.loading = true;
         this.getSelectedSurvey();
         this.getSurveyQuestionCount();
         this.getSurveyAnswersCount();
         this.getSurveyMatrixCount();
+        this.button.loading = true;
       },
       showButton(value) {
         if (value != "") {
@@ -187,11 +207,11 @@ export default {
           return false;
         }
       },
-      goToResponse() {
+      goToResponse(fbId) {
+        this.feedback_id = fbId;
         this.tab_state = 'response'
       },
       gotToSurvey() {
-
         this.tab_state = 'home'
       }
     }
@@ -199,6 +219,9 @@ export default {
 </script>
 
 <style>
+.button {
+background: #CF000F !important;
+}
 #home-preview-container {
     background-image: url('/static/survey-themes/breeze-cotton.jpg');
     background-attachment: fixed;

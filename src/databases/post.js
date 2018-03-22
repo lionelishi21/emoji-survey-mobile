@@ -9,7 +9,7 @@ export default {
       this.db.transaction(this.queryResponsesDatabase, this.nullHandler)
     },
     createDatabase (tx) {
-      tx.executeSql('CREATE TABLE IF NOT EXISTS responses (id INTEGER PRIMARY KEY AUTOINCREMENT, response TEXT, answer_id INTEGER, matrix INTEGER, question_id INTEGER, feedback_id INTEGER, user TEXT, sync INTEGER, slider INTEGER )', [], this.nullHandler, this.errorHandler)
+      tx.executeSql('CREATE TABLE IF NOT EXISTS responses (id INTEGER PRIMARY KEY AUTOINCREMENT, response TEXT, answer_id INTEGER, matrix INTEGER, question_id INTEGER, feedback_id INTEGER, user TEXT, question_type INTEGER, slider INTEGER )', [], this.nullHandler, this.errorHandler)
     },
     dropResponsesDatabase (tx) {
       console.log('dropping response table after upload to database')
@@ -96,7 +96,9 @@ export default {
     newPostResponse (mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId) {
       var action = 'https://happyreply.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
-      this.button.loading = true;
+      // this.loadButton.loading = true
+      // this.button.loading = true;
+
 
       this.$http.post(action, { params:
           {
@@ -113,11 +115,14 @@ export default {
         })
         .then(function (data) {
           console.log(data)
+          this.$router.push({ name: 'Survey' });
           location.reload();
-          this.button.loading = false
+          // this.loadButton.loading = false
+          // this.button.loading = false
         })
         .catch(function (data, status, request) {
-          this.button.loading = false;
+          // this.loadButton.loading = false
+          // this.button.loading = false;
         });
 
     },
@@ -126,10 +131,10 @@ export default {
     },
     renderResponses (tx, results) {
       var len = results.rows.length;
-      var resultsArray = [];
+      var resultsArray = []
 
       for (var i = 0; i < len; i++) {
-        var response = results.rows.item(i).response;
+        var response = results.rows.item(i).response
         var answer_id = results.rows.item(i).answer_id;
         var question_id = results.rows.item(i).question_id;
         var feedback_id = results.rows.item(i).feedback_id;
@@ -144,7 +149,8 @@ export default {
           matrix: results.rows.item(i).matrix,
           slider: results.rows.item(i).slider
         }
-        resultsArray.push(res);
+
+        resultsArray.push(res)
         // this.postResponse(response, answer_id, question_id, feedback_id, matrix, slider);
       }
       this.$store.commit('addToResponse', resultsArray)
@@ -161,19 +167,23 @@ export default {
         }, response => {
           this.success = false;
         })
-
     },
     postResponseOffline () {
-      this.button.loading = true
+      this.loadButton.loading = true
       this.db.transaction(this.queryResponsesDatabase1, this.errorHandler)
+      // this.loadButton.loading = false
     },
     queryResponsesDatabase1 (tx) {
       tx.executeSql('SELECT * FROM responses;', [], this.renderResponses1, this.errorHandler)
-      // this.db.transaction(this.dropResponsesDatabase, this.nullHandler)
     },
     renderResponses1 (tx, results) {
       var len = results.rows.length;
       var resultsArray = [];
+      var mcArray = [];
+      var matrixArray = [];
+      var sliderArray = [];
+      var rangeArray = [];
+      var commentArray = [];
 
       for (var i = 0; i < len; i++) {
         var response = results.rows.item(i).response;
@@ -182,6 +192,57 @@ export default {
         var feedback_id = results.rows.item(i).feedback_id;
         var matrix = results.rows.item(i).matrix;
         var slider = results.rows.item(i).slider;
+
+        var res = {
+          response: results.rows.item(i).response,
+          answer_id: results.rows.item(i).answer_id,
+          question_id: results.rows.item(i).question_id,
+          feedback_id: results.rows.item(i).feedback_id,
+          matrix: results.rows.item(i).matrix,
+          slider: results.rows.item(i).slider
+        }
+
+        /**Save Multiple choice answer in array */
+        if (results.rows.item(i).question_type === 1) {
+          var mcResults = {
+            question_id: results.rows.item(i).answer_id
+          }
+          mcArray.push(mcResults)
+        }
+
+        /** Save Matrix answer in array */
+        if (results.rows.item(i).question_type === 2) {
+          var matrixResults = {
+            answer_id: question_id + '-' + matrix
+          }
+          matrixArray.push(matrixResults)
+        }
+
+        /**Save Comment Answers */
+        if (results.rows.item(i).question_type === 3) {
+          var commentResults = {
+            question_id: response
+          }
+          commentArray.push(commentResults)
+        }
+
+        /**Save slider question */
+        if (results.rows.item(i).question_type === 4) {
+          var sliderResults = {
+            question_id: slider
+          }
+
+          sliderArray.push(sliderResults)
+        }
+
+        /**Save range answer in array */
+        if (results.rows.item(i).question_type === 5) {
+          var rangeResults = {
+            question_id: results.rows.item(i).answer_id
+          }
+          rangeArray.push(rangeResults)
+        }
+
         var res = {
           response: results.rows.item(i).response,
           answer_id: results.rows.item(i).answer_id,
@@ -191,11 +252,10 @@ export default {
           slider: results.rows.item(i).slider
         }
         resultsArray.push(res);
-        this.postResponse1(response, answer_id, question_id, feedback_id, matrix, slider);
+        this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, this.feedback_id);
       }
       this.db.transaction(this.dropResponsesDatabase, this.nullHandler);
-      this.button.loading = true
-      this.$swal('Response was successfully send to the server');
+      // this.$swal('Response was successfully send to the server');
     }
   }
 }
