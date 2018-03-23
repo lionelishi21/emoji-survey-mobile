@@ -1,5 +1,8 @@
 <template>
-    <pull-to :top-load-method="refresh" id="home-preview-container">
+    <pull-to
+     :top-load-method="refresh"
+     :top-config="config"
+    id="home-preview-container">
         <!-- Sidebar -->
         <section id="sidebar">
             <div class="logo text-center">
@@ -115,9 +118,20 @@ export default {
   mixins: [Feedback, Question, Answer, Matrix, Slider, Post],
     data() {
       return {
+        config: {
+          pullText: '..Loading', // The text is displayed when you pull down
+          triggerText: '..load', // The text that appears when the trigger distance is pulled down
+          loadingText: '... now loadinf', // The text in the load
+          doneText: '...survey refreshed', // Load the finished text
+          failText: '... cant load no internet', // Load failed text
+          loadedStayTime: 400, // Time to stay after loading ms
+          stayDistance: 50, // Trigger the distance after the refresh
+          triggerDistance: 70 // Pull down the trigger to trigger the distance
+        },
         feedback_id: "",
         database: 'SurveyDb',
         version: '1.0',
+         pic_url: 'static/survey-themes/people-image.png',
         dbDisplay: 'ServeyDatabase',
         maxSize: 1105535,
         db: "",
@@ -138,6 +152,7 @@ export default {
       this.initilizeDatabase();
       this.createResponseDatabase();
       this.getSurveyResponse();
+
     },
     components: {
       OfflineIndicator,
@@ -165,7 +180,7 @@ export default {
 
       },
       refresh(loaded) {
-
+          location.reload();
       },
       loadSurveys() {
         this.button.loading = true;
@@ -220,10 +235,14 @@ export default {
 
 <style>
 .button {
-background: #CF000F !important;
+  background: #CF000F !important;
+  		font-weight: bold;
+		height: calc(4.75em + 2px) !important;
+		letter-spacing: 0.25em !important;
+		line-height: 4.75em !important;
 }
 #home-preview-container {
-    background-image: url('/static/survey-themes/breeze-cotton.jpg');
+    background: url('../../static/survey-themes/breeze-cotton.jpg');
     background-attachment: fixed;
     background-position: center;
     background-size: cover;

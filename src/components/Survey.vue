@@ -329,7 +329,7 @@ export default {
             message: 'Please select at lease one answer to go any further',
             type: 'info',
             customClass: 'simple_background',
-            customIconUrl: '/static/disappointed.svg',
+            customIconUrl: 'static/disappointed.svg',
             onClose: this.onClose
           }
           this.$refs.simplert.openSimplert(obj)
@@ -587,35 +587,35 @@ export default {
         z-index: 1000;
     }
     .emo_1 .vue-slider .vue-slider-dot {
-        background: url('/static/disappointed.svg') no-repeat !important;
+        background: url('../../static/disappointed.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
     }
 
     .emo_2 .vue-slider .vue-slider-dot {
-        background: url('/static/worried.svg') no-repeat !important;
+        background: url('../../static/worried.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
     }
 
     .emo_3 .vue-slider .vue-slider-dot {
-        background: url('/static/neutral_face.svg') no-repeat !important;
+        background: url('../../static/neutral_face.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
     }
 
     .emo_4 .vue-slider .vue-slider-dot {
-        background: url('/static/smiling.svg') no-repeat !important;
+        background: url('../../static/smiling.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
     }
 
     .emo_5 .vue-slider .vue-slider-dot {
-        background: url('/static/veryhappy.svg') no-repeat !important;
+        background: url('../../static/veryhappy.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
