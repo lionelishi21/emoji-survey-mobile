@@ -1,5 +1,14 @@
 import { VueOnline } from 'vue-online'
 export default {
+  data(){
+    return {
+      button: {
+        loading: false,
+        'dataStyle': 'expand-left',
+        progress: 0,
+      },
+    }
+  },
   methods: {
     createResponseDatabase () {
       this.db.transaction(this.createDatabase, this.nullHandler)
@@ -97,7 +106,7 @@ export default {
       var action = 'https://happyreply.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
       // this.loadButton.loading = true
-      // this.button.loading = true;
+      this.button.loading = true;
 
 
       this.$http.post(action, { params:
@@ -114,17 +123,27 @@ export default {
           }
         })
         .then(function (data) {
-          console.log(data)
-          this.$router.push({ name: 'Survey' });
-          location.reload();
+          // let obj = {
+          //   title: 'Thank for your feedback we love you!',
+          //   type: 'info',
+          //   customIconUrl: '/static/veryhappy.svg',
+          //   onClose: this.onClose
+          // }
+          // this.$refs.simplert.openSimplert(obj)
+
+          setTimeout(this.afterSubmit(), 5000)
           // this.loadButton.loading = false
-          // this.button.loading = false
+          this.button.loading = false
         })
         .catch(function (data, status, request) {
           // this.loadButton.loading = false
-          // this.button.loading = false;
+          this.button.loading = false;
         });
 
+    },
+    afterSubmit (){
+      this.$router.push({ name: 'Survey' })
+      location.reload()
     },
     queryResponsesDatabase (tx) {
       tx.executeSql('SELECT * FROM responses;', [], this.renderResponses, this.errorHandler)

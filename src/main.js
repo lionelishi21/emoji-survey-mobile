@@ -27,6 +27,7 @@ import 'font-awesome/css/font-awesome.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import auth from './auth/auth'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Notifications from 'vue-notification'
 
 // Import F7
 /* eslint-disable no-unused-vars */
@@ -34,12 +35,14 @@ import Framework7 from 'framework7'
 import Framework7Vue from 'framework7-vue'
 import Framework7Theme from 'framework7/dist/css/framework7.material.min.css'
 import Framework7ThemeColors from 'framework7/dist/css/framework7.material.colors.min.css'
+
 // Init F7 Vue Plugin
 Vue.use(Framework7Vue)
 Vue.use(Framework7)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(BootstrapVue)
+Vue.use(Notifications)
 
 Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
 Vue.http.options.root = 'https://happyreply.com/'

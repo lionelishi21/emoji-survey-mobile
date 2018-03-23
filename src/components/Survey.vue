@@ -1,6 +1,10 @@
 <template>
 <div id="wrapper" >
     <img :src="pic_url " id="bg" class="" alt="">
+    <simplert style="custom_color" :useRadius="true"
+          :useIcon="true"
+          ref="simplert">
+   </simplert>
      <section class="wrapper fullscreen  overlay" v-show="showQuestion(-1)"  >
          <img @click="exitKioasMode()" src="static/emoji/grey_question.svg"  class="position_gear">
          <img  v-if="!online" src="static/offline.png"  class="position_offline">
@@ -182,7 +186,6 @@
                 <div class="inner text-center">
                     <h1>Congratulations on making it this far !</h1>
                     <p>
-                      {{this.mc_responses}}
                         Click button below to submit your survey results
                     </p>
                   <vue-ladda
@@ -211,13 +214,14 @@ import RangeSlider from 'vue-range-slider'
 // you probably need to import built-in style
 import 'vue-range-slider/dist/vue-range-slider.css'
 
-import Feedback from '../databases/feedback';
-import Question from '../databases/questions';
-import Answer from '../databases/answers';
-import Matrix from '../databases/matrixs';
-import Slider from '../databases/slider';
-import Post from '../databases/post';
+import Feedback from '../databases/feedback'
+import Question from '../databases/questions'
+import Answer from '../databases/answers'
+import Matrix from '../databases/matrixs'
+import Slider from '../databases/slider'
+import Post from '../databases/post'
 import VueLadda from 'vue-ladda'
+import Simplert from 'vue2-simplert'
 import { mapGetters } from 'vuex';
 
 export default {
@@ -303,7 +307,7 @@ export default {
         return VueOnline.isOnline
       }
     },
-    created() {
+    mounted() {
       this.init();
     },
     components: {
@@ -311,17 +315,25 @@ export default {
       swiper,
       swiperSlide,
       'vue-ladda': VueLadda,
-      RangeSlider
+      RangeSlider,
+      Simplert
     },
   	methods: {
-      checkConnection() {
-         // this.db.transaction(this.queryResponsesDatabase, this.errorHandler);
-         // this.db.transaction(this.dropResponsesDatabase, this.errorHandler);
-         console.log(this.connectionStatus);
-      },
       goTSubmit(){
-        alert('wroking')
-        windows.location('#submitSurvey');
+        var check = this.checkForNull();
+        if (check) {
+            window.location.hash = '#submitSurvey';
+        } else {
+          let obj = {
+            title: 'No answer has been selected!',
+            message: 'Please select at lease one answer to go any further',
+            type: 'info',
+            customClass: 'simple_background',
+            customIconUrl: '/static/disappointed.svg',
+            onClose: this.onClose
+          }
+          this.$refs.simplert.openSimplert(obj)
+        }
       },
       modifyAnswers(answer) {
             if (answer == '') {
@@ -338,12 +350,13 @@ export default {
         db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         console.log(db)
         this.db = db
-         this.getSelectedSurvey();
+        this.getSelectedSurvey();
         this.db.transaction(this.queryFeedbackDatabase, this.errorHandler);
         this.db.transaction(this.queryQuestionDatabase, this.errorHandler);
         this.db.transaction(this.queryAnswerDatabase, this.errorHandler);
-        this.getSurveySliders(localStorage.getItem("user_id"));
         this.getSurveyMatrix();
+        this.getSurveySliders(localStorage.getItem("user_id"));
+
       },
       showSubmit() {
         this.step = 'submit';
@@ -363,12 +376,9 @@ export default {
      formSubmit(fbId) {
       // created response database
       this.button.loading = true;
-       var check = this.checkForNull();
-       if (check) {
-          this.db.transaction(this.createResponseDatabase, this.errorHandler)
-          this.newSaveResponse(this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, fbId)
-       }
-      this.button.loading = false;
+        this.db.transaction(this.createResponseDatabase, this.errorHandler)
+        this.newSaveResponse(this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, fbId)
+      // this.button.loading = false;
 
     },
     isEmpty(obj) {
@@ -378,12 +388,8 @@ export default {
       }
       return true;
     },
-
     checkForNull() {
-
-
-      if (
-      this.isEmpty(this.mc_responses) === true &&
+      if (  this.isEmpty(this.mc_responses) === true &&
       this.isEmpty(this.matrix_responses) === true &&
       this.isEmpty(this.slider_questions) === true &&
       this.isEmpty(this.range_questions) === true &&
@@ -500,6 +506,13 @@ export default {
     .table th, .table td {
         border: 0 !important;
     }
+    .simplert__title {
+      color: #000 !important;
+    }
+
+    .simplert__body {
+       color: #000 !important;
+    }
 
     label.matrix_ques {
         margin: 0.4em 0 0.7em 0;
@@ -574,35 +587,35 @@ export default {
         z-index: 1000;
     }
     .emo_1 .vue-slider .vue-slider-dot {
-        background: url('/static/disappointed.svg') no-repeat;
+        background: url('/static/disappointed.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
     }
 
     .emo_2 .vue-slider .vue-slider-dot {
-        background: url('/static/worried.svg') no-repeat;
+        background: url('/static/worried.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
     }
 
     .emo_3 .vue-slider .vue-slider-dot {
-        background: url('/static/neutral_face.svg') no-repeat;
+        background: url('/static/neutral_face.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
     }
 
     .emo_4 .vue-slider .vue-slider-dot {
-        background: url('/static/smiling.svg') no-repeat;
+        background: url('/static/smiling.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
     }
 
     .emo_5 .vue-slider .vue-slider-dot {
-        background: url('/static/veryhappy.svg') no-repeat;
+        background: url('/static/veryhappy.svg') no-repeat !important;
         background-size: contain;
         box-shadow: none;
         border-radius: 0;
