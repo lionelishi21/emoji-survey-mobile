@@ -161,7 +161,7 @@
                                         <label class="matrix_ques" style="width:100%;">
                                             <img :id="'emojimage_'+answer.id" :src="'static/emoji/'+answer.emoji+'.svg'" class="img-responsive emoji-img" style="margin: 0px auto;margin-right:10px;"/>
 
-                                            <input v-model="range_questions[q.id]" class='rangeInput large custom' type="radio" name="range_question" :value="answer.id">
+                                            <input v-model="range_questions[q.id]" class='myinput large custom' type="radio" name="range_question" :value="answer.id">
                                             <i class="input-helper"></i>
 
                                             <strong class="range-label">{{answer.answer}}</strong>
@@ -181,7 +181,7 @@
             </section>
           </transition-group>
         </div>
-       <section id="submitSurvey" class="wrapper intro1 fullscreen fade-up question-bg-1">
+       <section id="submitSurvey" style="background-image: url('static/survey-themes/breeze-cotton.jpg');" class="wrapper intro1 fullscreen fade-up question-bg-1">
             <div class="question-overlay">
                 <div class="inner text-center">
                     <h1>Congratulations on making it this far !</h1>

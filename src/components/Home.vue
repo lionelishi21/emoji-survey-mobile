@@ -2,7 +2,7 @@
     <pull-to
      :top-load-method="refresh"
      :top-config="config"
-    id="home-preview-container">
+    id="home-preview-container" style="background-image: url('static/survey-themes/breeze-cotton.jpg');">
         <!-- Sidebar -->
         <section id="sidebar">
             <div class="logo text-center">
@@ -47,7 +47,7 @@
                 <div v-else class="row p-t-20 text-center">
                     <div class="col-md-12">
                          <vue-ladda
-                           class="button"
+                           class="btn btn-primary btn-lg survey_button"
                           :loading="button.loading"
                           :data-style="button.dataStyle"
                           :progress="button.progress"
@@ -88,7 +88,7 @@
                   <vue-ladda
                       v-if="online"
                       @click="postResponseOffline()"
-                      class="button"
+                      class="btn btn-primary btn-lg survey_button"
                       :loading="loadButton.loading"
                       :data-style="loadButton.dataStyle"
                       :progress="loadButton.progress">
@@ -120,7 +120,7 @@ export default {
       return {
         config: {
           pullText: '..Loading', // The text is displayed when you pull down
-          triggerText: '..load', // The text that appears when the trigger distance is pulled down
+          triggerText: '..fetching data from server', // The text that appears when the trigger distance is pulled down
           loadingText: '... now loadinf', // The text in the load
           doneText: '...survey refreshed', // Load the finished text
           failText: '... cant load no internet', // Load failed text
@@ -234,15 +234,31 @@ export default {
 </script>
 
 <style>
-.button {
-  background: #CF000F !important;
-  		font-weight: bold;
+/* .button {
+    background: #CF000F !important;
+  	font-weight: bold;
 		height: calc(4.75em + 2px) !important;
 		letter-spacing: 0.25em !important;
 		line-height: 4.75em !important;
+} */
+.survey_button {
+    background: #CF000F !important;
+    color: #ffffff !important;
+    border-radius: 3em !important;
+    font-size: 0.6em;
+		font-weight: bold;
+		height: calc(4.75em + 2px);
+		letter-spacing: 0.25em;
+		line-height: 4.75em;
+		outline: 0;
+		padding: 0 3.75em !important;
+		position: relative;
+		text-align: center;
+		text-decoration: none;
+		text-transform: uppercase;
+		white-space: nowrap;
 }
 #home-preview-container {
-    background: url('../../static/survey-themes/breeze-cotton.jpg');
     background-attachment: fixed;
     background-position: center;
     background-size: cover;

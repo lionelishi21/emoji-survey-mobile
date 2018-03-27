@@ -35,8 +35,7 @@ export default {
 
     },
     saveOffline (mcQuestion, matrixQuestion, sliderQuestion, rangeQuestion, suggesstionQuestion) {
-
-      var mc_question = mcQuestion
+        var mc_question = mcQuestion
         for (var key in mc_question) {
           // check if the property/key is defined in the object itself, not in parent
           var question_id = key;
@@ -131,7 +130,9 @@ export default {
           // }
           // this.$refs.simplert.openSimplert(obj)
 
-          setTimeout(this.afterSubmit(), 5000)
+           this.$router.push({ name: 'Survey' })
+           location.reload()
+          // setTimeout(this.afterSubmit(), 5000)
           // this.loadButton.loading = false
           this.button.loading = false
         })
@@ -142,8 +143,7 @@ export default {
 
     },
     afterSubmit (){
-      this.$router.push({ name: 'Survey' })
-      location.reload()
+
     },
     queryResponsesDatabase (tx) {
       tx.executeSql('SELECT * FROM responses;', [], this.renderResponses, this.errorHandler)
