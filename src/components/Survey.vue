@@ -189,7 +189,7 @@
                         Click button below to submit your survey results
                     </p>
                   <vue-ladda
-                   class="button beginButton"
+                   class="btn btn-primary btn-lg survey_button"
                    :loading="this.button.loading"
                    :data-style="this.button.dataStyle"
                    :progress="this.button.progress"
