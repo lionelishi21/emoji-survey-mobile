@@ -64,6 +64,7 @@ export default {
       if (check == true) {
         this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId)
       } else {
+        this.createResponseDatabase();
         this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
       }
     },
