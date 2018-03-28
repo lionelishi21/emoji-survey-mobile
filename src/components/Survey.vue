@@ -155,7 +155,7 @@
                  <div class="question-overlay" v-show="showRangeQuestions(q.type)">
                       <div class="inner">
                             <h2 class="quesHeader">{{q.question}}</h2>
-                            <div class="features" style="padding-bottom: 20px;">
+                            <div class="features question_content" style="padding-bottom: 20px;">
                                 <div class="col-sm-12" style="width: 100%; padding-left: 15px; padding-right: 15px; position: relative;" v-for="(answer, key) in all_answers" :class="key" v-if="answer.question_id == q.id" :key="key">
                                     <div class="cen/ter_check m-b-15 label_padding" style="padding-top: 20px; padding-left: 10px; padding-right: 10px;">
                                         <label class="matrix_ques" style="width:100%;">
@@ -354,6 +354,7 @@ export default {
         this.db.transaction(this.queryFeedbackDatabase, this.errorHandler);
         this.db.transaction(this.queryQuestionDatabase, this.errorHandler);
         this.db.transaction(this.queryAnswerDatabase, this.errorHandler);
+        this.db.transaction(this.createResponseDatabase, this.errorHandler);
         this.getSurveyMatrix();
         this.getSurveySliders(localStorage.getItem("user_id"));
 
@@ -375,11 +376,18 @@ export default {
       },
      formSubmit(fbId) {
       // created response database
-      this.button.loading = true;
-        this.db.transaction(this.createResponseDatabase, this.errorHandler)
+        this.button.loading = true;
+
         this.newSaveResponse(this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, fbId)
       // this.button.loading = false;
-
+        this.clearFormData();
+    },
+    clearFormData() {
+      this.mc_responses = {}
+      this.matrix_responses = {}
+      this.slider_questions = {}
+      this.range_questions = {}
+      this.comments_response = {}
     },
     isEmpty(obj) {
       for(var key in obj) {

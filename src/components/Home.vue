@@ -13,6 +13,7 @@
                     <ul>
                         <li class="active"><a  @click="gotToSurvey()">Survey</a></li>
                         <li><a @click="goToResponse(all_feedback[0]['feedback_id'])">Response</a></li>
+                         <li><a @click="logout()">Log out</a></li>
                     </ul>
                 </nav>
             </div>
@@ -94,7 +95,7 @@
                       :progress="loadButton.progress">
                       Post Responses
                   </vue-ladda>
-                  <button v-else class="button" disabled>Post Response</button>
+                  <!-- <button v-else class="button" disabled>Post Response</button> -->
                 </div>
             </div>
         </div>
@@ -170,6 +171,9 @@ export default {
         return VueOnline.isOnline
       }
     },
+    mounted() {
+
+    },
     methods:{
       initilizeDatabase() {
         console.log('creating database')
@@ -177,15 +181,28 @@ export default {
         db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         console.log(db)
         this.db = db
-
+      },
+      logout(){
+        this.db.transcation(function(tx){
+            tx.executeSql('DROP TABLE IF EXISTS feedbacks')
+            tx.executeSql('DROP TABLE IF EXISTS responses')
+            tx.executeSql('DROP TABLE IF EXISTS questions')
+            tx.executeSql('DROP TABLE IF EXISTS answers')
+            tx.executeSql('DROP TABLE IF EXISTS sliders')
+        })
+         localStorage.setItem("user_id", '');
+         localStorage.setItem("feedback_id", '');
+        this.$router.push({name: 'Login'});
+         location.reload();
       },
       refresh(loaded) {
           location.reload();
       },
       loadSurveys() {
         this.button.loading = true;
-        this.getSelectedSurvey();
+        this.loadFromServer();
         this.getSurveyQuestionCount();
+        this.getSurveyQuestions();
         this.getSurveyAnswersCount();
         this.getSurveyMatrixCount();
         this.button.loading = true;

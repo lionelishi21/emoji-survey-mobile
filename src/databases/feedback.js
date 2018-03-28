@@ -1,6 +1,6 @@
 export default {
   methods: {
-    getSelectedSurvey () {
+    loadFromServer () {
       this.db.transaction(this.createSurveyDatabase, this.errorHandler)
       var database = this.db;
       this.user_id = localStorage.getItem('user_id')
@@ -14,7 +14,9 @@ export default {
           }
         })
       // Fetch infromation in sqllite database
-
+    },
+    getSelectedSurvey () {
+      this.db.transaction(this.queryFeedbackDatabase, this.errorHandler);
     },
     createSurveyDatabase (tx) {
       tx.executeSql('DROP TABLE IF EXISTS feedbacks')
@@ -31,7 +33,6 @@ export default {
       this.db.transaction(this.queryFeedbackDatabase, this.errorHandler);
     },
     queryFeedbackDatabase (tx) {
-      console.log('selecting from database')
       tx.executeSql('SELECT * FROM feedbacks;', [], this.renderFeedback, this.errorHandler);
     },
     renderFeedback (tx, results) {
