@@ -192,7 +192,7 @@ export default {
         })
          localStorage.setItem("user_id", '');
          localStorage.setItem("feedback_id", '');
-        //  this.$router.push({name: 'Login'});
+         this.$router.push({name: 'Login'});
          location.reload();
       },
       refresh(loaded) {
