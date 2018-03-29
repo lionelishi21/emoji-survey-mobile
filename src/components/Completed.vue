@@ -7,7 +7,7 @@
 	                Create your own for free, click the button below to get started.
 	            </p>
 	            <ul>
-	                <li>  <router-link class="btn btn-primary btn-lg survey_button" href="home" tag="button" to="/"> Continue</router-link></li>
+	                <li>  <router-link class="btn btn-primary btn-lg survey_button" href="survey" tag="button" to="/survey"> Continue</router-link></li>
 	            </ul>
 	        </div>
 
@@ -32,13 +32,11 @@
 			}
 		},
 		created() {
-			this.backToHome();
+
 		 },
 		 methods: {
 		 	backToHome() {
-		 		setInterval(()=> {
-	              this.$router.push({name: 'Survey'});
-	              }, 2000);
+		 		 this.$router.push({name: 'Survey'});
 		 	  }
 		 }
 	}

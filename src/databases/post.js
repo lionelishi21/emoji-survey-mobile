@@ -172,7 +172,7 @@ export default {
         var commentArray = ''
 
         if (results.rows.item(i).multiple_choice != '{}') {
-          mcArray = JSON.parse(results.rows.item(i).mc)
+          mcArray = JSON.parse(results.rows.item(i).multiple_choice)
         }
 
         if (results.rows.item(i).matrix != '{}') {
@@ -195,16 +195,6 @@ export default {
       }
       this.db.transaction(this.dropResponsesDatabase, this.nullHandler);
       this.loadButton.loading = false
-      this.getSelectedSurvey();
-       let obj = {
-          title: 'Send to server!',
-          message: 'Your response has been post to server',
-          type: 'info',
-          customClass: 'simple_background',
-          customIconUrl: 'static/veryhappy.svg',
-          onClose: this.onClose
-        }
-        this.$refs.simplert.openSimplert(obj)
     }
   }
 }

@@ -171,9 +171,6 @@ export default {
         return VueOnline.isOnline
       }
     },
-    mounted() {
-
-    },
     methods:{
       initilizeDatabase() {
         console.log('creating database')
@@ -192,7 +189,7 @@ export default {
         })
          localStorage.setItem("user_id", '');
          localStorage.setItem("feedback_id", '');
-        this.$router.push({name: 'Login'});
+         this.$router.push({name: 'Login'});
          location.reload();
       },
       refresh(loaded) {
@@ -200,11 +197,12 @@ export default {
       },
       loadSurveys() {
         this.button.loading = true;
+        this.getSurveyMatrixCount();
         this.loadFromServer();
         this.getSurveyQuestionCount();
         this.getSurveyQuestions();
         this.getSurveyAnswersCount();
-        this.getSurveyMatrixCount();
+
         this.button.loading = true;
       },
       showButton(value) {

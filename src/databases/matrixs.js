@@ -2,7 +2,8 @@ export default {
   methods: {
     getSurveyMatrixCount () {
       this.db.transaction(this.createMatrixDatabase, this.errorHandler)
-      this.$http.get('https://happyreply.com/api/get-matrixs?user_id=' + this.user_id)
+      var user_id = localStorage.getItem('user_id')
+      this.$http.get('https://happyreply.com/api/get-matrixs?user_id=' + user_id)
         .then(response => {
           return response.json()
         }).then(data => {
