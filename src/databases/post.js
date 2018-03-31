@@ -75,8 +75,8 @@ export default {
           }
         })
         .then(function (data) {
+          console.log(data)
           if (offline == true) {
-          alert('working')
             // let obj = {
             //   title: 'Response has been sync to server!',
             //   type: 'info',

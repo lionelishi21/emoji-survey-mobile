@@ -307,7 +307,7 @@ export default {
         return VueOnline.isOnline
       }
     },
-    mounted() {
+    created() {
       this.init();
     },
     components: {
