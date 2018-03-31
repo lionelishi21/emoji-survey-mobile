@@ -335,6 +335,13 @@ export default {
           this.$refs.simplert.openSimplert(obj)
         }
       },
+      getSurveyQuestionAnswer() {
+         this.getSurveyTitle()
+         this.getSurveyQuestions()
+         this.getSurveyAnswers()
+         this.getSurveyMatrixes()
+         this.getSurveySliders()
+      },
       modifyAnswers(answer) {
             if (answer == '') {
                 return '<div class="col-md-12"><input type="text" class="text-primary form-control" placeholder="Enter your answer here" style="border-radius: 2px;height: 45px;"></div>'
@@ -343,20 +350,13 @@ export default {
             }
         },
       init() {
-        //  this.$router.reload()
         VueOnline.isOnline;
         console.log('creating database')
         var db
         db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         console.log(db)
         this.db = db
-        this.getSelectedSurvey();
-        this.db.transaction(this.queryFeedbackDatabase, this.errorHandler);
-        this.db.transaction(this.queryQuestionDatabase, this.errorHandler);
-        this.db.transaction(this.queryAnswerDatabase, this.errorHandler);
-        this.db.transaction(this.createResponseDatabase, this.errorHandler);
-        this.getSurveyMatrix();
-        this.getSurveySliders(localStorage.getItem("user_id"));
+        this.getSurveyQuestionAnswer()
 
       },
       showSubmit() {
@@ -494,10 +494,10 @@ export default {
 
       },
     nullHandler(tx, error) {
-       console.log('Error: ' + error + ' code: ' + error.code);
+       console.log('Error: ' + error + ' code: ' + error);
     },
     errorHandler(tx, error) {
-      console.log('Error: ' + error + ' code: ' + error.code);
+      console.log('Error: ' + error + ' code: ' + error);
     },
     getNext(key) {
         this.step + 1;

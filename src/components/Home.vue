@@ -48,11 +48,11 @@
                 <div v-else class="row p-t-20 text-center">
                     <div class="col-md-12">
                          <vue-ladda
-                           class="btn btn-primary btn-lg survey_button"
+                           class="btn btn-primary  survey_button"
                           :loading="button.loading"
                           :data-style="button.dataStyle"
                           :progress="button.progress"
-                          @click="loadSurveys()">
+                           @click="loadSurveys()">
                           Load Survey
                         </vue-ladda>
                     </div>
@@ -67,13 +67,6 @@
                     <h3 class="text-white fw-200">The panels below displays a list of all your survey responses</h3>
                 </div>
             </div>
-            <!-- <div class="row">
-                <div class="col-md-12">
-                    <div class="logo text-center">
-                        <img src="static/logo/logo.png" alt="logo">
-                    </div>
-                </div>
-            </div> -->
             <OfflineIndicator message="Oh no, you're offline :("></OfflineIndicator>
             <div class="content_box_sm">
                 <div class="row" v-if="all_feedback[0]">
@@ -89,7 +82,7 @@
                   <vue-ladda
                       v-if="online"
                       @click="postResponseOffline()"
-                      class="btn btn-primary btn-lg survey_button"
+                      class="btn btn-primary survey_button"
                       :loading="loadButton.loading"
                       :data-style="loadButton.dataStyle"
                       :progress="loadButton.progress">
@@ -122,7 +115,7 @@ export default {
         config: {
           pullText: '..Loading', // The text is displayed when you pull down
           triggerText: '..fetching data from server', // The text that appears when the trigger distance is pulled down
-          loadingText: '... now loadinf', // The text in the load
+          loadingText: '... now loading', // The text in the load
           doneText: '...survey refreshed', // Load the finished text
           failText: '... cant load no internet', // Load failed text
           loadedStayTime: 400, // Time to stay after loading ms
@@ -132,7 +125,7 @@ export default {
         feedback_id: "",
         database: 'SurveyDb',
         version: '1.0',
-         pic_url: 'static/survey-themes/people-image.png',
+        pic_url: 'static/survey-themes/people-image.png',
         dbDisplay: 'ServeyDatabase',
         maxSize: 1105535,
         db: "",
@@ -151,9 +144,6 @@ export default {
     },
     created(){
       this.initilizeDatabase();
-      this.createResponseDatabase();
-      this.getSurveyResponse();
-
     },
     components: {
       OfflineIndicator,
@@ -174,10 +164,9 @@ export default {
     methods:{
       initilizeDatabase() {
         console.log('creating database')
-        var db
-        db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-        console.log(db)
-        this.db = db
+        this.db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+        this.createResponseDatabase()
+        this.getSurveyResponse()
       },
       logout(){
         this.db.transcation(function(tx){
@@ -196,14 +185,17 @@ export default {
           location.reload();
       },
       loadSurveys() {
-        this.button.loading = true;
-        this.getSurveyMatrixCount();
-        this.loadFromServer();
-        this.getSurveyQuestionCount();
-        this.getSurveyQuestions();
-        this.getSurveyAnswersCount();
+        this.button.loading = true
+        this.loadTitle()
+        this.getSurveyTitle()
+        this.getSurveyQuestions()
 
-        this.button.loading = true;
+        // this.getSurveyAnswersCount();
+        // this.getSurveyMatrixCount();
+        // this.button.loading = true;
+      },
+      errorHandler(tx, error) {
+        console.log('Error: ' + error + ' code: ' + error.code);
       },
       showButton(value) {
         if (value != "") {

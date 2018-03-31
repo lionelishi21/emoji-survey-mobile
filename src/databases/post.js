@@ -2,39 +2,28 @@ import { VueOnline } from 'vue-online'
 export default {
   data(){
     return {
-      button: {
-        loading: false,
-        'dataStyle': 'expand-left',
-        progress: 0,
-      },
+      // button: {
+      //   loading: false,
+      //   'dataStyle': 'expand-left',
+      //   progress: 0,
+      // },
     }
   },
   methods: {
     createResponseDatabase () {
-      console.log('creating response database')
       this.db.transaction(this.createDatabaseResponses, this.nullHandler)
     },
     getSurveyResponse () {
-      console.log('question query response')
       this.db.transaction(this.queryResponsesDatabase, this.nullHandler)
     },
     createDatabaseResponses (tx) {
-      console.log('creatr')
+      console.log('create')
       tx.executeSql('CREATE TABLE IF NOT EXISTS responses (id INTEGER PRIMARY KEY AUTOINCREMENT, multiple_choice TEXT, matrix TEXT, slider TEXT, range TEXT, suggestion TEXT, feedback_id INTEGER )')
     },
     dropResponsesDatabase (tx) {
       console.log('dropping response table after upload to database')
       tx.executeSql('DROP TABLE IF EXISTS responses')
     },
-    // saveResponses(response, matrix, answer_id, question_id, slider, question_type, feedback_id) {
-    //   // var check = VueOnline.isOnline;
-    //   console.log('saving response')
-    //   this.db.transaction(function (tx) {
-    //     var sql = 'INSERT INTO responses (response, matrix, answer_id, question_id, slider, question_type, feedback_id ) VALUES (?,?,?,?,?,?,?)'
-    //     tx.executeSql(sql, [response, matrix, answer_id, question_id, slider, question_type, feedback_id]);
-    //   });
-
-    // },
     saveOfflineUpdate (multpleChoice, matrix, slider, range, comments, fbId) {
       var mc = JSON.stringify(multpleChoice)
       var matrixAnswers = JSON.stringify(matrix)
@@ -62,14 +51,12 @@ export default {
     newSaveResponse (multpleChoice, matrix, slider, range, comments, fbId) {
       var check = VueOnline.isOnline;
       if (check == true) {
-        this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId)
+        this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId, false)
       } else {
-        this.createResponseDatabase();
         this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
       }
     },
-
-    newPostResponse (mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId) {
+    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId, offline) {
       var action = 'https://happyreply.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
       // this.loadButton.loading = true
@@ -88,19 +75,21 @@ export default {
           }
         })
         .then(function (data) {
-          console.log(data)
-          // let obj = {
-          //   title: 'Thank for your feedback we love you!',
-          //   type: 'info',
-          //   customIconUrl: '/static/veryhappy.svg',
-          //   onClose: this.onClose
-          // }
-          // this.$refs.simplert.openSimplert(obj)
-
-           this.$router.push({ name: 'Completed' })
-          //  location.reload()
-          // setTimeout(this.afterSubmit(), 5000)
-          // this.loadButton.loading = false
+          if (offline == true) {
+          alert('working')
+            // let obj = {
+            //   title: 'Response has been sync to server!',
+            //   type: 'info',
+            //   customIconUrl: '/static/veryhappy.svg',
+            //   onClose: this.onClose
+            // }
+            // this.$refs.simplert.openSimplert(obj)
+            this.db.transaction(this.dropResponsesDatabase, this.nullHandler);
+            this.loadButton.loading = false
+            this.getSurveyResponse()
+          } else {
+            this.$router.push({ name: 'Completed' })
+          }
           this.button.loading = false
         })
         .catch(function (data, status, request) {
@@ -109,9 +98,7 @@ export default {
         });
 
     },
-    afterSubmit (){
 
-    },
     queryResponsesDatabase (tx) {
       tx.executeSql('SELECT * FROM responses;', [], this.renderResponses, this.errorHandler)
     },
@@ -188,13 +175,11 @@ export default {
         }
 
         if (results.rows.item(i).range != '{}') {
-          commentArray = JSON.parse(results.rows.item(i).comment)
+          commentArray = JSON.parse(results.rows.item(i).suggestion)
         }
         var feedbackId = results.rows.item(i).feedback_id;
-        this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, feedbackId)
+        this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, feedbackId, true)
       }
-      this.db.transaction(this.dropResponsesDatabase, this.nullHandler);
-      this.loadButton.loading = false
     }
   }
 }

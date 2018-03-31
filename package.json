@@ -28,6 +28,8 @@
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-sqlite-2": "^1.0.4",
     "cordova-plugin-whitelist": "1",
+    "cordova-sqlcipher-adapter": "^0.1.12-rc2",
+    "cordova-sqlite-storage": "^2.3.0",
     "emoji-mart-vue": "^1.0.2",
     "font-awesome": "^4.7.0",
     "framework7": "^1.5.2",

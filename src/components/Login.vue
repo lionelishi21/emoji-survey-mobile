@@ -92,8 +92,7 @@ export default {
               }
             },
             checkUserLogin() {
-              var user_id = localStorage.getItem("user_id");
-              if (user_id != null || user != '') {
+              if (localStorage.getItem("user_id") !== null) {
                   this.$router.push({name: 'Survey'});
               }
             },

@@ -1,18 +1,22 @@
 export default {
   methods: {
-    getSurveySliders(user_id) {
-      this.db.transaction(this.createSliderDatabase, this.errorHandler)
-      this.$http.get('https://happyreply.com/api/get-sliders?user_id=' + user_id)
+    loadSliders () {
+      var userId = localStorage.getItem("user_id")
+      this.$http.get('https://happyreply.com/api/get-sliders?user_id=' + userId)
         .then(response => {
           return response.json()
         }).then(data => {
           console.log(data)
+          this.db.transaction(this.createSliderDatabase, this.errorHandler)
           for (let key in data) {
             this.saveSlider(data[key]['id'], data[key]['question_id'], data[key]['left'], data[key]['right'], data[key]['label'])
           }
         })
-    },
 
+    },
+    getSurveySliders (){
+      this.db.transaction(this.querySliderDatabase, this.errorHandler)
+    },
     createSliderDatabase (tx) {
       console.log('creating slider database')
       tx.executeSql('DROP TABLE IF EXISTS sliders')
@@ -24,7 +28,6 @@ export default {
         var sql = 'INSERT INTO sliders ( id, question_id, left, right, label) VALUES (?,?,?,?,?)';
         tx.executeSql(sql, [id, question_id, left, right, label]);
       })
-      this.db.transaction(this.querySliderDatabase, this.errorHandler);
     },
     querySliderDatabase (tx) {
       tx.executeSql('SELECT * FROM sliders;', [], this.renderSlider, this.errorHandler)

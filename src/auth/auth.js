@@ -15,7 +15,6 @@ export default {
   logout (cb) {
     localStorage.setItem("user_id", '')
     //drop all database
-
     if (cb) cb()
     this.onChange(false)
   },

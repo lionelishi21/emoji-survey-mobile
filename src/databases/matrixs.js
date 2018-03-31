@@ -1,20 +1,19 @@
 export default {
   methods: {
-    getSurveyMatrixCount () {
-      this.db.transaction(this.createMatrixDatabase, this.errorHandler)
+    loadMatrixes () {
       var user_id = localStorage.getItem('user_id')
       this.$http.get('https://happyreply.com/api/get-matrixs?user_id=' + user_id)
         .then(response => {
           return response.json()
         }).then(data => {
-          console.log(data)
+          this.db.transaction(this.createMatrixDatabase, this.errorHandler)
           for (let key in data) {
             this.saveMatrixs(data[key]['id'], data[key]['emoji'], data[key]['matrix'], data[key]['question_id'])
           }
+          this.loadSliders()
         })
-      this.button.loading = false;
     },
-    getSurveyMatrix () {
+    getSurveyMatrixes () {
       this.db.transaction(this.queryMatrixDatabase, this.errorHandler)
     },
     createMatrixDatabase (tx) {
