@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #Sat Mar 31 03:26:40 EST 2018
+=======
+#Wed Mar 28 07:53:55 EST 2018
+>>>>>>> f8b7cfa63525b925b733090c2aa076a593bc470d
 base.0=/var/www/html/vue/happyreply/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
 path.0=classes.dex
 renamed.0=classes.dex

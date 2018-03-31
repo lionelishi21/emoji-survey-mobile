@@ -180,6 +180,21 @@ export default {
         var feedbackId = results.rows.item(i).feedback_id;
         this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, feedbackId, true)
       }
+<<<<<<< HEAD
+=======
+      this.db.transaction(this.dropResponsesDatabase, this.nullHandler);
+      this.loadButton.loading = false
+      // this.getSelectedSurvey();
+       let obj = {
+          title: 'Send to server!',
+          message: 'Your response has been post to server',
+          type: 'info',
+          customClass: 'simple_background',
+          customIconUrl: 'static/veryhappy.svg',
+          onClose: this.onClose
+        }
+        this.$refs.simplert.openSimplert(obj)
+>>>>>>> f8b7cfa63525b925b733090c2aa076a593bc470d
     }
   }
 }
