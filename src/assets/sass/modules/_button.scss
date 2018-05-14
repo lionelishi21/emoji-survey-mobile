@@ -1,0 +1,18 @@
+.survey-btn {
+   display: inline-block;
+   font-weight: $survey-btn-weight;
+   text-alignt: center;
+   white-space: nowrap;
+   user-select: none;
+   border: $btn-border-width solid transparent;
+}
+
+.btn-red {
+   background: $brand-color !important;
+   color: $text-color-light !important;
+}
+
+
+.btn-survey-lg {
+  @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $font-size-large, $btn-line-height, $btn-radius);
+}

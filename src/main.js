@@ -1,51 +1,54 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-require('../css/main.css')
-require('../response/assets/css/main.css')
+// require('../css/main.css')
+// require('../response/assets/css/main.css')
 require('expose?$!expose?jQuery!jquery')
 require('../vendors/bower_components/jquery/dist/jquery.min.js')
 require('../vendors/bower_components/bootstrap/dist/js/bootstrap.min.js')
 require('../vendors/bower_components/Waves/dist/waves.min.js')
 require('vue2-animate/dist/vue2-animate.min.css')
+require('./plugins/sweet-alert-plugin');
 import Icon from 'vue-awesome/components/Icon'
 
-// globally (in your main .js file)
-Vue.component('icon', Icon)
+
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import BootstrapVue from 'bootstrap-vue'
-export default Vue
 import App from './components/App.vue'
-import Survey from './components/Survey.vue'
+import Survey from './layouts/Survey.vue'
 import Login from './components/Login.vue'
 import Home from './components/Home.vue'
-import Completed from './components/Completed';
-import { store } from './store/store';
+import Completed from './components/Completed'
+import Intro from './components/Intro'
+import store  from './store/';
 import 'font-awesome/css/font-awesome.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import auth from './auth/auth'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Notifications from 'vue-notification'
+import VueYoutube from 'vue-youtube'
+import VueUp from 'vueup'
+import VModal from 'vue-js-modal'
 
-// Import F7
-/* eslint-disable no-unused-vars */
-import Framework7 from 'framework7'
-import Framework7Vue from 'framework7-vue'
-import Framework7Theme from 'framework7/dist/css/framework7.material.min.css'
-import Framework7ThemeColors from 'framework7/dist/css/framework7.material.colors.min.css'
+// globally (in your main .js file)
+Vue.component('icon', Icon)
 
-// Init F7 Vue Plugin
-Vue.use(Framework7Vue)
-Vue.use(Framework7)
+import ResponseTheme from './response-main'
+Vue.use(ResponseTheme)
+
+Vue.use(VModal)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(BootstrapVue)
 Vue.use(Notifications)
+Vue.use(VueYoutube)
+Vue.use(VueUp)
 
 Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
 Vue.http.options.root = 'https://happyreply.com/'
+Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
 
 export var router = new VueRouter({
 routes: [
@@ -65,10 +68,11 @@ routes: [
       component: Survey
     },
     {
-      path: '/completed',
+      path: '/completed/:id',
       name: 'Completed',
       component: Completed
-    }
+    },
+    { path: '/intro/:id', name: 'Intro', component: Intro }
   ]
 });
 

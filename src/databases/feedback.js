@@ -9,7 +9,7 @@ export default {
           console.log(data)
           this.db.transaction(this.createSurveyDatabase, this.errorHandler)
           for (let key in data) {
-            this.saveSurvey(data[key]['feedback_id'], data[key]['feedback_title'], data[key]['feedback_description'])
+            this.saveSurvey(data[key]['feedback_id'], data[key]['feedback_title'], data[key]['feedback_description'], data[key]['feedback_slug'])
           }
           this.loadQuestions()
         })
@@ -20,12 +20,12 @@ export default {
     createSurveyDatabase (tx) {
       tx.executeSql('DROP TABLE IF EXISTS feedbacks')
       tx.executeSql(`CREATE TABLE IF NOT EXISTS feedbacks (feedback_id INTEGER,
-	        feedback_title TEXT, feedback_desc TEXT)`, [], this.nullHandler, this.errorHandler)
+	        feedback_title TEXT, feedback_desc TEXT, feedback_slug Text)`, [], this.nullHandler, this.errorHandler)
     },
-    saveSurvey (id, title, desc) {
+    saveSurvey (id, title, desc, slug) {
       this.db.transaction(function (tx) {
-        var sql = 'INSERT INTO feedbacks (feedback_id, feedback_title, feedback_desc) VALUES (?,?,?)';
-        tx.executeSql(sql, [id, title, desc]);
+        var sql = 'INSERT INTO feedbacks (feedback_id, feedback_title, feedback_desc, feedback_slug) VALUES (?,?,?,?)';
+        tx.executeSql(sql, [id, title, desc, slug]);
       });
     },
     queryFeedbackDatabase (tx) {
@@ -37,7 +37,12 @@ export default {
 
       var resultsArray = [];
       for (var i = 0; i < len; i++) {
-        var res = { feedback_id: results.rows.item(i).feedback_id, feedback_title: results.rows.item(i).feedback_title, feedback_desc: results.rows.item(i).feedback_desc }
+        var res = {
+          feedback_id: results.rows.item(i).feedback_id,
+          feedback_title: results.rows.item(i).feedback_title,
+          feedback_desc: results.rows.item(i).feedback_desc,
+          feedback_slug: results.rows.item(i).feedback_slug
+        }
         resultsArray.push(res);
       }
       this.$store.commit('addToFeedback', resultsArray)

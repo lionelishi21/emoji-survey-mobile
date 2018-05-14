@@ -1,0 +1,48 @@
+.img-label > input {
+  /* HIDE RADIO */
+  visibility: hidden;
+  /* Makes input not-clickable */
+  position: absolute;
+  /* Remove input from document flow */
+  z-index: 1000; }
+
+.img-label > input + img {
+  /* IMAGE STYLES */
+  cursor: pointer;
+  border: 2px solid transparent;
+
+    border-radius: 50%;
+  -webkit-transition: -webkit-transform .8s ease-in-out;
+          transition:         transform .8s ease-in-out;
+
+}
+
+.img-label > input:checked + img {
+  /* (RADIO CHECKED) IMAGE STYLES */
+  background-color: burlywood;
+  border: 1px solid #ccc;
+
+ }
+
+.img-label > input:hover + img {
+  /* (RADIO CHECKED) IMAGE STYLES */
+ -webkit-transform: scale(1.25);
+  -moz-transform: scale(1.25);
+  -ms-transform: scale(1.25);
+  -o-transform: scale(1.25);
+  transform: scale(1.25);
+
+  -webkit-transform: rotate(360deg);
+          transform: rotate(360deg);
+
+
+}
+
+/*# sourceMappingURL=main.css.map */
+.img-bordesr {
+  display: inline-block;
+  height: inherit;
+  width: inherit;
+  vertical-align: top;
+  background-color: burlywood;
+  border: 1px solid #ccc; }

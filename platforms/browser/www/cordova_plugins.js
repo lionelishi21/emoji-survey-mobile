@@ -52,6 +52,14 @@ module.exports = [
         "clobbers": [
             "window.KioskPlugin"
         ]
+    },
+    {
+        "file": "plugins/com.moust.cordova.videoplayer/www/videoplayer.js",
+        "id": "com.moust.cordova.videoplayer.VideoPlayer",
+        "pluginId": "com.moust.cordova.videoplayer",
+        "clobbers": [
+            "VideoPlayer"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -61,7 +69,9 @@ module.exports.metadata =
     "cordova-plugin-sqlite-2": "1.0.4",
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-network-information": "2.0.1",
-    "cordova-plugin-kiosk": "0.2"
+    "cordova-plugin-kiosk": "0.2",
+    "cordova-plugin-websql": "0.0.10",
+    "com.moust.cordova.videoplayer": "1.0.1"
 }
 // BOTTOM OF METADATA
 });

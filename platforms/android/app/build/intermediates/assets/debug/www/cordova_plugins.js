@@ -40,6 +40,14 @@ module.exports = [
     "clobbers": [
       "sqlitePlugin"
     ]
+  },
+  {
+    "id": "com.moust.cordova.videoplayer.VideoPlayer",
+    "file": "plugins/com.moust.cordova.videoplayer/www/videoplayer.js",
+    "pluginId": "com.moust.cordova.videoplayer",
+    "clobbers": [
+      "VideoPlayer"
+    ]
   }
 ];
 module.exports.metadata = 
@@ -49,7 +57,9 @@ module.exports.metadata =
   "cordova-plugin-network-information": "2.0.1",
   "cordova-plugin-splashscreen": "5.0.2",
   "cordova-plugin-sqlite-2": "1.0.4",
-  "cordova-plugin-whitelist": "1.3.1"
+  "cordova-plugin-whitelist": "1.3.1",
+  "cordova-plugin-websql": "0.0.10",
+  "com.moust.cordova.videoplayer": "1.0.1"
 };
 // BOTTOM OF METADATA
 });

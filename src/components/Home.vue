@@ -2,7 +2,7 @@
     <pull-to
      :top-load-method="refresh"
      :top-config="config"
-    id="home-preview-container" style="background-image: url('static/survey-themes/breeze-cotton.jpg');">
+      id="home-preview-container" style="background-image: url('static/survey-themes/breeze-cotton.jpg');">
         <!-- Sidebar -->
         <section id="sidebar">
             <div class="logo text-center">
@@ -12,13 +12,12 @@
                 <nav>
                     <ul>
                         <li class="active"><a  @click="gotToSurvey()">Survey</a></li>
-                        <li><a @click="goToResponse(all_feedback[0]['feedback_id'])">Response</a></li>
+                        <li><a @click="goToResponse(feedbackInfo[0].feedback_id)">Response</a></li>
                          <li><a @click="logout()">Log out</a></li>
                     </ul>
                 </nav>
             </div>
         </section>
-
         <!-- Wrapper -->
         <div id="wrapper" class="center-bg" v-if="showSurveyTabHome()">
             <div class="row text-center pt-4">
@@ -35,13 +34,15 @@
                     </div>
                 </div>
             </div> -->
+
             <div class="content_box_sm">
-                <div class="row" v-if="all_feedback[0]">
-                    <div class="question question--numeric" @click="goToSurvey()">
+                <div class="row" v-if="feedbackInfo[0]">
+
+                    <div class="question question--numeric" @click="goToSurvey(feedbackInfo[0].feedback_slug)">
                         <div class="question__text-container pt-3">
-                        <p class="question__title">{{all_feedback[0]['feedback_title']}}</p>
-                        <p class="question__text">{{all_feedback[0]['feedback_desc']}}</p>
-                        <p class="question__answers">Questions: {{question_count}}</p>
+                        <p class="question__title">{{feedbackInfo[0].feedback_title}}</p>
+                        <p class="question__text">{{feedbackInfo[0].feedback_desc}}</p>
+                        <p class="question__answers">Questions: {{ QuestionAmount }}</p>
                         </div>
                     </div>
                 </div>
@@ -49,7 +50,7 @@
                     <div class="col-md-12">
                          <vue-ladda
                            class="btn btn-primary  survey_button"
-                          :loading="button.loading"
+                          :loading="loadingButton(isLoading)"
                           :data-style="button.dataStyle"
                           :progress="button.progress"
                            @click="loadSurveys()">
@@ -69,21 +70,20 @@
             </div>
             <OfflineIndicator message="Oh no, you're offline :("></OfflineIndicator>
             <div class="content_box_sm">
-                <div class="row" v-if="all_feedback[0]">
+                <div class="row" v-if="feedbackInfo[0]">
                     <div class="question question--numeric">
                         <div class="question__text-container pt-3">
-                        <p class="question__title">{{all_feedback[0]['feedback_title']}}</p>
-                        <p class="question__text">{{all_feedback[0]['feedback_desc']}}</p>
+                        <p class="question__title">{{feedbackInfo[0].feedback_title}}</p>
+                        <p class="question__text">{{feedbackInfo[0].feedback_desc}}</p>
                         <p class="question__answers">Responses: {{response_count}}</p>
                         </div>
                     </div>
                 </div>
                 <div class="row p-t-20">
                   <vue-ladda
-                      v-if="online"
                       @click="postResponseOffline()"
                       class="btn btn-primary survey_button"
-                      :loading="loadButton.loading"
+                      :loading="button.loading"
                       :data-style="loadButton.dataStyle"
                       :progress="loadButton.progress">
                       Post Responses
@@ -95,21 +95,12 @@
     </pull-to>
 </template>
 <script>
-import Feedback from '../databases/feedback';
-import Question from '../databases/questions';
-import Answer from '../databases/answers';
-import Matrix from '../databases/matrixs';
-import Slider from '../databases/slider';
-import Post from '../databases/post';
 import { OfflineIndicator, VueOnline } from 'vue-online'
 import { mapGetters } from 'vuex';
 import VueLadda from 'vue-ladda'
 import Snackbar from 'vue-snackbar'
 import PullTo from 'vue-pull-to'
-
-
 export default {
-  mixins: [Feedback, Question, Answer, Matrix, Slider, Post],
     data() {
       return {
         config: {
@@ -134,15 +125,11 @@ export default {
             loading: false,
             'dataStyle': 'expand-left',
             progress: 0,
-        },
-        loadButton: {
-          loading: false,
-          'dataStyle': 'expand-left',
-          progress: 0
         }
       }
     },
     created(){
+      this.checkUserLogin();
       this.initilizeDatabase();
     },
     components: {
@@ -152,10 +139,9 @@ export default {
     },
     computed: {
       ...mapGetters([
-        'all_feedback',
-        'question_count',
-        'response_count',
-        'all_response'
+        'feedbackInfo',
+        'QuestionAmount',
+        'isLoading'
       ]),
       online () {
         return VueOnline.isOnline
@@ -163,50 +149,42 @@ export default {
     },
     methods:{
       initilizeDatabase() {
-        console.log('creating database')
-        this.db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-        this.createResponseDatabase()
-        this.getSurveyResponse()
+        var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+        var user_id = localStorage.getItem('user_id')
+        this.$store.dispatch('reCreateDatabases', db)
+        this.$store.dispatch('getFeedback', {user_id, db})
+      },
+      loadingButton(load){
+        return load;
       },
       logout(){
-        this.db.transcation(function(tx){
-            tx.executeSql('DROP TABLE IF EXISTS feedbacks')
-            tx.executeSql('DROP TABLE IF EXISTS responses')
-            tx.executeSql('DROP TABLE IF EXISTS questions')
-            tx.executeSql('DROP TABLE IF EXISTS answers')
-            tx.executeSql('DROP TABLE IF EXISTS sliders')
-        })
-         localStorage.setItem("user_id", '');
-         localStorage.setItem("feedback_id", '');
-         this.$router.push({name: 'Login'});
+        
+         localStorage.removeItem("user_id");
+         localStorage.removeItem("feedback_id");
+         // this.$router.push({name: 'Login'});
          location.reload();
+      },
+      createDatabases(db) {
+          db.transaction(function (tx) {
+            tx.executeSql(`CREATE TABLE IF NOT EXISTS questions (id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
+              feedback_question TEXT NOT NULL, type INTEGER NOT NULL, feedback_id INTEGER NOT NULL)`, [])
+            tx.executeSql(`CREATE TABLE IF NOT EXISTS feedbacks (feedback_id INTEGER,
+            feedback_title TEXT, feedback_desc TEXT, feedback_slug Text)`, [])
+            tx.executeSql(`CREATE TABLE IF NOT EXISTS answers (id INTEGER NOT NULL,
+              answer TEXT NOT NULL, emoji TEXT, feedback_id INTEGER NOT NULL,  question_id INTEGER NOT NULL)`, [])
+          })
       },
       refresh(loaded) {
           location.reload();
       },
-      loadSurveys() {
-        this.button.loading = true
-        this.loadTitle()
-        this.getSurveyTitle()
-        this.getSurveyQuestions()
-
-        // this.getSurveyAnswersCount();
-        // this.getSurveyMatrixCount();
-        // this.button.loading = true;
-      },
-      errorHandler(tx, error) {
-        console.log('Error: ' + error + ' code: ' + error.code);
-      },
-      showButton(value) {
-        if (value != "") {
-          return false;
-        } else {
-          return true
+       checkUserLogin() {
+        if (localStorage.getItem("user_id") == null) {
+            this.$router.push({name: 'Login'});
         }
       },
-      goToSurvey() {
-         this.$router.push({name: 'Survey'});
-         location.reload();
+      goToSurvey(fb_id) {
+         this.$router.push({name: 'Intro',  params: { id: fb_id } })
+        //  location.reload();
       },
       showButtonTwo(value) {
         if (value > 0) {
@@ -235,19 +213,23 @@ export default {
       },
       gotToSurvey() {
         this.tab_state = 'home'
+      },
+      loadSurveys() {
+        var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+        var user_id = localStorage.getItem('user_id')
+
+        this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
+        this.$store.dispatch('getQuestions',  {user_id, db})
+        this.$store.dispatch('getAnswers',  {user_id, db})
+        this.$store.dispatch('getMatrixs',  {user_id, db})
+        this.$store.dispatch('getSliders',  {user_id, db})
+        this.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
       }
     }
 }
 </script>
 
 <style>
-/* .button {
-    background: #CF000F !important;
-  	font-weight: bold;
-		height: calc(4.75em + 2px) !important;
-		letter-spacing: 0.25em !important;
-		line-height: 4.75em !important;
-} */
 .survey_button {
     background: #CF000F !important;
     color: #ffffff !important;

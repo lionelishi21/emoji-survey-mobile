@@ -5,9 +5,10 @@
 	            <h1>Thank you for completing this survey!!</h1>
 	            <p>
 	                Create your own for free, click the button below to get started.
+
 	            </p>
 	            <ul>
-	                <li>  <router-link class="btn btn-primary btn-lg survey_button" href="survey" tag="button" to="/survey"> Continue</router-link></li>
+	                <router-link tag="button" :to="'/intro/' + this.feed_id" class="btn btn-primary btn-lg survey_button" href="survey" > Continue</router-link>
 	            </ul>
 	        </div>
 
@@ -26,18 +27,25 @@
 	</section>
 </template>
 <script>
-	export default {
-		data() {
-			return {
-			}
-		},
-		created() {
 
-		 },
-		 methods: {
-		 	backToHome() {
-		 		 this.$router.push({name: 'Survey'});
-		 	  }
-		 }
-	}
+export default {
+  data(){
+    return {
+         feed_id: '',
+    }
+  },
+  watch: {
+		'$route'(to, from) {
+			this.feed_id = this.$route.params.id
+		}
+  },
+  created() {
+    if (this.$route.params.id) {
+     this.feed_id = this.$route.params.id
+    }
+  },
+  methods: {
+
+  }
+}
 </script>

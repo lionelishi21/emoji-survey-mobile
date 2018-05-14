@@ -92,8 +92,8 @@ export default {
               }
             },
             checkUserLogin() {
-              if (localStorage.getItem("user_id") !== null) {
-                  this.$router.push({name: 'Survey'});
+              if (localStorage.getItem("user_id") != null) {
+                  this.$router.push({name: 'Home'});
               }
             },
             submitForm: function(event) {

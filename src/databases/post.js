@@ -35,7 +35,7 @@ export default {
         var sql = 'INSERT INTO responses (multiple_choice, matrix, slider, range, suggestion, feedback_id) VALUES (?,?,?,?,?,?)'
         tx.executeSql(sql, [mc, matrixAnswers, sliderAnswers, rangeAnswers, commentsAnswers, fbId])
       })
-      this.$router.push({ name: 'Completed' })
+
     },
     postResponse (response, answer_id, question_id, feedback_id, matrix, slider) {
       console.log('saving to server')
@@ -49,54 +49,41 @@ export default {
         })
     },
     newSaveResponse (multpleChoice, matrix, slider, range, comments, fbId) {
-      var check = VueOnline.isOnline;
-      if (check == true) {
+    
         this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId, false)
-      } else {
-        this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
-      }
+        // this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
     },
     newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId, offline) {
       var action = 'https://happyreply.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
       // this.loadButton.loading = true
       this.button.loading = true;
-      this.$http.post(action, { params:
-          {
-            feedback_id: fbId,
-            mc: mcArray,
-            matrix: matrixArray,
-            slider: sliderArray,
-            range: rangeArray,
-            comment: commentArray } },
+      this.$http.post(action,
+        { params:
+           {
+              feedback_id: fbId,
+              mc: mcArray,
+              matrix: matrixArray,
+              slider: sliderArray,
+              range: rangeArray,
+              comment: commentArray }
+           },
          {
           headers: {
             'X-CSRF-TOKEN': csrfToken
           }
         })
-        .then(function (data) {
-          console.log(data)
-          if (offline == true) {
-            // let obj = {
-            //   title: 'Response has been sync to server!',
-            //   type: 'info',
-            //   customIconUrl: '/static/veryhappy.svg',
-            //   onClose: this.onClose
-            // }
-            // this.$refs.simplert.openSimplert(obj)
+        .then(response => {
+          if (offline == 'ture') {
             this.db.transaction(this.dropResponsesDatabase, this.nullHandler);
-            this.loadButton.loading = false
-            this.getSurveyResponse()
-          } else {
-            this.$router.push({ name: 'Completed' })
           }
           this.button.loading = false
-        })
-        .catch(function (data, status, request) {
-          // this.loadButton.loading = false
+          this.$router.push({ name: 'Completed', params: { id: fbId } })
+        }, response => {
+          this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId)
           this.button.loading = false;
+          this.$router.push({ name: 'Completed', params: { id: fbId } })
         });
-
     },
 
     queryResponsesDatabase (tx) {

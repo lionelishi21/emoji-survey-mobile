@@ -1,0 +1,38 @@
+/* Survey Table */
+
+table.survey-table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 0 2em 0;
+  width: 100%;
+  tbody tr {
+    border-left: 0;
+    border-right: 0;
+    &:nth-child(2n + 1) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  }
+  td:first-of-type {
+    padding: 1em 0.75em 0.75em 0.75em;
+    vertical-align: middle;
+  }
+}
+
+.survey-table td:not(:first-of-type) {
+  padding: 0.75em 0.75em;
+}
+
+table.survey-table {
+  th {
+    color: #ffffff;
+    font-size: 1em;
+    padding: 0 0.75em 0.75em 0.75em;
+    text-align: left;
+  }
+  thead {
+    border-bottom: solid 2px rgba(255, 255, 255, 0.01);
+  }
+  tfoot {
+    border-top: solid 2px rgba(255, 255, 255, 0.15);
+  }
+}

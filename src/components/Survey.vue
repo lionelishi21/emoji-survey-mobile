@@ -1,188 +1,24 @@
 <template>
 <div id="wrapper" >
-    <img :src="pic_url " id="bg" class="" alt="">
-    <simplert style="custom_color" :useRadius="true"
-          :useIcon="true"
-          ref="simplert">
-   </simplert>
-     <section class="wrapper fullscreen  overlay" v-show="showQuestion(-1)"  >
-         <img @click="exitKioasMode()" src="static/emoji/grey_question.svg"  class="position_gear">
-         <img  v-if="!online" src="static/offline.png"  class="position_offline">
-          <div class="question-overlay">
-              <div class="inner text-center">
-                  <h1>{{all_feedback[0]['feedback_title']}}</h1>
-                  <p>{{all_feedback[0]['feedback_desc']}}</p>
-                  <ul>
-                      <li><a @click.prevent="initStep()" class="button beginButton">Take Survey</a></li>
-                  </ul>
-              </div>
-          </div>
-      </section>
+    <!-- <img :src="pic_url " id="bg" class="" alt=""> -->
+    <vue-up></vue-up>
         <div class="wrapper fullscreen overlay">
-          <transition-group name="fadeLeft">
-            <section  v-for="(q, key) in  all_questions" v-show="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'" style="padding: 10px;" >
-                 <div class="question-overlay" v-show="showMultipleChoiceQuestions(q.type)">
+          <transition-group tag="div" name="fadeLeft">
+            <section  v-for="(q, key) in  getAllQuestions" v-if="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'" style="padding: 10px;" >
+                 <div class="question-overlay" v-if="showMultipleChoiceQuestions(q.type)">
                         <div class="inner">
                             <h2 class="quesHeader">{{q.question}}</h2>
 
                             <div class="features question_content">
-                                <section v-for="(answer, key) in all_answers" :class="key" v-if="answer.question_id == q.id" :key="key">
-                                    <label class="img-label text-center m-r-20 " :id="answer.id">
-                                        <input
-                                            v-model="mc_responses[q.id]"
-                                            type="radio"
-                                            v-bind:checked="answer.id"
-                                            :name="'answers_mc['+q.id+']'"
-                                            :class="'emoji stats'+answer.id" :value="answer.id"
-                                            :id="'radio_'+answer.id"
-                                        />
-                                        <img
-                                            :id="'emojimage_'+answer.id"
-                                            :src="'static/emoji/'+answer.emoji+'.svg'"
-                                            class="img-responsive emoji-img "
-                                            />
-                                    </label>
-
-                                    <h3 v-html="modifyAnswers(answer.answer)"></h3>
-                                </section>
-                            </div>
-                            <div class="nextPrevious">
-                                <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
-                                <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                                <a v-if="key == all_questions.length-1"
-
-                                   @click="goTSubmit()"
-                                   class="button pull-right">
-                                  Submit
-                                </a>
-                                <a v-else @click="getNextPage(key)" class="button pull-right">Next Questions</a>
+                               
                             </div>
                         </div>
-                 </div>
-                 <div class="question-overlay " v-show="showMatrixQuestions(q.type)">
-                        <div :id="'quest_back'+key" class="inner">
-                            <h2 class="quesHeader">{{q.question}}</h2>
-                        </div>
-                        <div class="question_content">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th v-for="(mt, key) in all_matrixs" v-if="q.id == mt.question_id" :key="key">
-                                            <div class="text-center">
-                                                <div class="circle">
-                                                    <img class="img-responsive emoji-img " style="margin: 0 auto;"
-                                                        :src="'static/emoji/'+mt.emoji+'.svg'">
-                                                </div>
-                                                <h4 class="text-center">{{mt.matrix}}</h4>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(ans, key) in all_answers" v-if="q.id == ans.question_id" :key="key">
-                                        <div class="text-left mt-3">
-                                            <td><h4 class="text-left">{{ans.answer}}</h4></td>
-                                        </div>
-
-                                        <td v-for="(mt, key) in all_matrixs" v-if="q.id == mt.question_id" :key="key">
-                                            <div class="center_check">
-                                                <label class="matrix_ques">
-                                                    <input
-                                                    :name="'answers_matrixs['+ans.id+']'"
-                                                        class='myinput large custom'
-                                                        type="radio"
-                                                        v-model="matrix_responses[ans.id]"
-                                                        :value="q.id+'-'+mt.id
-                                                    ">
-                                                    <i class="input-helper"></i>
-                                                </label>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    <div class="nextPrevious">
-                            <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
-                            <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                            <a v-if="key == all_questions.length-1"  @click="goTSubmit()" class="button pull-right">Submit</a>
-                            <a v-else  @click="getNextPage(key)" class="button pull-right">Next Questions</a>
-                    </div>
-                 </div>
-                 <div class="question-overlay" v-show="showCommentQuestions(q.type)">
-                       <div class="inner">
-                          <h2 class="quesHeader">{{q.question}}</h2>
-                          <div class="question_content">
-                          <div class="form-group">
-                              <textarea class="form-control" v-model="comments_response[q.id]"  :name="'answers_comment['+q.id+']'" rows="7" id="textArea"></textarea>
-                              <span style="color:white">Click above to enter your comment.</span>
-                          </div>
-                          </div>
-
-                          <div class="nextPrevious">
-                               <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
-                                    <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                                    <a v-if="key == all_questions.length-1"  @click="goTSubmit()" class="button pull-right">Submit</a>
-                                    <a v-else  @click="getNextPage(key)" class="button pull-right">Next Questions</a>
-                          </div>
-                      </div>
-                 </div>
-                 <div class="question-overlay" v-show="showSliderQuestions(q.type)">
-                      <div class="inner">
-                          <h2 class="quesHeader">{{q.question}}</h2>
-                          <div class="question_content pt-4">
-                              <div class="text-center" v-for="(slider, key) in all_sliders" v-if="slider.question_id == q.id" :key="key">
-                                <vue-slider
-                                    :min="0"
-                                    :class="changeEmoji(slider_questions[q.id])"
-                                    :max="5"
-                                    v-bind="options"
-                                    v-model="slider_questions[q.id]"
-                                    >
-                                    </vue-slider>
-                                </div>
-                          </div>
-
-                            <div class="nextPrevious">
-                                <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
-                                <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                                <a v-if="key == all_questions.length-1"  @click="goTSubmit()" class="button pull-right">Submit</a>
-                                <a v-else  @click="getNextPage(key)" class="button pull-right">Next Questions</a>
-                          </div>
-                      </div>
-                 </div>
-                 <div class="question-overlay" v-show="showRangeQuestions(q.type)">
-                      <div class="inner">
-                            <h2 class="quesHeader">{{q.question}}</h2>
-                            <div class="features question_content" style="padding-bottom: 20px;">
-                                <div class="col-sm-12" style="width: 100%; padding-left: 15px; padding-right: 15px; position: relative;" v-for="(answer, key) in all_answers" :class="key" v-if="answer.question_id == q.id" :key="key">
-                                    <div class="cen/ter_check m-b-15 label_padding" style="padding-top: 20px; padding-left: 10px; padding-right: 10px;">
-                                        <label class="matrix_ques" style="width:100%;">
-                                            <img :id="'emojimage_'+answer.id" :src="'static/emoji/'+answer.emoji+'.svg'" class="img-responsive emoji-img" style="margin: 0px auto;margin-right:10px;"/>
-
-                                            <input v-model="range_questions[q.id]" class='myinput large custom' type="radio" name="range_question" :value="answer.id">
-                                            <i class="input-helper"></i>
-
-                                            <strong class="range-label">{{answer.answer}}</strong>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="nextPrevious">
-                                <a @click="backToIntro()" v-if="key == 0" class="button pull-left">Back to Introduction</a>
-                                <a v-else @click="getPrevPage(key)" class="button pull-left">Previous Question</a>
-                                 <a v-if="key == all_questions.length-1"  @click="goTSubmit()" class="button pull-right">Submit</a>
-                                <a v-else=""  @click="getNextPage(key)" class="button pull-right">Next Questions</a>
-                            </div>
-                      </div>
                  </div>
             </section>
           </transition-group>
         </div>
        <section id="submitSurvey" style="background-image: url('static/survey-themes/breeze-cotton.jpg');" class="wrapper intro1 fullscreen fade-up question-bg-1">
-            <div class="question-overlay">
+         <!--    <div class="question-overlay">
                 <div class="inner text-center">
                     <h1>Congratulations on making it this far !</h1>
                     <p>
@@ -193,17 +29,17 @@
                    :loading="this.button.loading"
                    :data-style="this.button.dataStyle"
                    :progress="this.button.progress"
-                   @click="formSubmit(all_feedback[0]['feedback_id'])">
+                   @click="formSubmit(all_feedback[0]['feedback_slug'])">
                    Submit Survey
                  </vue-ladda>
                 </div>
-            </div>
+            </div> -->
         </section>
 
   </div>
 </template>
 <script>
-import vueSlider from 'vue-slider-component';
+import vueSlider from 'vue-slider-component/src/vue2-slider.vue'
 import { OfflineIndicator, VueOnline } from 'vue-online'
 
 // require styles
@@ -213,22 +49,15 @@ import RangeSlider from 'vue-range-slider'
 
 // you probably need to import built-in style
 import 'vue-range-slider/dist/vue-range-slider.css'
-
-import Feedback from '../databases/feedback'
-import Question from '../databases/questions'
-import Answer from '../databases/answers'
-import Matrix from '../databases/matrixs'
-import Slider from '../databases/slider'
-import Post from '../databases/post'
 import VueLadda from 'vue-ladda'
 import Simplert from 'vue2-simplert'
 import { mapGetters } from 'vuex';
 
 export default {
-    mixins: [Feedback, Question, Answer, Matrix, Slider, Post],
 		data() {
 			return {
-        step: -1,
+        step: 0,
+        show: false,
         feedback_title: '',
         sliderValue: 50,
         success: false,
@@ -253,6 +82,12 @@ export default {
         range_count: '',
 				surveys: '',
         hash: '',
+        showSliderQue: false,
+        showMatrixQue: false,
+        showRangeQue: false,
+        showCommentQue: false,
+        showMcQue: false,
+
         button: {
           loading: false,
           'dataStyle': 'expand-left',
@@ -265,6 +100,9 @@ export default {
             dotSize: 60,
             show: true,
             interval: 1,
+            lazy:true,
+            max: 5,
+            min: 0,
             tooltip: "always",
             piecewise: true,
             piecewiseLabel: true,
@@ -297,18 +135,24 @@ export default {
     },
     computed: {
       ...mapGetters([
-        'all_feedback',
-        'all_questions',
-        'all_answers',
-        'all_sliders',
-        'all_matrixs'
+        'getAllQuestions',
+
       ]),
        online () {
         return VueOnline.isOnline
       }
     },
     created() {
-      this.init();
+      var db
+      db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+      this.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
+    },
+    watch: {
+      step (val) {
+         if (val == 2) {
+           return true;
+         }
+      },
     },
     components: {
       vueSlider,
@@ -319,6 +163,24 @@ export default {
       Simplert
     },
   	methods: {
+      showAlert(key, emoji, answer) {
+      var emoji = 'static/emoji/'+emoji+'.svg';
+      this.$popup({
+          message         : answer,
+          color           : '#423452',
+          backgroundColor : 'rgba(0, 0, 0, 0.4)',
+          delay           : 10,
+          image: emoji
+      })
+      this.getNextPage(key)
+      },
+      showMatrixAlert(qustion_key, matrix_key) {
+        var emoji = this.all_matrixs[matrix_key]['emoji']
+        var matrix = this.all_matrixs[matrix_key]['matrix']
+        
+
+        // this.showAlert(qustion_key, emoji, matrix)
+      },
       goTSubmit(){
         var check = this.checkForNull();
         if (check) {
@@ -330,7 +192,8 @@ export default {
             type: 'info',
             customClass: 'simple_background',
             customIconUrl: 'static/disappointed.svg',
-            onClose: this.onClose
+           
+
           }
           this.$refs.simplert.openSimplert(obj)
         }
@@ -349,16 +212,6 @@ export default {
                 return answer
             }
         },
-      init() {
-        VueOnline.isOnline;
-        console.log('creating database')
-        var db
-        db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-        console.log(db)
-        this.db = db
-        this.getSurveyQuestionAnswer()
-
-      },
       showSubmit() {
         this.step = 'submit';
       },
@@ -450,8 +303,6 @@ export default {
       showSliderQuestions(value){
          if(value == 4){
           return true;
-         } else {
-           return false;
          }
       },
       showRangeQuestions(value){
@@ -475,11 +326,16 @@ export default {
       },
 
       getNextPage(key) {
-          if (key == 0) {
-            this.step = 1;
-          } else {
-            this.step += 1;
-          }
+          // if (key == this.all_questions.length - 1) {
+          //   alert('end of questio')
+          //   this.goTSubmit()
+          // }
+
+          // if (key == 0) {
+          //   this.step = 1;
+          // } else {
+          //   this.step += 1;
+          // }
 
       },
       getPrevPage(key) {
@@ -505,7 +361,12 @@ export default {
     getPrev(key) {
         this.step - 1;
     },
-
+    refreshSlider: function () {
+        this.$nextTick(function () {
+          console.log(this.$refs);
+          this.$refs['vue_slider'].refresh()
+        })
+      }
 	   }
 	}
 </script>
@@ -789,4 +650,9 @@ export default {
     background-size: 100%;
     border-color: #2196F3;
     }
+
+
+#app_ {
+  transform: rotate(90deg);
+}
 </style>

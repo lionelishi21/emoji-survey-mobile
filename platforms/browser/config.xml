@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.cordova.hellocordova" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.cordova.appfinity" version="1.0.8" versionCode="8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>HappyReply</name>
     <description>
         Emoji survey app
     </description>
-    <author email="support@usagetech.com" href="http://usagetech.com">
-        Usage Technologies
+    <author email="support@appfinity.com" href="http://appfinity.com">
+       AppFinity Technologies
     </author>
     <content src="index.html" />
     <access origin="*" />
@@ -16,6 +16,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <icon density="mdpi" height="57" platform="android" src="static/icon/happyreply.png" width="57" />
+    <preference name="AllowInlineMediaPlayback" value="true" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="orientation" value="landscape" />
 </widget>
