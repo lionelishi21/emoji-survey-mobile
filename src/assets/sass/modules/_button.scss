@@ -1,4 +1,5 @@
 .survey-btn {
+  font-family: $font-family-russo;
    display: inline-block;
    font-weight: $survey-btn-weight;
    text-alignt: center;
@@ -15,4 +16,8 @@
 
 .btn-survey-lg {
   @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $font-size-large, $btn-line-height, $btn-radius);
+}
+
+.btn-survey-intro {
+  @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $font-size-intro, $btn-line-height, $btn-radius);
 }

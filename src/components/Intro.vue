@@ -12,19 +12,21 @@
 </section>
 </template>
 <script>
-import myVideo from 'vue-video-module'
 import { mapGetters } from 'vuex';
 export default {
-  components: {
-        myVideo
-  },
   data(){
     return {
         id: '',
         videoId: '',
         playerVars: {
-          autoplay: 1,
-          controls: 0,
+          autoplay : 1,
+          rel : 0,
+          showinfo : 0,
+          showsearch : 0,
+          controls : 0,
+          loop : 1,
+          enablejsapi : 1,
+          playlist: '',
           suggestedQuality: 'large'
 
         },
@@ -62,6 +64,9 @@ export default {
    ...mapGetters([
        'feedbackInfo'
     ]),
+    player () {
+      return this.$refs.youtube.player
+    }
   },
   created(){
     var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
@@ -73,8 +78,13 @@ export default {
     playing() {
       console.log('\o/ we are watching!!!')
     },
+    ended(){
+       this.$refs.youtube.player.playVideo()
+    },
     getVideoId() {
-      return this.$youtube.getIdFromUrl(this.videoId)
+      var video = this.$youtube.getIdFromUrl(this.videoId)
+      this.playerVars.playlist = video
+      return video
     },
      goToSurvey() {
          this.$router.push({name: 'Survey'})

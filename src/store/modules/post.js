@@ -1,7 +1,7 @@
 import api from '../../api'
 
 const state = {
-    mc_responses: {},
+    mcResponses: [],
     matrix_responses: {},
     range_responses: {},
     comments_responses: {},
@@ -9,20 +9,23 @@ const state = {
 }
 
 const getters = {
-	getMcResponse: state => state.mc_responses,
+	getMcResponse: state => state.mcResponses,
 	getMatrixResponse: state => state.matrix_responses,
 	getRangeResponse: state => state.range_responses,
 	getCommentResponse: state => state.comment_responses,
 	getSliderResponse: state => state.slider_responses
 }
 
-const action = {
-
+const actions = {
+	//TODO: Make post response works here
+	postResponses (mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId) {
+		// api.postResponses(fbId)
+	}
 }
 
 const mutations = {
 	setMcResponse(state, mc) {
-
+		state.mcResponses = mc
 	}
 }
 

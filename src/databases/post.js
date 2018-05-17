@@ -24,14 +24,14 @@ export default {
       console.log('dropping response table after upload to database')
       tx.executeSql('DROP TABLE IF EXISTS responses')
     },
-    saveOfflineUpdate (multpleChoice, matrix, slider, range, comments, fbId) {
+    saveOfflineUpdate (multpleChoice, matrix, slider, range, comments, fbId, db) {
       var mc = JSON.stringify(multpleChoice)
       var matrixAnswers = JSON.stringify(matrix)
       var sliderAnswers = JSON.stringify(slider)
       var rangeAnswers = JSON.stringify(range)
       var commentsAnswers = JSON.stringify(comments)
 
-      this.db.transaction(function (tx) {
+      db.transaction(function (tx) {
         var sql = 'INSERT INTO responses (multiple_choice, matrix, slider, range, suggestion, feedback_id) VALUES (?,?,?,?,?,?)'
         tx.executeSql(sql, [mc, matrixAnswers, sliderAnswers, rangeAnswers, commentsAnswers, fbId])
       })
@@ -48,12 +48,12 @@ export default {
           this.success = false;
         })
     },
-    newSaveResponse (multpleChoice, matrix, slider, range, comments, fbId) {
+    newSaveResponse (multpleChoice, matrix, slider, range, comments, fbId, db) {
     
-        this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId, false)
+        this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId, false, db)
         // this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
     },
-    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId, offline) {
+    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId, offline, db) {
       var action = 'https://happyreply.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
       // this.loadButton.loading = true
@@ -75,12 +75,13 @@ export default {
         })
         .then(response => {
           if (offline == 'ture') {
-            this.db.transaction(this.dropResponsesDatabase, this.nullHandler);
+             var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+             db.transaction(this.dropResponsesDatabase, this.nullHandler);
           }
           this.button.loading = false
           this.$router.push({ name: 'Completed', params: { id: fbId } })
         }, response => {
-          this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId)
+          this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId, db)
           this.button.loading = false;
           this.$router.push({ name: 'Completed', params: { id: fbId } })
         });
@@ -128,9 +129,9 @@ export default {
           this.success = false;
         })
     },
-    postResponseOffline () {
+    postResponseOffline (db) {
       this.loadButton.loading = true
-      this.db.transaction(this.queryResponsesDatabase1, this.errorHandler)
+      db.transaction(this.queryResponsesDatabase1, this.errorHandler)
 
     },
     queryResponsesDatabase1 (tx) {
@@ -165,7 +166,7 @@ export default {
           commentArray = JSON.parse(results.rows.item(i).suggestion)
         }
         var feedbackId = results.rows.item(i).feedback_id;
-        this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, feedbackId, true)
+        this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, feedbackId, true, db)
       }
     }
   }

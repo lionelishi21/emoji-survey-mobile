@@ -18,7 +18,7 @@
           </transition-group>
         </div>
        <section id="submitSurvey" style="background-image: url('static/survey-themes/breeze-cotton.jpg');" class="wrapper intro1 fullscreen fade-up question-bg-1">
-         <!--    <div class="question-overlay">
+            <div class="question-overlay">
                 <div class="inner text-center">
                     <h1>Congratulations on making it this far !</h1>
                     <p>
@@ -33,7 +33,7 @@
                    Submit Survey
                  </vue-ladda>
                 </div>
-            </div> -->
+            </div>
         </section>
 
   </div>
@@ -145,6 +145,7 @@ export default {
     created() {
       var db
       db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+       this.$store.dispatch('getFeedbackTitleFromSqlLite', db);
       this.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
     },
     watch: {

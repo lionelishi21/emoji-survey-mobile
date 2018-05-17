@@ -1,5 +1,18 @@
 <template>
-	<div class="limiter">
+	<div>
+      <v-snackbar
+      :timeout="timeout"
+      :top="y === 'top'"
+      :bottom="y === 'bottom'"
+      :right="x === 'right'"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :vertical="mode === 'vertical'"
+      v-model="snackbar"
+    >
+      {{ text }}
+      <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
+    </v-snackbar>
 		<div class="container-login100" style="background-image: url('static/survey-themes/breeze-cotton.jpg');">
 			<div class="wrap-login100 p-t-190 p-b-30">
 				<form class="login100-form validate-form">
@@ -59,6 +72,12 @@ export default {
   },
        data() {
             return {
+                snackbar: false,
+                y: 'top',
+                x: null,
+                mode: '',
+                timeout: 5000,
+                text: '',
                 database: 'SurveyDb',
                 version: '1.0',
                 dbDisplay: 'ServeyDatabase',
@@ -103,11 +122,18 @@ export default {
 
             if (this.formInputs.email == "") {
                $('#emailInput').addClass('alert-validate');
+              $('#passwordInput').addClass('alert-validate');
+               this.text = 'Email and password is required'
+               this.snackbar = true;
+               return
              } else {
                 $('#emailInput').removeClass('alert-validate');
              }
 
             if (this.formInputs.password == "") {
+              this.text = 'Password is required'
+               this.snackbar = true;
+               return
                $('#passwordInput').addClass('alert-validate');
              } else {
                 $('#passwordInput').removeClass('alert-validate');
@@ -129,7 +155,11 @@ export default {
               })
               .catch(function (data, status, request) {
                 var errors = data.data;
+                console.log(errors)
                 if (errors != null) {
+                  this.text = errors.error
+                  this.snackbar = true
+
                   $('#emailInput').addClass('alert-validate');
                   $('#passwordInput').addClass('alert-validate');
                   this.formInputs.password == "";
@@ -142,7 +172,7 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="css">
 /*---------------------------------------------*/
 input {
 	outline: none;
@@ -596,5 +626,4 @@ iframe {
     padding-right: 15px;
   }
 }
-
 </style>

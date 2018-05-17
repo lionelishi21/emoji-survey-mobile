@@ -16,16 +16,16 @@ const actions = {
       .then(response => {
         return response.json()
       }).then(response => {
-        dispatch('saveSliderToDataBase', { data, db })
+        dispatch('saveSliderToDataBase', { response, db })
       })
   },
   saveSliderToDataBase ({ commit }, response) {
-    var data = response['data']
+    var data = response['response']
     var db = response['db']
     for (let key in data) {
       db.transaction(function (tx) {
         var sql = 'INSERT INTO sliders ( id, question_id, left, right, label) VALUES (?,?,?,?,?)'
-        tx.executeSql(sql, [data['id'], data['question_id'], data['left'], data['right'], data['label']])
+        tx.executeSql(sql, [data[key]['id'], data[key]['question_id'], data[key]['left'], data[key]['right'], data[key]['label']])
       })
     }
   },

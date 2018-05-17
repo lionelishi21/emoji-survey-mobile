@@ -31,13 +31,13 @@ import Notifications from 'vue-notification'
 import VueYoutube from 'vue-youtube'
 import VueUp from 'vueup'
 import VModal from 'vue-js-modal'
-
-// globally (in your main .js file)
-Vue.component('icon', Icon)
-
+import Vuetify from 'vuetify'
 import ResponseTheme from './response-main'
-Vue.use(ResponseTheme)
+// index.js or main.js
+import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
+Vue.use(ResponseTheme)
+Vue.use(Vuetify)
 Vue.use(VModal)
 Vue.use(VueRouter)
 Vue.use(VueResource)
@@ -63,7 +63,7 @@ routes: [
       component: Home
     },
     {
-      path: '/survey',
+      path: '/survey/:id',
       name: 'Survey',
       component: Survey
     },
@@ -89,11 +89,6 @@ function requireAuth (to, from, next) {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-    framework7: {
-    root: '#app',
-     // Uncomment to enable Material theme:
-    material: true
-  },
   router: router,
   store: store,
   render: h => h(App)

@@ -14,24 +14,25 @@ const actions = {
     var db = data['db']
     api.getSurveyMatrix(userId)
       .then(response => {
+        console.log(response)
         return response.json()
       }).then(response => {
-        dispatch('saveMatrixToDataBase', { data, db })
+        dispatch('saveMatrixToDataBase', { response, db })
       })
   },
   saveMatrixToDataBase ({ commit }, response) {
-    var data = response['data']
+    var data = response['response']
     var db = response['db']
     for (let key in data) {
       db.transaction(function (tx) {
         var sql = 'INSERT INTO matrixs ( id, emoji, matrix, question_id) VALUES (?,?,?,?)'
-        tx.executeSql(sql, [data['id'], data['emoji'], data['matrix'], data['question_id']])
+        tx.executeSql(sql, [data[key]['id'], data[key]['emoji'], data[key]['matrix'], data[key]['question_id']])
       })
     }
   },
   getFeedbackMatixFromSqlLite ({ commit }, db) {
     db.transaction(function (tx) {
-      tx.executeSql('SELECT * FROM answers;', [], function (tx, results) {
+      tx.executeSql('SELECT * FROM matrixs;', [], function (tx, results) {
         var len = results.rows.length;
         var resultsArray = [];
         for (var i = 0; i < len; i++) {
