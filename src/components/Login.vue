@@ -66,6 +66,7 @@
 <script>
 // import auth from '../auth/auth.js';
 import VueLadda from 'vue-ladda'
+import { mapGetters } from 'vuex';
 export default {
   components: {
     'vue-ladda': VueLadda
@@ -101,9 +102,25 @@ export default {
           this.checkUserLogin();
           this.initDatabase();
         },
+        computed: {
+
+        },
         methods: {
             initDatabase() {
-                this.db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+                db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+                this.$store.dispatch('creatingDatabase', db)
+            },
+            fetchFromServer(){
+                var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+                var user_id = localStorage.getItem('user_id')
+                this.$store.dispatch('creatingDatabase', db)
+                this.$store.dispatch('getFeedback', {user_id, db})
+                this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
+                this.$store.dispatch('getQuestions',  {user_id, db})
+                this.$store.dispatch('getAnswers',  {user_id, db})
+                this.$store.dispatch('getMatrixs',  {user_id, db})
+                this.$store.dispatch('getSliders',  {user_id, db})
+                this.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
             },
             showError(value){
               if (value != null) {
@@ -149,9 +166,16 @@ export default {
               .then(function(data) {
                    localStorage.setItem("user_id", data.body.user_id);
                    localStorage.setItem("feedback_id", data.body.feedback_id);
+                   localStorage.setItem("user_name", data.body.user_name);
+                   this.fetchFromServer();
                    // Retrieve
-                    this.$router.push({name: 'Home'});
-                    this.button.loading = false;
+                   var self = this;
+                   setTimeout(function(){
+                       self.button.loading = false;
+                       self.$router.push({name: 'Home'});
+                   }, 1000);
+                   
+                
               })
               .catch(function (data, status, request) {
                 var errors = data.data;

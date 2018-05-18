@@ -27,7 +27,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import VueLadda from 'vue-ladda'
-import Post from '../database/post'
+import Post from '../databases/post'
 export default {
 	mixins:[Post],
 	components: {

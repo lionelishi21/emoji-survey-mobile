@@ -1,32 +1,35 @@
 <template>
-	<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
-            <h1 class="h2">Dashboard</h1>
-          </div>
-           <div class="row center-xs" style="padding-top: 20%;" v-if="feedbackInfo[0]">
-              <div class="col-xs-6">
-                     <article class="custom-card animated fadeInLeft" @click="goToSurvey(feedbackInfo[0].feedback_slug)">
-                        <div class="card-body">
-                          <h4 class="card-title">{{feedbackInfo[0].feedback_title}}</h4>
-                          <h6 class="text-muted">Questions: {{ QuestionAmount }}</h6>
-                          <p class="card-text">{{feedbackInfo[0].feedback_desc}}</p>
-                        </div>
-                      </article><!-- .end Card -->
-              </div>
-          </div>
-           <div v-else class="row center-xs" style="padding-top: 20%;">
-                <div class="col-xs-6">
-                    <vue-ladda
-                       class="survey-btn btn-red btn-survey-lg"
-                      :loading="loadingButton(isLoading)"
-                      :data-style="button.dataStyle"
-                      :progress="button.progress"
-                       @click="loadSurveys()">
-                      Load Survey
-                    </vue-ladda>
-                </div>
-            </div>
-        </main>
+  <div>
+   <v-layout row wrap>
+   <v-subheader><h2>Surveys</h2></v-subheader>
+   </v-layout>
+      <v-flex xs6>
+         <v-card style="border: 1px solid blue" @click="goToSurvey()" >
+              <v-container fluid grid-list-lg>
+                <v-layout row>
+                  <v-flex xs7>
+                    <div>
+                      <div class="headline">{{feedbackInfo[0].feedback_title}}</div>
+                      <div>{{feedbackInfo[0].feedback_desc}}</div>
+                    </div>
+                  </v-flex>
+                  <v-flex xs5>
+                    <v-card-text>
+                      <h1>
+                       Q: {{ QuestionAmount }}
+                      </h1>
+                    </v-card-text>
+                    
+                  </v-flex>
+                </v-layout>
+              </v-container>
+                <v-card-actions>
+                    <v-btn flat color="orange" @click="goToSurvey(feedbackInfo[0].feedback_slug)">Select</v-btn>
+                  </v-card-actions>
+            </v-card>
+      </v-flex>
+</v-layout>
+</div>
 </template>
 <script>
 import { OfflineIndicator, VueOnline } from 'vue-online'
@@ -87,14 +90,14 @@ export default {
       initilizeDatabase() {
         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         var user_id = localStorage.getItem('user_id')
-        this.$store.dispatch('reCreateDatabases', db)
-        this.$store.dispatch('getFeedback', {user_id, db})
+        this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
+        this.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
       },
       loadingButton(load){
         return load;
       },
       logout(){
-          var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
          this.$store.dispatch('dropDatabase', db)
          localStorage.removeItem("user_id");
          localStorage.removeItem("feedback_id");
@@ -120,42 +123,14 @@ export default {
         }
       },
       goToSurvey(fb_id) {
-         this.$router.push({name: 'Intro',  params: { id: fb_id } })
+         this.$router.push({name: 'Survey',  params: { id: fb_id } })
         //  location.reload();
-      },
-      showButtonTwo(value) {
-        if (value > 0) {
-          return false;
-        } else {
-          return true
-        }
-      },
-      showSurveyTabResponse(){
-        if (this.tab_state == 'response') {
-          return true;
-        }  else {
-          return false;
-        }
-      },
-      showSurveyTabHome(){
-         if (this.tab_state == 'home') {
-          return true;
-        }  else {
-          return false;
-        }
-      },
-      goToResponse(fbId) {
-        this.feedback_id = fbId;
-        this.tab_state = 'response'
-      },
-      gotToSurvey() {
-        this.tab_state = 'home'
       },
       loadSurveys() {
         
         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         var user_id = localStorage.getItem('user_id')
-
+        this.$store.dispatch('reCreateDatabases', db)
         this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
         this.$store.dispatch('getQuestions',  {user_id, db})
         this.$store.dispatch('getAnswers',  {user_id, db})

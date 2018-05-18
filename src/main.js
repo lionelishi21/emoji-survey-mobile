@@ -1,15 +1,12 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-// require('../css/main.css')
-// require('../response/assets/css/main.css')
 require('expose?$!expose?jQuery!jquery')
 require('../vendors/bower_components/jquery/dist/jquery.min.js')
-require('../vendors/bower_components/bootstrap/dist/js/bootstrap.min.js')
-require('../vendors/bower_components/Waves/dist/waves.min.js')
+// require('../vendors/bower_components/bootstrap/dist/js/bootstrap.min.js')
+// require('../vendors/bower_components/Waves/dist/waves.min.js')
 require('vue2-animate/dist/vue2-animate.min.css')
 require('./plugins/sweet-alert-plugin');
-import Icon from 'vue-awesome/components/Icon'
-
+require('vue2-animate/dist/vue2-animate.min.css')
 
 
 import Vue from 'vue'
@@ -18,8 +15,10 @@ import VueResource from 'vue-resource'
 import BootstrapVue from 'bootstrap-vue'
 import App from './components/App.vue'
 import Survey from './layouts/Survey.vue'
+import Dashboard from './layouts/Dashboard.vue'
 import Login from './components/Login.vue'
-import Home from './components/Home.vue'
+import Home from './layouts/Home.vue'
+import Response from './layouts/Responses'
 import Completed from './components/Completed'
 import Intro from './components/Intro'
 import store  from './store/';
@@ -58,9 +57,14 @@ routes: [
       component: Login
     },
     {
-      path: '/home',
-      name: 'Home',
-      component: Home
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: Dashboard,
+      children:[
+        { path: '', name: 'Home', component:  Home },
+        { path: '/response', name:'Response', component: Response }
+        // { path: '/settings', component: SurveyStart },
+      ]
     },
     {
       path: '/survey/:id',

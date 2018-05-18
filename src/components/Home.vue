@@ -1,67 +1,69 @@
 <template>
-  <div>
-      <div class="container-fluid">
-      <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-          <div class="sidebar-sticky">
-             <div class="logo text-center">
-                <img src="static/logo/logo.png" alt="logo" style="width:100">
-            </div>
-            <ul class="nav flex-column custom-nav">
-              <li class="nav-item custom-link-nav">
-                <a class="nav-link active" href="#">
-                    <img src="../assets/img/home.png" alt="">
-                  Home <span class="sr-only">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link custom-link-nav" href="#">
-                 <img src="../assets/img/contract.png" alt="" width="20px">
-                  <span data-feather="file"></span>
-                  Response
-                </a>
-              </li>
-              <li class="nav-item custom-link-nav">
-                <a class="nav-link" href="#">
-                  <img src="../assets/img/logout.png" alt="" width="20px">
-                  <span data-feather="shopping-cart"></span>
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
-            <h1 class="h2">Dashboard</h1>
-          </div>
-           <div class="row center-xs" style="padding-top: 20%;" v-if="feedbackInfo[0]">
-              <div class="col-xs-6">
-                     <article class="custom-card animated fadeInLeft" @click="goToSurvey(feedbackInfo[0].feedback_slug)">
-                        <div class="card-body">
-                          <h4 class="card-title">{{feedbackInfo[0].feedback_title}}</h4>
-                          <h6 class="text-muted">Questions: {{ QuestionAmount }}</h6>
-                          <p class="card-text">{{feedbackInfo[0].feedback_desc}}</p>
-                        </div>
-                      </article><!-- .end Card -->
-              </div>
-          </div>
-           <div v-else class="row center-xs" style="padding-top: 20%;">
-                <div class="col-xs-6">
-                    <vue-ladda
-                       class="survey-btn btn-red btn-survey-lg"
-                      :loading="loadingButton(isLoading)"
-                      :data-style="button.dataStyle"
-                      :progress="button.progress"
-                       @click="loadSurveys()">
-                      Load Survey
-                    </vue-ladda>
-                </div>
-            </div>
-        </main>
-      </div>
-    </div>
-  </div>
+<v-app>
+     <v-navigation-drawer
+      :clipped="$vuetify.breakpoint.lgAndUp"
+      v-model="drawer"
+      permanent
+      app
+    >
+    <v-toolbar flat class="transparent">
+        <v-list class="pa-0">
+          <v-list-tile avatar>
+            <v-list-tile-avatar>
+              <img src="https://randomuser.me/api/portraits/men/85.jpg" >
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{user_name}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-toolbar>
+    <v-list dense>
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Home</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>contact_mail</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Responses</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+         <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>power_settings_new</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+  </v-navigation-drawer>
+  <v-toolbar color="grey darken-3" 
+    fixed 
+    dark
+    app
+     :clipped-left="$vuetify.breakpoint.mdAndUp"
+    >
+    <v-toolbar-title> <img src="static/logo/logo.png" alt="logo" style="width:200px"></v-toolbar-title>
+    <v-spacer></v-spacer>
+     <v-btn icon @click="">
+      <v-icon>refresh</v-icon>
+    </v-btn>
+  </v-toolbar>
+  <v-content>
+    <v-container fluid>
+      <router-view></router-view>
+    </v-container>
+  </v-content>
+  <v-footer app></v-footer>
+</v-app>
 </template>
 <script>
 import { OfflineIndicator, VueOnline } from 'vue-online'
@@ -73,6 +75,7 @@ import Icon from 'vue-awesome/components/Icon'
 export default {
     data() {
       return {
+        user_name: 'Lionel Francis',
         config: {
           pullText: '..Loading', // The text is displayed when you pull down
           triggerText: '..fetching data from server', // The text that appears when the trigger distance is pulled down
@@ -101,6 +104,7 @@ export default {
     created(){
       this.checkUserLogin();
       this.initilizeDatabase();
+
     },
     components: {
       OfflineIndicator,
@@ -122,6 +126,7 @@ export default {
       initilizeDatabase() {
         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         var user_id = localStorage.getItem('user_id')
+        // this.user_name = localStorage.getItem('user_name')
         this.$store.dispatch('reCreateDatabases', db)
         this.$store.dispatch('getFeedback', {user_id, db})
       },
