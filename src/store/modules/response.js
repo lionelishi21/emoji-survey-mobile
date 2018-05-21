@@ -13,7 +13,7 @@ const actions = {
     db.transaction(function (tx) {
       tx.executeSql('SELECT * FROM responses;', [], function (tx, results) {
         var len = results.rows.length
-        this.$store.commit('setResponseCount', len)
+        commit('setResponseCount', len)
       })
     })
   }

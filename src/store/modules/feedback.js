@@ -2,6 +2,7 @@ import api from '../../api'
 
 const state = {
   feedbacks: []
+
 }
 
 const getters = {
@@ -51,6 +52,7 @@ const actions = {
           }
           resultsArray.push(res)
         }
+
         commit('setFeedback', resultsArray)
       })
     })

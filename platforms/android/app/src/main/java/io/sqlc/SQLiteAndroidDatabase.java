@@ -8,6 +8,10 @@ package io.sqlc;
 
 import android.annotation.SuppressLint;
 
+// SQLCipher version of database classes:
+import net.sqlcipher.*;
+import net.sqlcipher.database.*;
+/* **
 import android.database.Cursor;
 import android.database.CursorWindow;
 
@@ -16,6 +20,7 @@ import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteStatement;
+// */
 
 import android.util.Log;
 
@@ -24,12 +29,12 @@ import java.io.File;
 import java.lang.IllegalArgumentException;
 import java.lang.Number;
 
-import java.util.Locale;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.cordova.CallbackContext;
+// NOTE: more than CordovaPlugin & CallbackContext needed to support
+// ...
+import org.apache.cordova.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,13 +70,22 @@ class SQLiteAndroidDatabase
      */
 
     /**
+     * to load native lib(s)
+     */
+    //@Override
+    static
+    public void initialize(CordovaInterface cordova) {
+        SQLiteDatabase.loadLibs(cordova.getActivity());
+    }
+
+    /**
+     *
      * Open a database.
      *
      * @param dbfile   The database File specification
      */
-    void open(File dbfile) throws Exception {
-        dbFile = dbfile; // for possible bug workaround
-        mydb = SQLiteDatabase.openOrCreateDatabase(dbfile, null);
+    void open(File dbfile, String key) throws Exception {
+        mydb = SQLiteDatabase.openOrCreateDatabase(dbfile, key, null);
     }
 
     /**
@@ -88,10 +102,7 @@ class SQLiteAndroidDatabase
         }
     }
 
-    void bugWorkaround() throws Exception {
-        this.closeDatabaseNow();
-        this.open(dbFile);
-    }
+    /* NOTE: bug workaround NOT NEEDED in this version */
 
     /**
      * Executes a batch request and sends the results via cbc.
@@ -138,58 +149,46 @@ class SQLiteAndroidDatabase
             try {
                 boolean needRawQuery = true;
 
-                //Log.v("executeSqlBatch", "get query type");
+                //Log.v("executeSqlBatch", "...");
                 QueryType queryType = getQueryType(query);
                 //Log.v("executeSqlBatch", "query type: " + queryType);
 
                 if (queryType == QueryType.update || queryType == queryType.delete) {
-                    if (isPostHoneycomb) {
-                        SQLiteStatement myStatement = mydb.compileStatement(query);
+                    // NOTE: SQLCipher for Android provides consistent SQLiteStatement.executeUpdateDelete();
+                    // no need for rowsAffectedCompat hack.
+                    SQLiteStatement myStatement = mydb.compileStatement(query);
 
-                        if (json_params != null) {
-                            bindArgsToStatement(myStatement, json_params);
-                        }
+                    bindArgsToStatement(myStatement, json_params);
 
-                        int rowsAffected = -1; // (assuming invalid)
+                    long rowsAffected = -1; // (assuming invalid)
 
-                        // Use try & catch just in case android.os.Build.VERSION.SDK_INT >= 11 is lying:
-                        // (Catch SQLiteException here to avoid extra retry)
-                        try {
-                            rowsAffected = myStatement.executeUpdateDelete();
-                            // Indicate valid results:
-                            needRawQuery = false;
-                        } catch (SQLiteConstraintException ex) {
-                            // Indicate problem & stop this query:
-                            ex.printStackTrace();
-                            errorMessage = "constraint failure: " + ex.getMessage();
-                            code = 6; // SQLException.CONSTRAINT_ERR
-                            Log.v("executeSqlBatch", "SQLiteStatement.executeUpdateDelete(): Error=" + errorMessage);
-                            needRawQuery = false;
-                        } catch (SQLiteException ex) {
-                            // Indicate problem & stop this query:
-                            ex.printStackTrace();
-                            errorMessage = ex.getMessage();
-                            Log.v("executeSqlBatch", "SQLiteStatement.executeUpdateDelete(): Error=" + errorMessage);
-                            needRawQuery = false;
-                        } catch (Exception ex) {
-                            // Assuming SDK_INT was lying & method not found:
-                            // do nothing here & try again with raw query.
-                            ex.printStackTrace();
-                            Log.v("executeSqlBatch", "SQLiteStatement.executeUpdateDelete(): runtime error (fallback to old API): " + errorMessage);
-                        }
-
-                        // "finally" cleanup myStatement
-                        myStatement.close();
-
-                        if (rowsAffected != -1) {
-                            queryResult = new JSONObject();
-                            queryResult.put("rowsAffected", rowsAffected);
-                        }
+                    try {
+                        rowsAffected = myStatement.executeUpdateDelete();
+                        // Indicate valid results:
+                        needRawQuery = false;
+                    } catch (SQLiteConstraintException ex) {
+                        // Indicate problem & stop this query:
+                        ex.printStackTrace();
+                        errorMessage = "constraint failure: " + ex.getMessage();
+                        code = 6; // SQLException.CONSTRAINT_ERR
+                        Log.v("executeSqlBatch", "SQLiteStatement.executeUpdateDelete(): Error=" + errorMessage);
+                        // stop the query in case of error:
+                        needRawQuery = false;
+                    } catch (SQLiteException ex) {
+                        // Indicate problem & stop this query:
+                        ex.printStackTrace();
+                        errorMessage = ex.getMessage();
+                        Log.v("executeSqlBatch", "SQLiteStatement.executeUpdateDelete(): Error=" + errorMessage);
+                        // stop the query in case of error:
+                        needRawQuery = false;
                     }
 
-                    if (needRawQuery) { // for pre-honeycomb behavior
-                        rowsAffectedCompat = countRowsAffectedCompat(queryType, query, json_params, mydb);
-                        needRowsAffectedCompat = true;
+                    // "finally" cleanup myStatement
+                    myStatement.close();
+
+                    if (rowsAffected != -1) {
+                        queryResult = new JSONObject();
+                        queryResult.put("rowsAffected", rowsAffected);
                     }
                 }
 
@@ -332,81 +331,6 @@ class SQLiteAndroidDatabase
         }
     }
 
-    private final int countRowsAffectedCompat(QueryType queryType, String query, JSONArray json_params,
-                                         SQLiteDatabase mydb) throws JSONException {
-        // quick and dirty way to calculate the rowsAffected in pre-Honeycomb.  just do a SELECT
-        // beforehand using the same WHERE clause. might not be perfect, but it's better than nothing
-        Matcher whereMatcher = WHERE_CLAUSE.matcher(query);
-
-        String where = "";
-
-        int pos = 0;
-        while (whereMatcher.find(pos)) {
-            where = " WHERE " + whereMatcher.group(1);
-            pos = whereMatcher.start(1);
-        }
-        // WHERE clause may be omitted, and also be sure to find the last one,
-        // e.g. for cases where there's a subquery
-
-        // bindings may be in the update clause, so only take the last n
-        int numQuestionMarks = 0;
-        for (int j = 0; j < where.length(); j++) {
-            if (where.charAt(j) == '?') {
-                numQuestionMarks++;
-            }
-        }
-
-        JSONArray subParams = null;
-
-        if (json_params != null) {
-            // only take the last n of every array of sqlArgs
-            JSONArray origArray = json_params;
-            subParams = new JSONArray();
-            int startPos = origArray.length() - numQuestionMarks;
-            for (int j = startPos; j < origArray.length(); j++) {
-                subParams.put(j - startPos, origArray.get(j));
-            }
-        }
-
-        if (queryType == QueryType.update) {
-            Matcher tableMatcher = UPDATE_TABLE_NAME.matcher(query);
-            if (tableMatcher.find()) {
-                String table = tableMatcher.group(1);
-                try {
-                    SQLiteStatement statement = mydb.compileStatement(
-                            "SELECT count(*) FROM " + table + where);
-
-                    if (subParams != null) {
-                        bindArgsToStatement(statement, subParams);
-                    }
-
-                    return (int)statement.simpleQueryForLong();
-                } catch (Exception e) {
-                    // assume we couldn't count for whatever reason, keep going
-                    Log.e(SQLiteAndroidDatabase.class.getSimpleName(), "uncaught", e);
-                }
-            }
-        } else { // delete
-            Matcher tableMatcher = DELETE_TABLE_NAME.matcher(query);
-            if (tableMatcher.find()) {
-                String table = tableMatcher.group(1);
-                try {
-                    SQLiteStatement statement = mydb.compileStatement(
-                            "SELECT count(*) FROM " + table + where);
-                    bindArgsToStatement(statement, subParams);
-
-                    return (int)statement.simpleQueryForLong();
-                } catch (Exception e) {
-                    // assume we couldn't count for whatever reason, keep going
-                    Log.e(SQLiteAndroidDatabase.class.getSimpleName(), "uncaught", e);
-
-                }
-            }
-        }
-
-        return 0;
-    }
-
     private void bindArgsToStatement(SQLiteStatement myStatement, JSONArray sqlArgs) throws JSONException {
         for (int i = 0; i < sqlArgs.length(); i++) {
             if (sqlArgs.get(i) instanceof Float || sqlArgs.get(i) instanceof Double) {
@@ -465,17 +389,8 @@ class SQLiteAndroidDatabase
                     for (int i = 0; i < colCount; ++i) {
                         key = cur.getColumnName(i);
 
-                        if (isPostHoneycomb) {
-
-                            // Use try & catch just in case android.os.Build.VERSION.SDK_INT >= 11 is lying:
-                            try {
-                                bindPostHoneycomb(row, key, cur, i);
-                            } catch (Exception ex) {
-                                bindPreHoneycomb(row, key, cur, i);
-                            }
-                        } else {
-                            bindPreHoneycomb(row, key, cur, i);
-                        }
+                        // Always valid for SQLCipher for Android:
+                        bindPostHoneycomb(row, key, cur, i);
                     }
 
                     rowsArrayResult.put(row);
@@ -499,7 +414,10 @@ class SQLiteAndroidDatabase
         return rowsResult;
     }
 
-    @SuppressLint("NewApi")
+    /**
+     * bindPostHoneycomb - always valid for SQLCipher for Android
+     *
+     */
     private void bindPostHoneycomb(JSONObject row, String key, Cursor cur, int i) throws JSONException {
         int curType = cur.getType(i);
 
@@ -520,25 +438,6 @@ class SQLiteAndroidDatabase
         }
     }
 
-    private void bindPreHoneycomb(JSONObject row, String key, Cursor cursor, int i) throws JSONException {
-        // Since cursor.getType() is not available pre-honeycomb, this is
-        // a workaround so we don't have to bind everything as a string
-        // Details here: http://stackoverflow.com/q/11658239
-        SQLiteCursor sqLiteCursor = (SQLiteCursor) cursor;
-        CursorWindow cursorWindow = sqLiteCursor.getWindow();
-        int pos = cursor.getPosition();
-        if (cursorWindow.isNull(pos, i)) {
-            row.put(key, JSONObject.NULL);
-        } else if (cursorWindow.isLong(pos, i)) {
-            row.put(key, cursor.getLong(i));
-        } else if (cursorWindow.isFloat(pos, i)) {
-            row.put(key, cursor.getDouble(i));
-        } else {
-            // STRING or BLOB:
-            row.put(key, cursor.getString(i));
-        }
-    }
-
     static QueryType getQueryType(String query) {
         Matcher matcher = FIRST_WORD.matcher(query);
 
@@ -551,7 +450,7 @@ class SQLiteAndroidDatabase
                 // (needed for SQLCipher version)
                 if (first.length() == 0) throw new RuntimeException("query not found");
 
-                return QueryType.valueOf(first.toLowerCase(Locale.ENGLISH));
+                return QueryType.valueOf(first.toLowerCase());
             } catch (IllegalArgumentException ignore) {
                 // unknown verb (NOT blank)
                 return QueryType.other;

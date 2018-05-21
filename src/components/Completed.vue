@@ -8,7 +8,7 @@
 
 	            </p>
 	            <ul>
-	                <router-link tag="button" :to="'/survey/' + this.feed_id" class="btn btn-primary btn-lg survey_button" href="survey" > Continue</router-link>
+	                <router-link tag="button" :to="'/intro/' + this.feed_id" class="btn btn-primary btn-lg survey_button" href="survey" > Continue</router-link>
 	            </ul>
 	        </div>
 

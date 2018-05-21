@@ -7,26 +7,29 @@
     "files": {}
   },
   "installed_plugins": {
+    "com.moust.cordova.videoplayer": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
     "cordova-plugin-kiosk": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "cordova-plugin-sqlite-2": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "cordova-plugin-websql": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
-    "com.moust.cordova.videoplayer": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-sqlcipher-adapter": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
     }
   },
   "dependent_plugins": {}

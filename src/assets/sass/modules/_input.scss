@@ -4,7 +4,8 @@
   /* Makes input not-clickable */
   position: absolute;
   /* Remove input from document flow */
-  z-index: 1000; }
+  z-index: -1000 !important;
+}
 
 .img-label > input + img {
   /* IMAGE STYLES */
@@ -19,10 +20,11 @@
 
 .img-label > input:checked + img {
   /* (RADIO CHECKED) IMAGE STYLES */
-  background-color: burlywood;
+  background-color: #efefef;
   border: 1px solid #ccc;
-
+  z-index: -1000 !important;
  }
+
 
 .img-label > input:hover + img {
   /* (RADIO CHECKED) IMAGE STYLES */

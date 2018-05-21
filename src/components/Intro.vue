@@ -1,21 +1,33 @@
 <template>
 <!-- Intro -->
+<div>
+<v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+  <v-container fill-height>
+    <v-layout row justify-center align-center>
+      <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+    </v-layout>
+  </v-container>
+</v-dialog>
+<v-icon @click="exitKioasMode()" large color="blue darken-2"  class="position_gear" >help</v-icon>
 <section class="survey-intro video_overlay">
-  <youtube id="youtube_media" :video-id="getVideoId()" player-width="100%" :player-vars="playerVars" @playing="playing"></youtube>
-  <img @click="exitKioasMode()" src="static/emoji/grey_question.svg"  class="position_gear">
+  <youtube id="youtube_media" :video-id="getVideoId()" player-width="100%" :player-vars="playerVars" @playing="playing" @ended="ended"></youtube>
+    <!-- <img @click="exitKioasMode()" src="static/emoji/grey_question.svg"  class="position_gear"> -->
+    
     <div class="intro">
           <h1>{{feedbackInfo[0].feedback_title}}</h1>
           <h4><i>{{feedbackInfo[0].feedback_desc}}</i></h4>
-           <hr>
-          <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-lg">Take Survey</button>
+          <hr>
+          <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-intro">Take Survey</button>
     </div>
 </section>
+</div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
 export default {
   data(){
     return {
+        loading: false,
         id: '',
         videoId: '',
         playerVars: {
@@ -32,7 +44,7 @@ export default {
         },
         feedback_video: '',
         hasVideo:false,
-        pic_url: 'static/survey-themes/people-image.png',
+        pic_url: 'static/survey-themes/bg.jpg',
         database: 'SurveyDb',
         version: '1.0',
         dbDisplay: 'ServeyDatabase',
@@ -66,6 +78,7 @@ export default {
     ]),
     player () {
       return this.$refs.youtube.player
+
     }
   },
   created(){
@@ -79,7 +92,9 @@ export default {
       console.log('\o/ we are watching!!!')
     },
     ended(){
-       this.$refs.youtube.player.playVideo()
+       location.reload()
+       this.$refs.youtube.player
+       
     },
     getVideoId() {
       var video = this.$youtube.getIdFromUrl(this.videoId)
@@ -87,10 +102,23 @@ export default {
       return video
     },
      goToSurvey() {
-         this.$router.push({name: 'Survey'})
+        this.loading = true
+
+        var self = this
+        setTimeout(function(){
+           self.loading = false;
+           self.$router.push({name: 'Survey'})
+        }, 500);
       },
       exitKioasMode() {
-         this.$router.push({name: 'Home'});
+        this.loading = true
+
+        var self = this;
+        setTimeout(function(){
+           self.loading = false;
+           self.$router.push({name: 'Home'});
+        }, 500);
+        
       },
       getIntroVideo(feedback_id) {
          this.$http.get('https://happyreply.com/api/get/video-link/'+feedback_id)
@@ -106,17 +134,10 @@ export default {
 <style>
 .position_gear{
     cursor: pointer;
-    background: #fff;
-    border-radius: 10px;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    padding:2px;
-    color: #fff;
-    font-weight: 50px;
-    width:20px;
-    height:20px;
-    z-index: 1000;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
 }
 </style>
 

@@ -88,11 +88,11 @@ $btn-radius:                3em !default;
 $card-spacer-y:                     .75rem !default;
 $card-spacer-x:                     1.25rem !default;
 $card-border-width:                 0px !default;
-$card-border-radius:                0px !default;
+$card-border-radius:                10px !default;
 $card-border-color:                 #000 !default;
 $card-inner-border-radius:          calc(#{$card-border-radius} - #{$card-border-width}) !default;
 $card-cap-bg:                       rgba($black, .03) !default;
-$card-bg:                           rgba(0, 0, 0, 0.1) !default
+$card-bg:                           rgba(236, 236, 236, 0.1) !default
 
 $card-img-overlay-padding:          1.25rem !default;
 

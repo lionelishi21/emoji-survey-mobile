@@ -4,8 +4,7 @@ require('expose?$!expose?jQuery!jquery')
 require('../vendors/bower_components/jquery/dist/jquery.min.js')
 // require('../vendors/bower_components/bootstrap/dist/js/bootstrap.min.js')
 // require('../vendors/bower_components/Waves/dist/waves.min.js')
-require('vue2-animate/dist/vue2-animate.min.css')
-require('./plugins/sweet-alert-plugin');
+// require('./plugins/sweet-alert-plugin');
 require('vue2-animate/dist/vue2-animate.min.css')
 
 
@@ -33,18 +32,16 @@ import VModal from 'vue-js-modal'
 import Vuetify from 'vuetify'
 import ResponseTheme from './response-main'
 // index.js or main.js
-import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
 Vue.use(ResponseTheme)
 Vue.use(Vuetify)
 Vue.use(VModal)
 Vue.use(VueRouter)
 Vue.use(VueResource)
-Vue.use(BootstrapVue)
 Vue.use(Notifications)
 Vue.use(VueYoutube)
-Vue.use(VueUp)
 
+import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
 Vue.http.options.root = 'https://happyreply.com/'
 Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'

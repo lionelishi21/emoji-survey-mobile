@@ -9,7 +9,7 @@ const getters = {
 }
 
 const actions = {
-  getAnswers ({ commit, dispatch }, data) {
+  getMatrixs ({ commit, dispatch }, data) {
     var userId = data['user_id']
     var db = data['db']
     api.getSurveyMatrix(userId)

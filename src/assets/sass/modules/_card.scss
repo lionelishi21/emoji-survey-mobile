@@ -7,6 +7,7 @@
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
+  margin-bottom: 10px;
   background-color: $card-bg;
   background-clip: border-box;
   border: $card-border-width solid $card-border-color;
@@ -252,8 +253,8 @@
 // Columns
 //
 
-.card-columns {
-  .card {
+.survey-card-columns {
+  .survey-card {
     margin-bottom: $card-columns-margin;
   }
 
@@ -263,7 +264,7 @@
     orphans: 1;
     widows: 1;
 
-    .card {
+    .survey-card {
       display: inline-block; // Don't let them vertically span multiple columns
       width: 100%; // Don't let their width change
     }
@@ -276,30 +277,34 @@
 //
 
 .accordion {
-  .card:not(:first-of-type):not(:last-of-type) {
+  .survey-card:not(:first-of-type):not(:last-of-type) {
     border-bottom: 0;
     border-radius: 0;
   }
 
-  .card:not(:first-of-type) {
-    .card-header:first-child {
+  .survey-card:not(:first-of-type) {
+    .survey-card-header:first-child {
       border-radius: 0;
     }
   }
 
-  .card:first-of-type {
+  .survey-card:first-of-type {
     border-bottom: 0;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 
-  .card:last-of-type {
+  .survey-card:last-of-type {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }
 }
 
 
-.card-click {
+.survey-card-click {
   background: blue !important;
+}
+
+.survey-card-hightlight {
+  background: #1E8BC3 !important;
 }

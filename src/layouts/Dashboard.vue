@@ -53,9 +53,10 @@
     >
     <v-toolbar-title> <img src="static/logo/logo.png" alt="logo" style="width:200px"></v-toolbar-title>
     <v-spacer></v-spacer>
-     <v-btn icon @click="">
-      <v-icon>refresh</v-icon>
-    </v-btn>
+      <v-badge left>
+          <!-- <span slot="badge">6</span> -->
+         <v-icon large color="grey lighten-1">notification_important</v-icon>
+      </v-badge>
   </v-toolbar>
   <v-content>
     <v-container fluid>
@@ -66,19 +67,29 @@
 </v-app>
 </template>
 <script>
+ import { mapGetters } from 'vuex';
  export default {
     data() {
       return {
-        user_name: 'Lionel Francis'
+        response_count: 0,
+        dialog: false,
+        loading: false,
+        user_name: '',
+        database: 'SurveyDb',
+        version: '1.0',
+        dbDisplay: 'ServeyDatabase',
+        maxSize: 1105535,
       }
     },
     created() {
       this.user_name = localStorage.getItem('user_name')
+      var online = navigator.onLine;
     },
     methods: {
       refresh(){
 
       },
+
       home() {
          this.$router.push({name: 'Home'});
       },
@@ -88,8 +99,15 @@
       setting(){
 
       },
-      logout(){
 
+      logout(){
+         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+         this.$store.dispatch('dropDatabase', db)
+         localStorage.removeItem("user_id");
+         localStorage.removeItem("feedback_id");
+         localStorage.removeItem("user_name");
+         this.$router.push({name: 'Login'});
+         location.reload();
       }
     }
  }

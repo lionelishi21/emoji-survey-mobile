@@ -2,6 +2,7 @@
   "_from": "git+https://github.com/hkalina/cordova-plugin-kiosk.git",
   "_id": "cordova-plugin-kiosk@1.0.0",
   "_inBundle": false,
+  "_integrity": "",
   "_location": "/cordova-plugin-kiosk",
   "_phantomChildren": {},
   "_requested": {
@@ -16,9 +17,9 @@
     "#USER",
     "/"
   ],
-  "_resolved": "git+https://github.com/hkalina/cordova-plugin-kiosk.git#4b913e93dd472a36767788b4069fc821095b5718",
+  "_resolved": "git+https://github.com/hkalina/cordova-plugin-kiosk.git#bf30f1fa37d08c130c86e7c2b00cbca45b1c84a2",
   "_spec": "https://github.com/hkalina/cordova-plugin-kiosk.git",
-  "_where": "/var/www/html/vue/happreply_app",
+  "_where": "/var/www/html/vue/happyreply.v2/happyreply.v1",
   "author": {
     "name": "Jan Kalina"
   },

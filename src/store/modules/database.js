@@ -1,16 +1,18 @@
 const state = {
-	isDroping: false
+	isDroping: false,
+	isLoading: false,
+	isLoadSuccessfully: false
 }
 
 const getters = {
-	getDatabaseStatus: state => state.isDroping
+	getDatabaseStatus: state => state.isDroping,
+	isLoading: state => state.isLoading,
+	isLoadSuccessfully: state => state.isLoadSuccessfully
 }
 
 const actions = {
 	creatingDatabase({commit, dispatch}, db) {
 	  db.transaction(function (tx) {
-	  	tx.executeSql(`CREATE TABLE IF NOT EXISTS questions (id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
-	  	feedback_question TEXT NOT NULL, type INTEGER NOT NULL, feedback_id INTEGER NOT NULL,  answer_count INTEGER)`, [])
 
 	  	tx.executeSql(`CREATE TABLE IF NOT EXISTS feedbacks (feedback_id INTEGER, feedback_title TEXT, 
 	  	feedback_desc TEXT, feedback_slug Text)`, [])
@@ -26,12 +28,14 @@ const actions = {
 
 	    tx.executeSql(`CREATE TABLE IF NOT EXISTS responses (id INTEGER PRIMARY KEY AUTOINCREMENT, multiple_choice TEXT, 
 	    matrix TEXT, slider TEXT, range TEXT, suggestion TEXT, feedback_id INTEGER )`, [])
+
+	    tx.executeSql(`CREATE TABLE IF NOT EXISTS questions (id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
+	  	feedback_question TEXT NOT NULL, type INTEGER NOT NULL, feedback_id INTEGER NOT NULL,  answer_count INTEGER)`, [])
 	  })
 	},
 	dropDatabase({commit, dispatch}, db) {
 	  db.transaction(function(tx){
 	      tx.executeSql('DROP TABLE IF EXISTS feedbacks')
-	      tx.executeSql('DROP TABLE IF EXISTS responses')
 	      tx.executeSql('DROP TABLE IF EXISTS questions')
 	      tx.executeSql('DROP TABLE IF EXISTS answers')
 	      tx.executeSql('DROP TABLE IF EXISTS matrixs')
@@ -41,15 +45,34 @@ const actions = {
 	reCreateDatabases({commit, dispatch}, db) {
 		dispatch('dropDatabase', db)
 		dispatch('creatingDatabase', db)
+		  // Retrieve
+		
+	},
+	reloadingQuestionAnswer({commit, dispatch}, db) {
+		console.log('loading all question and answer')
+		var user_id = localStorage.getItem('user_id')
+		
 	}
 }
 
-// const mutations = {
+const mutations = {
+  startLoading(state) {
+    state.isLoading = true
+  },
+  stopLoading(state) {
+    state.isLoading = false
+  },
+  setLoad(state) {
+  	state.isLoadSuccessfully = true
+  },
+  unsetLoad(state) {
+  	state.isLoadSuccessfully = false
+  }
+}
 
-// }
 export default {
   state,
   getters,
-  actions
-  // mutations
+  actions,
+  mutations
 }

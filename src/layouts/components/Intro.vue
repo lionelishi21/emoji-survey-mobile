@@ -1,7 +1,7 @@
 <template>
 <!-- Intro -->
 <section class="survey-intro video_overlay">
-  <youtube id="youtube_media" :video-id="getVideoId()" player-width="100%" :player-vars="playerVars" @playing="playing"></youtube>
+  <youtube id="youtube_media" :video-id="getVideoId()" player-width="100%" :player-vars="playerVars" @ended="ended" @playing="playing"></youtube>
   <img @click="exitKioasMode()" src="static/emoji/grey_question.svg"  class="position_gear">
     <div class="intro">
           <h1>{{feedbackInfo[0].feedback_title}}</h1>
@@ -80,7 +80,8 @@ export default {
       console.log('\o/ we are watching!!!')
     },
     ended(){
-       this.$refs.youtube.player.playVideo()
+      // this.$refs.youtube.player.playVideo()
+      this.getVideoId()
     },
     getVideoId() {
       var video = this.$youtube.getIdFromUrl(this.videoId)

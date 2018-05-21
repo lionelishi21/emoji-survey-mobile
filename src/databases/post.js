@@ -49,15 +49,15 @@ export default {
         })
     },
     newSaveResponse (multpleChoice, matrix, slider, range, comments, fbId, db) {
-    
         this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId, false, db)
         // this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
     },
     newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId, offline, db) {
       var action = 'https://happyreply.com/post-survey-responses2'
+     
       var csrfToken = $('meta[name=csrf-token]').attr('content')
       // this.loadButton.loading = true
-      this.button.loading = true;
+      // this.button.loading = true;
       this.$http.post(action,
         { params:
            {
@@ -78,12 +78,12 @@ export default {
              var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
              db.transaction(this.dropResponsesDatabase, this.nullHandler);
           }
-          this.button.loading = false
-          this.$router.push({ name: 'Completed', params: { id: fbId } })
+          // this.button.loading = false
+          this.$router.push({ name: 'Intro', params: { id: fbId } })
         }, response => {
           this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId, db)
-          this.button.loading = false;
-          this.$router.push({ name: 'Completed', params: { id: fbId } })
+          // this.button.loading = false;
+          this.$router.push({ name: 'Intro', params: { id: fbId } })
         });
     },
 
@@ -130,12 +130,11 @@ export default {
         })
     },
     postResponseOffline (db) {
-      this.loadButton.loading = true
-      db.transaction(this.queryResponsesDatabase1, this.errorHandler)
+      database.transaction(this.queryResponsesDatabas)
 
     },
     queryResponsesDatabase1 (tx) {
-      tx.executeSql('SELECT * FROM responses;', [], this.renderResponses1, this.errorHandler)
+      tx.executeSql('SELECT * FROM responses;', [], this.renderResponses)
     },
     renderResponses1 (tx, results) {
       var len = results.rows.length

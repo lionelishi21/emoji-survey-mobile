@@ -1,32 +1,48 @@
 <template>
   <div>
+      <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+      <v-container fill-height>
+        <v-layout row justify-center align-center>
+          <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+        </v-layout>
+      </v-container>
+    </v-dialog>
    <v-layout row wrap>
-   <v-subheader><h2>Surveys</h2></v-subheader>
+      <v-subheader><h2>Surveys</h2></v-subheader>
+      <v-btn @click="loadSurveys()"
+        color="pink" dark bottom fixed
+        right fab >
+         <v-icon>refresh</v-icon>
+      </v-btn>
+   </v-layout>
    </v-layout>
       <v-flex xs6>
-         <v-card style="border: 1px solid blue" @click="goToSurvey()" >
+
+        <div @click="goToSurvey()">
+         <v-card  >
               <v-container fluid grid-list-lg>
                 <v-layout row>
                   <v-flex xs7>
                     <div>
-                      <div class="headline">{{feedbackInfo[0].feedback_title}}</div>
-                      <div>{{feedbackInfo[0].feedback_desc}}</div>
+                      <div class="headline fadein">{{feedback_title}}</div>
+                      <div>{{feedback_desc}}</div>
+                     
                     </div>
                   </v-flex>
-                  <v-flex xs5>
-                    <v-card-text>
+                  <v-flex xs5 style="background: #96281B; color: #fff">
+                    <v-card-text class="text-center">
                       <h1>
-                       Q: {{ QuestionAmount }}
+                        {{ question_count }}
                       </h1>
+                       <v-spacer></v-spacer>
+                       <p>Questions</p>
                     </v-card-text>
                     
                   </v-flex>
                 </v-layout>
               </v-container>
-                <v-card-actions>
-                    <v-btn flat color="orange" @click="goToSurvey(feedbackInfo[0].feedback_slug)">Select</v-btn>
-                  </v-card-actions>
             </v-card>
+          </div>
       </v-flex>
 </v-layout>
 </div>
@@ -41,6 +57,13 @@ import Icon from 'vue-awesome/components/Icon'
 export default {
     data() {
       return {
+        loading: false,
+        value: 0,
+        feedback_title: '',
+        feedback_desc: '',
+        feedback_slug: '',
+        question_count: 0,
+        slug: '',
         config: {
           pullText: '..Loading', // The text is displayed when you pull down
           triggerText: '..fetching data from server', // The text that appears when the trigger distance is pulled down
@@ -69,6 +92,10 @@ export default {
     created(){
       this.checkUserLogin();
       this.initilizeDatabase();
+     
+    },
+    mounted() {
+      
     },
     components: {
       OfflineIndicator,
@@ -76,15 +103,26 @@ export default {
       PullTo,
       Icon
     },
+    watch: {
+      feedbackInfo(oldValue, newValue) {
+        this.feedback_title = this.feedbackInfo[0].feedback_title
+        this.feedback_desc = this.feedbackInfo[0].feedback_desc
+        this.feedback_slug = this.feedbackInfo[0].feedback_slug
+      },
+      QuestionAmount(value){
+        this.question_count = value
+      }
+    },
     computed: {
       ...mapGetters([
         'feedbackInfo',
         'QuestionAmount',
-        'isLoading'
+        'isLoading',
+        'isLoadSuccessfully'
       ]),
       online () {
         return VueOnline.isOnline
-      }
+      }, 
     },
     methods:{
       initilizeDatabase() {
@@ -92,6 +130,10 @@ export default {
         var user_id = localStorage.getItem('user_id')
         this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
         this.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
+        this.$store.dispatch('getQuestionCount', db)
+        this.feedback_title = this.feedbackInfo[0].feedback_title
+        this.feedback_desc = this.feedbackInfo[0].feedback_desc
+        this.feedback_slug = this.feedbackInfo[0].feedback_slug
       },
       loadingButton(load){
         return load;
@@ -122,27 +164,37 @@ export default {
             this.$router.push({name: 'Login'});
         }
       },
-      goToSurvey(fb_id) {
-         this.$router.push({name: 'Survey',  params: { id: fb_id } })
-        //  location.reload();
+      goToSurvey() {
+
+         this.$router.push({name: 'Intro',  params: { id: this.feedback_slug } })
       },
       loadSurveys() {
-        
+        this.loading = true
         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         var user_id = localStorage.getItem('user_id')
         this.$store.dispatch('reCreateDatabases', db)
+         this.$store.dispatch('getFeedback', {user_id, db})
         this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
         this.$store.dispatch('getQuestions',  {user_id, db})
         this.$store.dispatch('getAnswers',  {user_id, db})
         this.$store.dispatch('getMatrixs',  {user_id, db})
         this.$store.dispatch('getSliders',  {user_id, db})
-        this.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
+        
+        var self = this
+        setTimeout(function(){
+
+        self.$store.dispatch('getFeedbackAnswerFromSqlLite', db)
+        self.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
+        self.$store.dispatch('getQuestionCount', db)
+          self.loading = false
+          this.initilizeDatabase();
+        }, 5000);
       }
     }
 }
 </script>
 <style>
-  .logo img {
-    width: 90%;
-   }
+.loading-dialog {
+   background-color: rgba(236,236,236, 0.4) 
+}
 </style>

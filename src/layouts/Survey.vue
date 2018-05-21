@@ -1,29 +1,31 @@
 <template>
   <div>
-
-  <div class="survey-intro video_overlay">
-      <v-dialog v-model="dialog3" max-width="250px" content-class="text-center" dialog-transition="">
+    <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+      <v-container fill-height>
+        <v-layout row justify-center align-center>
+          <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+        </v-layout>
+      </v-container>
+    </v-dialog>
+  <div class="survey-intro video_overlay ">
+      <v-dialog v-model="dialog3" max-width="500px" content-class="text-center" dialog-transition="">
         <v-card>
           <v-card-text>
-              <img :src="'static/emoji/'+modal.emoji+'.svg'"
-                 class="img-responsive emoji-img"/>
+              <img :src="'static/emoji/'+modal.emoji+'.svg'" class="img-responsive" width="300px"/>
                   <v-spacer></v-spacer>
-             <b> {{modal.answer}}</b>
+             <h3><b> {{modal.answer}}</b></h3>
           </v-card-text>
         </v-card>
       </v-dialog>
-    <section :class="key+' wrapper fullscreen matrix_content question-bg-1'" v-show="showIntro()" >
-        <intro :slug="slug" @startsurvey="initateSurvey"></intro>
-    </section>
     <img :src="pic_url " id="youtube_media" v-show="showBackgroundImage()" >
-    <transition-group name="fadeLeft" @after-enter="refreshSlider">
+    <transition-group name="fadeLeft">
       <section  v-for="(q, key) in  getAllQuestions" v-show="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'">
           <div  v-if="showMultipleChoiceQuestions(q.type)" :key="key">
               <div class="question-wrapper">
                   <div class="row">
                     <div class="col-md-12">
-                        <div class="survey-card m-b-5">
-                          <div class="survey-card-body">
+                        <div class="m-b-5">
+                          <div class="">
                            <h2>{{q.question}}</h2>
                           </div>
                         </div>
@@ -32,20 +34,24 @@
                    <div class="row">
                       <div v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id == q.id" 
                       :class="changeClass(q.answer_count)">
-                        <div class="survey-card answer_content" :id="'card_select'+answer.id">
-                          <div class="survey-card-body text-center">
+                        <div :class="'survey-card answer_content '+cardSelect(mc_responses[q.id], answer.id)" :id="'card_select_'+answer.id">
+                          <div class="survey-card-body text-center" style="z-index: 1000;">
                              <label class="img-label text-center m-r-20 " :id="answer.id">
                                       <input
+                                      style="z-index: -10000"
                                       v-model="mc_responses[q.id]"
                                       type="radio"        
-                                      v-bind:checked="answer.id"
+                                      id:checked="answer.id"
                                       :name="'answers_mc['+q.id+']'"
                                       :class="'emoji stats'+answer.id" 
                                       :value="answer.id"
-                                      :id="'radio_'+answer.id"
+                                      :id="'mc_'+answer.id"
+                                       @click="showAlert(answer.id, answer.emoji, answer.answer, key)"
                                       />
+
                                       <img
-                                     @click="showAlert(answer.id, answer.emoji, answer.answer, key)"
+
+                                       style="z-index: -10000"
                                        :id="'emojimage_'+answer.id"
                                         :src="'static/emoji/'+answer.emoji+'.svg'"
                                         class="img-responsive emoji-img "
@@ -62,7 +68,7 @@
                 <div class="question-wrapper">
                      <div class="row">
                         <div class="col-md-12">
-                          <div class="survey-card m-b-5">
+                          <div class=" m-b-5">
                             <div class="survey-card-body">
                                <h2>{{q.question}}</h2>
                              </div>
@@ -97,8 +103,8 @@
                                                 <div class="center_check">
                                                     <label class="matrix_ques">
                                                         <input
-                                                        @click="showMatrixAlert(key, matrix_key, q.answer_count, q.id)"
-                                                        :name="'answers_matrixs['+ans.id+']'"
+                                                     
+                                                           :name="'answers_matrixs['+ans.id+']'"
                                                             class='myinput large custom'
                                                             type="radio"
                                                             v-model="matrix_responses[ans.id]"
@@ -124,7 +130,7 @@
            <div class="question-wrapper" v-if="showCommentQuestions(q.type)" :key="key">
               <div class="row">
                   <div class="col-md-12">
-                     <div class="survey-card m-b-5">
+                     <div class=" m-b-5">
                         <div class="survey-card-body">
                            <h2>{{q.question}}</h2>
                          </div>
@@ -145,10 +151,10 @@
                    </div>
                 </div>
            </div>
-           <div class="question-wrapper" v-if="showSliderQuestions(q.type)"  :key="key" >
+           <div class="question-wrapper" v-if="showSliderQuestions(q.type)" :key="key" >
               <div class="row">
                   <div class="col-md-12">
-                   <div class="survey-card m-b-5">
+                   <div class=" m-b-5">
                       <div class="survey-card-body">
                          <h2>{{q.question}}</h2>
                        </div>
@@ -166,7 +172,6 @@
                               v-bind="options"
                               v-model="slider_questions[q.id]"
                               >
-
                           </vue-slider>
          <!--                  <input 
                              type="range" 
@@ -196,7 +201,7 @@
               <div class="question-wrapper">
                   <div class="row">
                     <div class="col-md-12">
-                        <div class="survey-card m-b-5">
+                        <div class="m-b-5">
                             <div class="survey-card-body ">
                                <h2>{{q.question}}</h2>
                              </div>
@@ -204,21 +209,22 @@
                     </div>
                    </div>
                    <div class="row">
-                      <div class="col-md-4" v-for="(answer, key) in getAllAnswers" :key="key" v-if="answer.question_id == q.id">
-                        <div class="survey-card answer_content" :id="'card_select'+answer.id">
-                        <div class="survey-card-body text-center">
+                      <div class="col-md-4" v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id == q.id">
+                         <div :class="'survey-card answer_content '+cardSelect(range_questions[q.id], answer.id)" :id="'card_select_'+answer.id">
+                        <div class="survey-card-body text-center" >
                            <label class="img-label text-center m-r-20 " :id="answer.id">
                                     <input
-                                    v-model="mc_responses[q.id]"
+                                  
+                                    v-model="range_questions[q.id]"
                                     type="radio"        
                                     v-bind:checked="answer.id"
                                     :name="'answers_mc['+q.id+']'"
                                     :class="'emoji stats'+answer.id" 
                                     :value="answer.id"
-                                    :id="'radio_'+answer.id"
+                                    :id="'mc_'+answer.id"
+                                     @click="showAlert(answer.id, answer.emoji, answer.answer, key)"
                                     />
                                     <img
-                                   @click="showAlert(answer.id, answer.emoji, answer.answer, key)"
                                      :id="'emojimage_'+answer.id"
                                       :src="'static/emoji/'+answer.emoji+'.svg'"
                                       class="img-responsive emoji-img "
@@ -229,25 +235,37 @@
                       </div>
                       </div>
                    </div>
-                  
+
                  </div>
           </div>
             <div class="row">
                <div class="col-md-6">
-                 <button @click="step = 100" v-if="key == 0" class="survey-btn pull-left btn-red btn-survey-lg">Back to Introduction </button>
+                 <button @click="backToIntro()" v-if="key == 0" class="survey-btn pull-left btn-red btn-survey-lg">Back to Introduction </button>
                   <button v-else @click="getPrevPage(key)" class="survey-btn pull-left btn-red btn-survey-lg">Previous Question </button>
               </div>
               <div class="col-md-6">
                   <button v-if="key == getAllQuestions.length-1"
                      @click="goTSubmit()"
                      class="survey-btn pull-right btn-red btn-survey-lg">
-                    Submit
+                   Next Question
                   </button>
                   <button v-else @click="getNextPage(key, q.type)" class="survey-btn pull-right btn-red btn-survey-lg">Next Questions</button>
               </div>
           </div>
       </section>
     </transition-group>
+     <section class="wrapper intro1 fullscreen fade-up question-wrapper" id="showsubmit" v-show="showSubmitContent()"> 
+        <div class="survey-card">
+            <div class="survey-card-body text-center">
+               <h2>Thank you for completing this survey!!</h2>
+               <p>Please submit.</p>
+               <button @click="clickToSubmit()" class="survey-btn btn-red  btn-survey-intro">
+                 Click to Submit
+              </button>
+            </div>
+        </div>
+       
+    </section>
   </div>
 </div>
 </template>
@@ -273,15 +291,16 @@ export default {
     mixins: [Post],
 		data() {
 			return {
-        backgroundImage: false,
-         value1: 0,
+        loading: false,
+        backgroundImage: true,
+        value1: 0,
         slug: '',
         isSlider: 0,
         question_type: 0,
         dialog3: false,
         current_question: 0,
         question_increment: [],
-        step: 100,
+        step: 0,
         show: false,
         feedback_title: '',
         sliderValue: 50,
@@ -375,6 +394,7 @@ export default {
         return VueOnline.isOnline
       }
     },
+  
     created() {
       this.slug = this.$route.params.id
       var db
@@ -394,6 +414,28 @@ export default {
       Intro
     },
   	methods: {
+      triggerClicks(key){
+       
+        var mc_id = '#mc_'+key
+        $(mc_id).trigger('click')
+      },
+      showSubmitContent() {
+        if (this.step == 100) {
+          return true
+        }
+        return false
+      },
+      clickToSubmit() {
+         this.loading = true
+         this.formSubmit(this.feedbackInfo[0].feedback_slug)
+         var self = this
+         setTimeout(function(){
+          self.loading = false
+         }, 1000);
+      },
+      backToIntro() {
+        this.$router.push({name: 'Intro',  params: { id:  this.slug  } })
+      },
       showBackgroundImage() {
         return this.backgroundImage
       },
@@ -403,9 +445,6 @@ export default {
         this.backgroundImage = true
       
       },
-      refreshSlider: function () {
-        this.$nextTick(() => this.$refs.slider.refresh())
-      },
       showIntro(){
         if (this.step == 100) {
           this.backgroundImage = false
@@ -413,33 +452,45 @@ export default {
         }
         return false
       },
+      showCheckedbg(id, event) {
+         if (event.target.checked) {
+           var card = '#card_select_'+id;
+           $(card).addClass('survey-card-hightlight');
+         } else {
+           var card = '#card_select_'+id;
+           $(card).removeClass('survey-card-hightlight');
+         }
+      },
       showAlert(id, emoji, answer, key) {
+
        
+
        this.modal.answer = answer
        this.modal.emoji = emoji 
 
 
         this.dialog3 = true;
-        this.getNextPage(key)
+       
         
         var self = this;
         setTimeout(function(){
            self.dialog3 = false;
-        }, 1500);
-      },
-      showSlider(step) {
-          if (this.isSlider == 1) {
-            this.$nextTick(() => this.$refs.slider.refresh());
-            return true
-          }
-          return false
+           self.getNextPage(key)
+        }, 1000);
       },
       changeClass (value) {
-        if (value == 4 || value == 2 ) {
+        if ( value == 2) {
           return 'col-md-6'
         }
-        if (value == 6 || value == 3) {
+        if (value == 4 ) {
+          return 'col-md-6'
+        }
+        if (value == 6 ) {
           return 'col-md-3'
+        }
+
+        if (value == 3) {
+          return 'col-md-4'
         }
 
         if (value == 5) {
@@ -476,10 +527,20 @@ export default {
 
         
       },
+      cardSelect(value, answer) {
+
+        if (value != undefined) {
+           if (value == answer) {
+            return 'survey-card-hightlight'
+          }
+        }
+       
+      },
       goTSubmit(){
         var check = this.checkForNull();
         if (check) {
-            this.formSubmit(this.feedbackInfo[0].feedback_slug)
+           this.step = 100
+           // windows.location('#showsubmit')
         } else {
            this.modal.answer = 'You have to select at lease one answer'
            this.modal.emoji = 'sad' 
@@ -502,9 +563,6 @@ export default {
                 return answer
             }
         },
-      showSubmit() {
-        this.step = 'submit';
-      },
       showSumitButton(){
         if (this.step == 'submit') {
           return true;
@@ -521,9 +579,9 @@ export default {
       // created response database
       var db
       db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-      this.button.loading = true;
+     
       this.newSaveResponse(this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, fbId, db)
-      this.button.loading = false;
+     
       this.clearFormData();
      },
     clearFormData() {
@@ -604,9 +662,6 @@ export default {
            return false;
          }
       },
-      backToIntro() {
-        this.step = -1;
-      },
       showQuestion(key) {
           if (this.step == key) {
             return true;
@@ -617,17 +672,17 @@ export default {
           }
       },
       getNextPage(key, type) {
-            this.isSlider = this.step
-
-          if (key == this.getAllQuestions.length - 1) {
+          if (key == this.getAllQuestions.length-1) {
             this.goTSubmit()
+          } else {
+            if (key == 0) {
+              this.step = 1;
+            } else {
+              this.step += 1;
+            }
           }
 
-          if (key == 0) {
-            this.step = 1;
-          } else {
-            this.step += 1;
-          }
+          
       },
       getPrevPage(key) {
           if (key == 0) {
@@ -651,14 +706,8 @@ export default {
     },
     getPrev(key) {
         this.step - 1;
-    },
-    refreshSlider: function () {
-        this.$nextTick(function () {
-          console.log(this.$refs);
-          this.$refs['vue_slider'].refresh()
-        })
-      }
-	   }
+    }
+	 }
 	}
 </script>
 
