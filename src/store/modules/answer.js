@@ -14,6 +14,7 @@ const actions = {
     var db = data['db']
     api.getSurveyAnswers(userId)
       .then(response => {
+        console.log(response)
         return response.json()
       }).then(response => {
         dispatch('saveAnswerToDataBase', { response, db })
@@ -24,8 +25,9 @@ const actions = {
    var db = response['db']
    for (let key in data) {
     db.transaction(function (tx) {
-      var sql = 'INSERT INTO answers ( id, answer, emoji, feedback_id, question_id ) VALUES (?,?,?,?,?)';
-      tx.executeSql(sql, [data[key]['id'], data[key]['answer'], data[key]['emoji'], data[key]['feedback_id'], data[key]['question_id']]);
+      var sql = 'INSERT INTO answers ( id, answer, emoji, feedback_id, question_id, logic_to ) VALUES (?,?,?,?,?,?)';
+      tx.executeSql(sql, [data[key]['id'], data[key]['answer'], data[key]['emoji'], 
+        data[key]['feedback_id'], data[key]['question_id'], data[key]['logicQuestionTo']]);
     })
    }
   },
@@ -40,7 +42,8 @@ const actions = {
             answer: results.rows.item(i).answer, 
             emoji: results.rows.item(i).emoji,
             feedback_id: results.rows.item(i).feedback_id, 
-            question_id: results.rows.item(i).question_id 
+            question_id: results.rows.item(i).question_id,
+            logic_to: results.rows.item(i).logic_to 
           }
           resultsArray.push(res);
         }

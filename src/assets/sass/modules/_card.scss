@@ -13,6 +13,21 @@
   border: $card-border-width solid $card-border-color;
   @include border-radius($card-border-radius);
 
+  h3 {
+    
+    color: #fff;
+  }
+  label {
+
+    input {
+      z-index: -1000 !important;
+    }
+
+    img {
+      z-index: -1000 !important;
+    }
+  }
+
   > hr {
     margin-right: 0;
     margin-left: 0;

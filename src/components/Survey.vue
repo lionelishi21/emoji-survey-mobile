@@ -7,7 +7,7 @@
             <section  v-for="(q, key) in  getAllQuestions" v-if="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'" style="padding: 10px;" >
                  <div class="question-overlay" v-if="showMultipleChoiceQuestions(q.type)">
                         <div class="inner">
-                            <h2 class="quesHeader">{{q.question}}</h2>
+                            <h2 class="quesHeader">{{q.question}} this is working</h2>
 
                             <div class="features question_content">
                                

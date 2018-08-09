@@ -1,22 +1,41 @@
 <template>
 <!-- Intro -->
+<div>
+<v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+  <v-container fill-height>
+    <v-layout row justify-center align-center>
+      <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+    </v-layout>
+  </v-container>
+</v-dialog>
 <section class="survey-intro video_overlay">
-  <youtube id="youtube_media" :video-id="getVideoId()" player-width="100%" :player-vars="playerVars" @ended="ended" @playing="playing"></youtube>
-  <img @click="exitKioasMode()" src="static/emoji/grey_question.svg"  class="position_gear">
+   <vue-video 
+     id="youtube_media" 
+     ref="video1" 
+     :options="videoOptions">
+    </vue-video>
     <div class="intro">
-          <h1>{{feedbackInfo[0].feedback_title}}</h1>
-          <h4><i>{{feedbackInfo[0].feedback_desc}}</i></h4>
-           <hr>
-          <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-intro">Take Survey</button>
+        <h1>{{feedbackInfo[0].feedback_title}}</h1>
+        <h4><i>{{feedbackInfo[0].feedback_desc}}</i></h4>
+        <hr>
+        <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-intro">Take Survey</button>
     </div>
+     <v-btn  @click="exitKioasMode()"
+        color="red" large dark bottom fixed
+        right fab >
+         <v-icon>help</v-icon>
+      </v-btn>
 </section>
+</div>
 </template>
 <script>
+import VueVideo from 'vue-video-module';
 import { mapGetters } from 'vuex';
 export default {
-  props: ['slug'],
   data(){
     return {
+        local: false,
+        loading: false,
         id: '',
         videoId: '',
         playerVars: {
@@ -29,96 +48,84 @@ export default {
           enablejsapi : 1,
           playlist: '',
           suggestedQuality: 'large'
-
         },
         feedback_video: '',
         hasVideo:false,
-        pic_url: 'static/survey-themes/people-image.png',
+        pic_url: 'static/survey-themes/bg.jpg',
         database: 'SurveyDb',
         version: '1.0',
         dbDisplay: 'ServeyDatabase',
         maxSize: 1105535,
         db: '',
-         video: {
-          sources: [{
-              src: 'static/video/girl.mp4',
-              type: 'video/mp4'
-          }],
-          options: {
-            src: 'https://www.youtube.com/watch?v=Z6WIAbPyrQA',
-            poster: 'http://www.freemake.com/blog/wp-content/uploads/2015/06/videojs-logo.jpg',
-            spinner: 'circles',
-            loop: 1,
-            controlBar:false,
-            autoPlay: true,
-            fullscreen: false,
-          }
-      }
-    }
+        videoOptions: {
+          src: "/static/video/girl.mp4",
+          poster: 'http://www.freemake.com/blog/wp-content/uploads/2015/06/videojs-logo.jpg',
+          controlBar: false,
+          loop : true,
+          spinner: 'circles',
+          autoPlay: true,
+          fullscreen: true,
+        }
+     }
   },
   watch: {
-		'$route'(to, from) {
-			// this.id = this.$route.params.id
-		}
-	},
+    '$route'(to, from) {
+      // this.id = this.$route.params.id
+    },
+  },
+  components: {
+     VueVideo
+  },
   computed: {
    ...mapGetters([
-       'feedbackInfo'
+       'feedbackInfo',
+       'getVideoLink',
+       'getYoutubeStatus'
     ]),
-    player () {
-      return this.$refs.youtube.player
-    }
+  },
+  mounted() {
+     this.video1 = this.$refs.video1.play();
+     
   },
   created(){
     var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+    var feedback_id = this.$route.params.id
     var user_id = localStorage.getItem('user_id')
     this.$store.dispatch('getFeedbackTitleFromSqlLite', db);
-    this.getIntroVideo(this.slug)
+    // this.$store.dispatch('getIntroVideo', feedback_id)
+    // this.getIntroVideo(feedback_id)
   },
   methods: {
-    playing() {
-      console.log('\o/ we are watching!!!')
-    },
-    ended(){
-      // this.$refs.youtube.player.playVideo()
-      this.getVideoId()
-    },
-    getVideoId() {
-      var video = this.$youtube.getIdFromUrl(this.videoId)
-      this.playerVars.playlist = video
-      return video
-    },
+     playing() {
+       console.log('\o/ we are watching!!!')
+     },
      goToSurvey() {
-         this.$emit('startsurvey')
+        this.loading = true
+        var self = this
+        setTimeout(function(){
+           self.loading = false;
+           self.$router.push({name: 'Survey'})
+        }, 500);
       },
       exitKioasMode() {
-         this.$router.push({name: 'Home'});
+        this.loading = true
+        var self = this;
+        setTimeout(function(){
+           self.loading = false;
+           self.$router.push({name: 'Home'});
+        }, 500);
+        
       },
-      getIntroVideo(feedback_id) {
-         this.$http.get('https://happyreply.com/api/get/video-link/'+feedback_id)
-        .then(response => {
-          this.videoId = response.body
-        }).then(data => {
-          console.log(data)
-        })
-      }
   }
 }
 </script>
 <style>
-.position_gear{
+.p_gear{
     cursor: pointer;
-    background: #fff;
-    border-radius: 10px;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    padding:2px;
-    color: #fff;
-    font-weight: 50px;
-    width:20px;
-    height:20px;
     z-index: 1000;
+    top: 20px;
+    right: 20px;
 }
 </style>
 

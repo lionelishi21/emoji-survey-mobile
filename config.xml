@@ -37,15 +37,15 @@
     <feature name="http://api.phonegap.com/1.0/network" />
     <preference name="AllowInlineMediaPlayback" value="true" />
     <icon density="mdpi" height="57" platform="android" src="static/icon/happyreply.png" width="57" />
-    <plugin name="cordova-plugin-whitelist" spec="1" />
-    <plugin name="cordova-plugin-sqlite-2" spec="~1.0.4" />
-    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="orientation" value="landscape" />
-    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
-    <plugin name="cordova-plugin-websql" spec="0.0.10" />
     <plugin name="com.moust.cordova.videoplayer" spec="https://github.com/moust/cordova-plugin-videoplayer.git" />
-    <plugin name="cordova-plugin-kiosk" spec="https://github.com/hkalina/cordova-plugin-kiosk.git" />
+    <plugin name="cordova-plugin-kiosk" spec="git+https://github.com/hkalina/cordova-plugin-kiosk.git" />
+    <plugin name="cordova-plugin-network-information" spec="^2.0.1" />
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
+    <plugin name="cordova-plugin-sqlite-2" spec="^1.0.4" />
+    <plugin name="cordova-plugin-websql" spec="0.0.10" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
     <engine name="browser" spec="^5.0.1" />
     <engine name="ios" spec="^4.5.4" />
 </widget>

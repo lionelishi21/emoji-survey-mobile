@@ -1,5 +1,18 @@
 <template>
   <div>
+          <v-snackbar
+      :timeout="timeout"
+      :top="y === 'top'"
+      :bottom="y === 'bottom'"
+      :right="x === 'right'"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :vertical="mode === 'vertical'"
+      v-model="snackbar"
+    >
+      {{ text }}
+      <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
+    </v-snackbar>
       <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
       <v-container fill-height>
         <v-layout row justify-center align-center>
@@ -7,6 +20,7 @@
         </v-layout>
       </v-container>
     </v-dialog>
+
    <v-layout row wrap>
       <v-subheader><h2>Surveys</h2></v-subheader>
       <v-btn @click="loadSurveys()"
@@ -32,7 +46,7 @@
                   <v-flex xs5 style="background: #96281B; color: #fff">
                     <v-card-text class="text-center">
                       <h1>
-                        {{ question_count }}
+                        {{ QuestionAmount }}
                       </h1>
                        <v-spacer></v-spacer>
                        <p>Questions</p>
@@ -57,8 +71,15 @@ import Icon from 'vue-awesome/components/Icon'
 export default {
     data() {
       return {
+        text: "",
+        logout: false,
+        snackbar: false,
         loading: false,
         value: 0,
+        y: 'top',
+        x: null,
+        mode: '',
+        timeout: 5000,
         feedback_title: '',
         feedback_desc: '',
         feedback_slug: '',
@@ -108,9 +129,6 @@ export default {
         this.feedback_title = this.feedbackInfo[0].feedback_title
         this.feedback_desc = this.feedbackInfo[0].feedback_desc
         this.feedback_slug = this.feedbackInfo[0].feedback_slug
-      },
-      QuestionAmount(value){
-        this.question_count = value
       }
     },
     computed: {
@@ -139,6 +157,7 @@ export default {
         return load;
       },
       logout(){
+
          var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
          this.$store.dispatch('dropDatabase', db)
          localStorage.removeItem("user_id");
@@ -170,10 +189,19 @@ export default {
       },
       loadSurveys() {
         this.loading = true
+
+        if (this.online == false) {
+            this.text = 'Internet connection is unavailable'
+            this.snackbar = true;
+            this.loading = false
+            return
+        }
+        
         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         var user_id = localStorage.getItem('user_id')
+        
         this.$store.dispatch('reCreateDatabases', db)
-         this.$store.dispatch('getFeedback', {user_id, db})
+        this.$store.dispatch('getFeedback', {user_id, db})
         this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
         this.$store.dispatch('getQuestions',  {user_id, db})
         this.$store.dispatch('getAnswers',  {user_id, db})
@@ -188,7 +216,7 @@ export default {
         self.$store.dispatch('getQuestionCount', db)
           self.loading = false
           this.initilizeDatabase();
-        }, 5000);
+        }, 4000);
       }
     }
 }

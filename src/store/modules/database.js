@@ -18,7 +18,7 @@ const actions = {
 	  	feedback_desc TEXT, feedback_slug Text)`, [])
 
 	  	tx.executeSql(`CREATE TABLE IF NOT EXISTS answers (id INTEGER NOT NULL, answer TEXT NOT NULL, emoji TEXT, 
-	  	feedback_id INTEGER NOT NULL,  question_id INTEGER NOT NULL)`, [])
+	  	feedback_id INTEGER NOT NULL,  question_id INTEGER NOT NULL, logic_to INTEGER)`, [])
 
 	  	tx.executeSql(`CREATE TABLE IF NOT EXISTS matrixs (id INTEGER, emoji TEXT NOT NULL, matrix TEXT,
 	  	question_id INTEGER NOT NULL)`, [])
@@ -27,10 +27,11 @@ const actions = {
 	    question_id INTEGER NOT NULL, left TEXT NOT NULL, right TEXT NOT NULL, label TEXT )`, [])
 
 	    tx.executeSql(`CREATE TABLE IF NOT EXISTS responses (id INTEGER PRIMARY KEY AUTOINCREMENT, multiple_choice TEXT, 
-	    matrix TEXT, slider TEXT, range TEXT, suggestion TEXT, feedback_id INTEGER )`, [])
+	    matrix TEXT, slider TEXT, range TEXT, suggestion TEXT, email TEXT, number TEXT, feedback_id INTEGER )`, [])
 
 	    tx.executeSql(`CREATE TABLE IF NOT EXISTS questions (id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
-	  	feedback_question TEXT NOT NULL, type INTEGER NOT NULL, feedback_id INTEGER NOT NULL,  answer_count INTEGER)`, [])
+	  	feedback_question TEXT NOT NULL, type INTEGER NOT NULL, 
+	  	feedback_id INTEGER NOT NULL,  answer_count INTEGER, isLogic TEXT, recieved_logic INTEGER)`, [])
 	  })
 	},
 	dropDatabase({commit, dispatch}, db) {

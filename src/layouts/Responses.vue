@@ -1,31 +1,36 @@
 <template>
 <div>
-	<v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+	 <v-snackbar
+      :timeout="timeout"
+      :top="y === 'top'"
+      :bottom="y === 'bottom'"
+      :right="x === 'right'"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :vertical="mode === 'vertical'"
+      v-model="snackbar"
+    >
+      {{ text }}
+      <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
+    </v-snackbar>
+	<!-- <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
       <v-container fill-height>
         <v-layout row justify-center align-center>
           <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
         </v-layout>
       </v-container>
-    </v-dialog>
+    </v-dialog> -->
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
     <h1 class="h2">Offline Responses</h1>
-
   </div>
   <v-row>
-   <v-card>
-    <v-card-text>
-      <p class="text-md-center display-4">{{response_count}}</p>
+   <v-card class="text-center">
+    <v-card-text >
+      <p class="text-md-center display-4">{{ResponseAmount}}</p>
       <p class="text-md-center"> Offline Respponse</p>
-        <v-btn
-      :loading="loading3"
-      :disabled="loading3"
-
-      color="blue-grey"
-      class="white--text"
-      @click="postResponseOffline()"
-    >
-      Post Response
-      <v-icon right dark>cloud_upload</v-icon>
+       <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
+          Post Response
+        <v-icon right dark>cloud_upload</v-icon>
     </v-btn>
     </v-card-text>
   </v-card>
@@ -41,6 +46,13 @@ export default {
 	},
     data() {
       return {
+      	text: "",
+      	snackbar: false,
+        value: 0,
+        y: 'top',
+        x: null,
+        mode: '',
+        timeout: 5000,
       	isLoading: false,
       	loading: false,
       	feedback_title: '',
@@ -88,10 +100,17 @@ export default {
 	      	 this.$store.dispatch('getResponses', db)
 	      	 this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
 	      	},
+	      	checkResponses() {
+	      		if (this.ResponseAmount < 1) {
+	      			return false
+	      		}
+	      		return true;
+	      	},
 	      	postResponseOffline () {
 	         this.loading = true
 	         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
 		     db.transaction(this.getResponsesFromSqlite)
+		     this.loading = false;
 		    },
 		    getResponsesFromSqlite (tx) {
 		      tx.executeSql('SELECT * FROM responses;', [], this.renderResponses1)
@@ -104,6 +123,8 @@ export default {
 		        var sliderArray = ''
 		        var rangeArray = ''
 		        var commentArray = ''
+		        var emailArray = ''
+		        var numberArray = ''
 
 		        if (results.rows.item(i).multiple_choice != '{}') {
 		          mcArray = JSON.parse(results.rows.item(i).multiple_choice)
@@ -124,16 +145,26 @@ export default {
 		        if (results.rows.item(i).range != '{}') {
 		          commentArray = JSON.parse(results.rows.item(i).suggestion)
 		        }
+
+		        if (results.rows.item(i).range != '{}') {
+		          emailArray = JSON.parse(results.rows.item(i).email)
+		        }
+
+		        if (results.rows.item(i).range != '{}') {
+		          numberArray = JSON.parse(results.rows.item(i).number)
+		        }
+
 		        var feedbackId = results.rows.item(i).feedback_id;
 		        var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-		        this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, feedbackId, true, db)
+		        this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, feedbackId, true, db)
+
 		      }
 		    },
 		     newSaveResponse (multpleChoice, matrix, slider, range, comments, fbId, db) {
 		        this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId, false, db)
 		    },
-		    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, fbId, offline, db) {
-		      var action = 'https://happyreply.com/post-survey-responses2'
+		    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, fbId, offline, db) {
+		      var action = 'https://happyreply.appfinitytech.com/post-survey-responses2'
 		      var csrfToken = $('meta[name=csrf-token]').attr('content')
 		      // this.loadButton.loading = true
 		      // this.button.loading = true;
@@ -145,7 +176,11 @@ export default {
 		              matrix: matrixArray,
 		              slider: sliderArray,
 		              range: rangeArray,
-		              comment: commentArray }
+		              comment: commentArray,
+		              email: emailArray,
+		              number: numberArray
+
+		               }
 		           },
 		         {
 		          headers: {
@@ -154,14 +189,22 @@ export default {
 		        })
 		        .then(response => {
 		             var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-		             db.transaction(this.dropResponsesDatabase, this.nullHandler);
+		             db.transaction(this.dropResponsesDatabase);
+		             this.text = 'Response has been succesfully post to the servery'
+                     this.snackbar = true;
 		             this.loading = false
 		        }, response => {
 		        	//TODO: Snackbar goes here
-		        	 this.loading = false
+		            this.text = 'Responses did not post, something wen wrong'
+                    this.snackbar = true;
+		        	his.loading = false
 		        	this.init()
 		        });
-		    }
+		    },
+		    dropResponsesDatabase (tx) {
+		      console.log('dropping response table after upload to database')
+		      tx.executeSql('DROP TABLE IF EXISTS responses')
+		    },
       }   	
 }
 </script>

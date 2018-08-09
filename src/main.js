@@ -2,9 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 require('expose?$!expose?jQuery!jquery')
 require('../vendors/bower_components/jquery/dist/jquery.min.js')
-// require('../vendors/bower_components/bootstrap/dist/js/bootstrap.min.js')
-// require('../vendors/bower_components/Waves/dist/waves.min.js')
-// require('./plugins/sweet-alert-plugin');
 require('vue2-animate/dist/vue2-animate.min.css')
 
 
@@ -20,6 +17,7 @@ import Home from './layouts/Home.vue'
 import Response from './layouts/Responses'
 import Completed from './components/Completed'
 import Intro from './components/Intro'
+import Intro2 from './components/Intro2'
 import store  from './store/';
 import 'font-awesome/css/font-awesome.css'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -31,19 +29,32 @@ import VueUp from 'vueup'
 import VModal from 'vue-js-modal'
 import Vuetify from 'vuetify'
 import ResponseTheme from './response-main'
-// index.js or main.js
+import IdleVue from 'idle-vue'
+import VueGeolocation from 'vue-browser-geolocation';
 
+Vue.use(VueGeolocation);
+const eventsHub = new Vue()
+ 
+// Vue.use(IdleVue, {
+//   eventEmitter: eventsHub,
+//   idleTime: 60000
+// })
+
+Vue.use(IdleVue, { store })
 Vue.use(ResponseTheme)
 Vue.use(Vuetify)
 Vue.use(VModal)
+
 Vue.use(VueRouter)
 Vue.use(VueResource)
+
+// this a test
 Vue.use(Notifications)
 Vue.use(VueYoutube)
 
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
-Vue.http.options.root = 'https://happyreply.com/'
+Vue.http.options.root = 'https://app.happyreply.com/'
 Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
 
 export var router = new VueRouter({
@@ -55,7 +66,6 @@ routes: [
     },
     {
       path: '/dashboard',
-      name: 'Dashboard',
       component: Dashboard,
       children:[
         { path: '', name: 'Home', component:  Home },
@@ -73,7 +83,8 @@ routes: [
       name: 'Completed',
       component: Completed
     },
-    { path: '/intro/:id', name: 'Intro', component: Intro }
+    { path: '/intro/:id', name: 'Intro', component: Intro },
+    { path: '/intro2/:id', name: 'Intro2', component: Intro2 }
   ]
 });
 

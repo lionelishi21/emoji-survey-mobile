@@ -1,5 +1,8 @@
 <template>
   <div>
+    <transition name="zoomUp">
+     <div id="dsp_data" v-show="animate"></div>
+    </transition>
     <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
       <v-container fill-height>
         <v-layout row justify-center align-center>
@@ -8,8 +11,8 @@
       </v-container>
     </v-dialog>
   <div class="survey-intro video_overlay ">
-      <v-dialog v-model="dialog3" max-width="500px" content-class="text-center" dialog-transition="">
-        <v-card>
+      <v-dialog v-model="dialog3" max-width="500px" content-class="text-center" transition="zoomUp">
+        <v-card style="background: transparent; color: #fff;">
           <v-card-text>
               <img :src="'static/emoji/'+modal.emoji+'.svg'" class="img-responsive" width="300px"/>
                   <v-spacer></v-spacer>
@@ -17,9 +20,13 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-    <img :src="pic_url " id="youtube_media" v-show="showBackgroundImage()" >
+    <img :src="getBgImage" id="youtube_media" v-show="showBackgroundImage()" >
+     
     <transition-group name="fadeLeft">
-      <section  v-for="(q, key) in  getAllQuestions" v-show="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'">
+      <section  v-for="(q, key) in  getAllQuestions" 
+        v-show="showQuestion(key, q.id, q.recieved_logic)" 
+        :key="key" 
+        :class="key+' wrapper fullscreen matrix_content question-bg-1'">
           <div  v-if="showMultipleChoiceQuestions(q.type)" :key="key">
               <div class="question-wrapper">
                   <div class="row">
@@ -35,10 +42,9 @@
                       <div v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id == q.id" 
                       :class="changeClass(q.answer_count)">
                         <div :class="'survey-card answer_content '+cardSelect(mc_responses[q.id], answer.id)" :id="'card_select_'+answer.id">
-                          <div class="survey-card-body text-center" style="z-index: 1000;">
+                          <div class="survey-card-body text-center" @click="triggerClicks(answer.id)">
                              <label class="img-label text-center m-r-20 " :id="answer.id">
                                       <input
-                                      style="z-index: -10000"
                                       v-model="mc_responses[q.id]"
                                       type="radio"        
                                       id:checked="answer.id"
@@ -46,18 +52,17 @@
                                       :class="'emoji stats'+answer.id" 
                                       :value="answer.id"
                                       :id="'mc_'+answer.id"
-                                       @click="showAlert(answer.id, answer.emoji, answer.answer, key)"
+                                       @change="showAlert(answer.id, answer.emoji, answer.answer, key, 'input', answer.logic_to)"
                                       />
 
                                       <img
-
-                                       style="z-index: -10000"
                                        :id="'emojimage_'+answer.id"
                                         :src="'static/emoji/'+answer.emoji+'.svg'"
                                         class="img-responsive emoji-img "
                                        />
                                   </label>
                                   <h3 v-html="modifyAnswers(answer.answer)"></h3>
+                                  <h3></h3>
                           </div>
                         </div>
                       </div>
@@ -95,15 +100,16 @@
                                     </tr>
                                 </thead>
                                     <tbody>
-                                        <tr v-for="(ans, matrix_key) in getAllAnswers" v-if="q.id == ans.question_id" :key="matrix_key">
+                                        <tr v-for="(ans, answer_key) in getAllAnswers" v-if="q.id == ans.question_id" :key="answer_key">
                                             <div class="text-left mt-3">
                                                 <td><h4 class="text-left">{{ans.answer}}</h4></td>
+                                               
                                             </div>
-                                            <td v-for="mt in getAllMatrixs" v-if="q.id == mt.question_id" :key="matrix_key">
+                                            <td v-for="(mt, matrix_key) in getAllMatrixs" v-if="q.id == mt.question_id" :key="matrix_key">
                                                 <div class="center_check">
                                                     <label class="matrix_ques">
                                                         <input
-                                                     
+                                                            @click="showMatrixAlert(matrix_key, ans.id, q.answer_count, q.id, key)"
                                                            :name="'answers_matrixs['+ans.id+']'"
                                                             class='myinput large custom'
                                                             type="radio"
@@ -145,6 +151,103 @@
                                   <textarea class="form-control" v-model="comments_response[q.id]"  :name="'answers_comment['+q.id+']'" rows="7" id="textArea"></textarea>
                                   <span style="color:white">Click above to enter your comment.</span>
                                    <img class="img-responsive emoji-img" src="static/emoji/veryhappy.svg" style="width: 30px">
+                              </div>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+           </div>
+           <div class="question-wrapper" v-if="showEmailQuestions(q.type)" :key="key">
+              <div class="row">
+                  <div class="col-md-12">
+                     <div class=" m-b-5">
+                        <div class="survey-card-body">
+                           <h2>{{q.question}}</h2>
+                         </div>
+                      </div>
+                </div>
+              </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="survey-card answer_content">
+                           <div class="survey-card-body text-center">
+                              <div class="form-group">
+                                   <v-text-field
+                                    autofocus
+                                    :rules="[rules.email]"
+                                    placeholder="Type your email here"
+                                    v-model="email_response[q.id]"
+                                    style="color: #fff"
+                                  >
+                                 </v-text-field>
+                                  <span style="color:white">Click above to enter your Email.</span>
+                                   <img class="img-responsive emoji-img" src="/static/emoji/veryhappy.svg" style="width: 30px">
+                              </div>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+           </div>
+            <div class="question-wrapper" v-if="showShortTextQuestions(q.type)" :key="key">
+              <div class="row">
+                  <div class="col-md-12">
+                     <div class=" m-b-5">
+                        <div class="survey-card-body">
+                           <h2>{{q.question}}</h2>
+                         </div>
+                      </div>
+                </div>
+              </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="survey-card answer_content">
+                           <div class="survey-card-body text-center">
+                              <div class="form-group">
+                                   <v-text-field
+                                    autofocus
+                                    v-model="shorttext_response[q.id]"
+                                    class="c-white"
+                                    :rules="[rules.counter]"
+                                    style="color: #fff"
+                                    single-line
+                                    box
+                                  >
+                                 </v-text-field>
+                                  <span style="color:white">Click above to enter your full name.</span>
+                                   <img class="img-responsive emoji-img" src="/static/emoji/veryhappy.svg" style="width: 30px">
+                              </div>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+        </div>
+            <div class="question-wrapper" v-if="showNumberQuestions(q.type)" :key="key">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class=" m-b-5">
+                        <div class="survey-card-body">
+                           <h2>{{q.question}}</h2>
+                         </div>
+                      </div>
+                </div>
+              </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="survey-card answer_content">
+                           <div class="survey-card-body text-center">
+                              <div class="form-group">
+                                   <v-text-field
+                                    autofocus
+                                    :mask="'(###) ### - ####'" 
+                                    v-model="number_response[q.id]"
+                                    class="c-white"
+                                    :rules="[rules.phonenumber]"
+                                    placeholder="(876) 999-9999"
+                                    style="color: #fff"
+                                  >
+                                 </v-text-field>
+                                  <span style="color:white">Click above to enter your Number.</span>
+                                   <img class="img-responsive emoji-img" src="/static/emoji/veryhappy.svg" style="width: 30px">
                               </div>
                             </div>
                         </div>
@@ -197,7 +300,7 @@
                   </div>
                 </div>
            </div>
-          <div  v-if="showRangeQuestions(q.type)" :key="key" >
+          <div v-if="showRangeQuestions(q.type)" :key="key" >
               <div class="question-wrapper">
                   <div class="row">
                     <div class="col-md-12">
@@ -211,10 +314,10 @@
                    <div class="row">
                       <div class="col-md-4" v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id == q.id">
                          <div :class="'survey-card answer_content '+cardSelect(range_questions[q.id], answer.id)" :id="'card_select_'+answer.id">
-                        <div class="survey-card-body text-center" >
+                        <div class="survey-card-body text-center"  @click="triggerClicks(answer.id)" >
                            <label class="img-label text-center m-r-20 " :id="answer.id">
                                     <input
-                                  
+                                   
                                     v-model="range_questions[q.id]"
                                     type="radio"        
                                     v-bind:checked="answer.id"
@@ -222,7 +325,7 @@
                                     :class="'emoji stats'+answer.id" 
                                     :value="answer.id"
                                     :id="'mc_'+answer.id"
-                                     @click="showAlert(answer.id, answer.emoji, answer.answer, key)"
+                                    @change="showAlert(answer.id, answer.emoji, answer.answer, key, 'input', answer.logic_to)"
                                     />
                                     <img
                                      :id="'emojimage_'+answer.id"
@@ -238,20 +341,20 @@
 
                  </div>
           </div>
-            <div class="row">
-               <div class="col-md-6">
-                 <button @click="backToIntro()" v-if="key == 0" class="survey-btn pull-left btn-red btn-survey-lg">Back to Introduction </button>
-                  <button v-else @click="getPrevPage(key)" class="survey-btn pull-left btn-red btn-survey-lg">Previous Question </button>
-              </div>
-              <div class="col-md-6">
-                  <button v-if="key == getAllQuestions.length-1"
-                     @click="goTSubmit()"
-                     class="survey-btn pull-right btn-red btn-survey-lg">
-                   Next Question
-                  </button>
-                  <button v-else @click="getNextPage(key, q.type)" class="survey-btn pull-right btn-red btn-survey-lg">Next Questions</button>
-              </div>
-          </div>
+          <div class="row">
+             <div class="col-md-6">
+               <button @click="backToIntro()" v-if="key == 0" class="survey-btn pull-left btn-red btn-survey-lg">Back to Introduction </button>
+                <button v-else @click="getPrevPage(key)" class="survey-btn pull-left btn-red btn-survey-lg">Previous Question </button>
+            </div>
+            <div class="col-md-6">
+                <button v-if="key == getAllQuestions.length-1"
+                   @click="goTSubmit()"
+                   class="survey-btn pull-right btn-red btn-survey-lg">
+                 Next Question
+                </button>
+                <button v-else @click="getNextPage(key, q.type)" class="survey-btn pull-right btn-red btn-survey-lg">Next Questions</button>
+            </div>
+        </div>
       </section>
     </transition-group>
      <section class="wrapper intro1 fullscreen fade-up question-wrapper" id="showsubmit" v-show="showSubmitContent()"> 
@@ -264,7 +367,6 @@
               </button>
             </div>
         </div>
-       
     </section>
   </div>
 </div>
@@ -291,6 +393,42 @@ export default {
     mixins: [Post],
 		data() {
 			return {
+        rules: {
+          required: value => !!value || 'Required.',
+          counter: value =>  value.length <= 20 || 'Max 20 characters',
+          phonenumber: value => {
+            console.log(value.length)
+              if (value.length  > 0 && value.length < 10) {
+                this.phone_number_valid = false
+                return 'Invalid phone number'
+              } else {
+                this.phone_number_valid = true
+              }
+          },
+          email: value => {
+             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+             
+             if (pattern.test(value) == false && value.length > 0) {
+               this.valid = false
+             } else {
+               this.valid = true
+             }
+             return pattern.test(value) || 'Invalid e-mail.'
+          }
+        },
+        phone_number_valid:true,
+        valid: true,
+        location: {
+          lat: '',
+          long: ''
+        },
+        animate: true,
+        current_answer_array: [],
+        matrix_answer_count: 0,
+        current_answer: 0,
+        surveybgimage:'',
+        appTimeout: 100000,
+        answer_id: 0,
         loading: false,
         backgroundImage: true,
         value1: 0,
@@ -307,7 +445,7 @@ export default {
         success: false,
         amount_answer: '',
         feedback_id: '',
-        pic_url: 'static/survey-themes/people-image.png',
+        pic_url: '',
         feedback_desc: '',
         database: 'SurveyDb',
         version: '1.0',
@@ -319,6 +457,9 @@ export default {
         range_questions: {},
         comments_response: {},
         slider_questions: {},
+        email_response: {},
+        number_response: {},
+        shorttext_response: {},
 				index: 0,
 				count: 0,
 				questions: null,
@@ -340,6 +481,10 @@ export default {
           'dataStyle': 'expand-left',
           progress: 0,
         },
+        goback: false,
+        isLogic: false,
+        logic_question_id: '',
+        before_logic_step: '',
         connectionStatus: '',
          options: {
             width: "100%",
@@ -387,23 +532,32 @@ export default {
         'getAllAnswers',
         'getAllSliders',
         'getAllMatrixs',
-        'getMcResponse'
+        'getMcResponse',
+        'getBgImage'
 
       ]),
-       online () {
+      online () {
         return VueOnline.isOnline
+      },
+      messageStr() {
+        if (this.isAppIdle) {
+          this.backToIntro()
+        }
       }
+    
     },
-  
     created() {
       this.slug = this.$route.params.id
       var db
+      
+      this.getUserLocation();
       db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
       this.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
       this.$store.dispatch('getFeedbackAnswerFromSqlLite', db)
       this.$store.dispatch('getFeedbackMatixFromSqlLite', db)
-      this.$store.dispatch('getFeedbackTitleFromSqlLite', db);
+      this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
       this.$store.dispatch('getFeedbackSliderFromSqlLite', db)
+      this.$store.dispatch('getBackgroundImage', this.feedbackInfo[0].feedback_slug)
     },
     components: {
       vueSlider,
@@ -414,8 +568,59 @@ export default {
       Intro
     },
   	methods: {
+      getUserLocation() {
+         var bool = true
+         var int = 0
+          this.$getLocation({
+            enableHighAccuracy: bool, //defaults to false
+            timeout: Infinity, //defaults to Infinity
+            maximumAge: int //defaults to 0
+          })
+        .then(coordinates => {
+           console.log(coordinates)
+           this.lat = coordinates['lat']
+           this.long = coordinates['lng']
+        });
+      },
+      emailValidationOptions() {
+        if (this.valid == false ) {
+           this.modal.answer = 'Something is wrong with your email address'
+           this.modal.emoji = 'sad' 
+           this.dialog3 = true;
+          return true
+        }
+        return false
+      },
+      phoneValidationOptions() {
+        if (this.phone_number_valid == false) {
+           this.modal.answer = 'Something is wrong with your phone number'
+           this.modal.emoji = 'sad' 
+           this.dialog3 = true;
+           return true
+        }
+        return false
+      },
+      showShortTextQuestions(value) {
+        if (value == 8){
+          return true;
+         } 
+         return false
+      },
+      showLogicsQuestion(logic_question_id) {
+        if (logic_question_id) {
+           this.logic_question_id = logic_question_id
+           this.logic = true
+           this.before_logic_step = this.step
+           this.step = 'logic'
+         } else {
+          this.logic_question_id = ''
+          this.logic = false
+          if (this.before_logic_step) {
+              this.step = this.before_logic_step          
+          }
+        }
+      },
       triggerClicks(key){
-       
         var mc_id = '#mc_'+key
         $(mc_id).trigger('click')
       },
@@ -461,21 +666,17 @@ export default {
            $(card).removeClass('survey-card-hightlight');
          }
       },
-      showAlert(id, emoji, answer, key) {
+      showAlert(id, emoji, answer, key , value, logic_question_id = '') {
 
-       
-
+       this.animateEmoji(emoji)
        this.modal.answer = answer
        this.modal.emoji = emoji 
-
-
-        this.dialog3 = true;
-       
+       this.dialog3 = true;
         
         var self = this;
         setTimeout(function(){
            self.dialog3 = false;
-           self.getNextPage(key)
+           self.getNextPage(key, id, logic_question_id)
         }, 1000);
       },
       changeClass (value) {
@@ -502,33 +703,52 @@ export default {
         this.modal.answer = event.params.answer
         this.modal.emoji = event.params.emoji
       },
-      showMatrixAlert(qustion_key, matrix_key, answer_count, question_id) {
-        if (this.current_question != question_id) {
-            this.current_question = question_id
-            this.question_increment = []
-            this.question_increment.push({ matrix_key });
+      attemptMatrixQuestion(answer_id, question_id) {
+          this.current_question = question_id
+          this.current_answer = answer_id;
+          this.current_answer_array = []
+          this.matrix_answer_count = 1
+          this.current_answer_array.push(answer_id)
+          return
+      },
+     inArray: function(needle, haystack) {
+            var length = haystack.length;
+            for(var i = 0; i < length; i++) {
+                if(haystack[i] == needle) 
+                return true;
+            }
+            return false;
+        },
+      showMatrixAlert (matrix_key, answer_id, answer_count, question_id, question_key) {
+        
+        if (this.current_question == 0) {
+            this.attemptMatrixQuestion(answer_id, question_id)
         }
+
+        if (this.current_question != question_id) {
+            his.attemptMatrixQuestion(answer_id, question_id)
+        }
+
 
         if (this.current_question == question_id) {
-            this.question_increment.push({ matrix_key })
-
-            //TODO: check if key already exist
-            //Example to know if key is already in array:
-            // [1, 2, 3].includes(2);     // true
-            // [1, 2, 3].includes(4);     // false
-            // [1, 2, 3].includes(3, 3);  // false
-
-             if (this.question_increment.length == answer_count) {
-                var emoji = this.getAllMatrixs[matrix_key]['emoji']
-                var matrix = this.getAllMatrixs[matrix_key]['matrix']
-                this.showAlert(qustion_key, emoji, matrix)
-             }
+            if (this.current_answer == answer_id) {
+                return
+            } else {
+                if (this.inArray(answer_id, this.current_answer_array)) {
+                } else {
+                   this.current_answer_array.push(answer_id)
+                   this.matrix_answer_count += 1  
+                }
+                if (this.matrix_answer_count == answer_count) {
+                   var emoji = this.getAllMatrixs[matrix_key]['emoji']
+                   var matrix = this.getAllMatrixs[matrix_key]['matrix']
+                    this.showAlert(question_id, emoji, matrix, question_key, '', '')
+                }
+                return
+            }
         }
-
-        
       },
       cardSelect(value, answer) {
-
         if (value != undefined) {
            if (value == answer) {
             return 'survey-card-hightlight'
@@ -544,7 +764,6 @@ export default {
         } else {
            this.modal.answer = 'You have to select at lease one answer'
            this.modal.emoji = 'sad' 
-
             this.dialog3 = true;
             var self = this;
         }
@@ -579,9 +798,7 @@ export default {
       // created response database
       var db
       db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-     
-      this.newSaveResponse(this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, fbId, db)
-     
+      this.newSaveResponsenew(this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, this.email_response, this.number_response, this.lat, this.lng, fbId, db)
       this.clearFormData();
      },
     clearFormData() {
@@ -598,16 +815,31 @@ export default {
       }
       return true;
     },
-    checkForNull() {
-      if (  this.isEmpty(this.mc_responses) === true &&
-      this.isEmpty(this.matrix_responses) === true &&
-      this.isEmpty(this.slider_questions) === true &&
-      this.isEmpty(this.range_questions) === true &&
-      this.isEmpty(this.comments_response) === true) {
-        return false;
-      }
-      return true;
+    showEmailQuestions(value) {
+        if (value == 6){
+          return true;
+         } 
+         return false
+      },
+    showNumberQuestions(value) {
+        if (value == 7){
+          return true;
+         } 
+         return false
     },
+     checkForNull() {
+        if (  this.isEmpty(this.mc_responses) === true &&
+        this.isEmpty(this.matrix_responses) === true &&
+        this.isEmpty(this.slider_questions) === true &&
+        this.isEmpty(this.range_questions) === true &&
+        this.isEmpty(this.comments_response) === true &&
+        this.isEmpty(this.email_response) === true &&
+        this.isEmpty(this.number_response) === true
+        ) {
+          return false;
+        }
+        return true;
+     },
    changeEmoji(value){
         if  (value == 1) {
            return 'emo_1'
@@ -662,38 +894,92 @@ export default {
            return false;
          }
       },
-      showQuestion(key) {
-          if (this.step == key) {
-            return true;
-          } else if (this.step == -1) {
-            return true;
-          } else {
-            return false;
-          }
-      },
-      getNextPage(key, type) {
-          if (key == this.getAllQuestions.length-1) {
-            this.goTSubmit()
-          } else {
-            if (key == 0) {
-              this.step = 1;
-            } else {
-              this.step += 1;
-            }
-          }
+      showQuestion(key, question_id, recieved_logic) {
+        if (this.logic) {
+           if (this.logic_question_id == question_id) {
+             return true
+           }
+        }
 
-          
+        if (this.step == key) {
+          if (recieved_logic == 1) {
+            if (this.goback == true ) {
+              this.step -= 1
+            } else {
+              
+              this.step += 1
+            }
+            
+            if (this.step == this.getAllQuestions.length) {
+                this.goTSubmit()
+             }
+          }
+          return true;
+        } else if (this.step == -1) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      getNextPage(key, answer_id, logic_question_id) {
+          if (this.emailValidationOptions() == true) {
+           return 
+         }
+
+         if (this.phoneValidationOptions() == true) {
+           return
+         }
+
+         this.goback = false
+         if (this.logic == true) {
+               this.logic_question_id = ''
+               this.logic = false
+               this.step = this.before_logic_step
+            if (this.before_logic_step !== '') {
+                this.step = this.before_logic_step
+                if (this.step == 0) {
+                  this.step = 1
+                }else {
+                  this.step = this.step+1
+                }
+                // this.before_logic_step == ''
+                // this.step = key+1
+                 return
+             }
+            
+         }
+
+
+         if (logic_question_id === null || logic_question_id === false || logic_question_id === '' || logic_question_id === undefined ) {
+            if (key == this.getAllQuestions.length-1) {
+              this.goTSubmit()
+            } else {
+              if (key == 0) {
+                 this.step = 1;
+              } else {
+                this.step += 1
+              }
+            }
+         } else {
+             this.showLogicsQuestion(logic_question_id)
+         }
       },
       getPrevPage(key) {
-          if (key == 0) {
-            this.step = 1;
+        this.goback = true
+        if (key == 0) {
+          this.step = 1;
+        } else {
+          if (this.step == 'logic') {
+            this.step = this.before_logic_step;
+            this.before_logic_step = ''
           } else {
-            this.step -= 1;
+             this.step -= 1;
           }
+         
+        }
       },
       initStep() {
         this.step = 0;
-
       },
     nullHandler(tx, error) {
        console.log('Error: ' + error + ' code: ' + error);
@@ -706,16 +992,32 @@ export default {
     },
     getPrev(key) {
         this.step - 1;
+    },
+    animateEmoji(emoji) {
+      this.animate = true
+      var emo = 'static/emoji/'+emoji+'.svg'
+      var data = '<div class="webloder"';
+        for (var i = 1; i <= 40; i++) {
+           if(i==1 || i==11 || i==21) {
+
+           } else {
+             data +='<div style="background-image: url('+emo+')" class="bubble x'+i+'"></div>'; 
+           }
+        }
+        data +='</div>';
+        $("#dsp_data").html(data);
+        
+        var self = this
+        setTimeout(function(){
+           self.animate = false
+        }, 2900);
     }
 	 }
 	}
 </script>
 
 <style lang="scss">
-    .slide-enter { transform: translate3d( 100%, 0, 0 ); }
-.slide-enter-active { transition: 0.3s linear all; }
-.slide-leave { transform: translate3d( -100%, 0, 0 ); }
-.slide-leave-active { transition: 0.3s linear all; }
+
     .table th, .table td {
         border: 0 !important;
     }

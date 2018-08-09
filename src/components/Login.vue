@@ -25,7 +25,7 @@
 						<input class="input100 " type="text" name="username" placeholder="Username" v-model="formInputs.email">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
-							<i class="fa fa-user"></i>
+							  <v-icon>perm_identity</v-icon>
 						</span>
 					</div>
 
@@ -33,7 +33,7 @@
 						<input class="input100 alert-validate" type="password" name="pass" placeholder="Password" v-model="formInputs.password" >
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
-							<i class="fa fa-lock"></i>
+							<v-icon>lock</v-icon>
 						</span>
 					</div>
 
@@ -134,7 +134,7 @@ export default {
             },
             submitForm: function(event) {
 
-            var action = 'https://happyreply.com/api/authenticate';
+            var action = 'https://app.happyreply.com/api/authenticate';
             var csrfToken = $('meta[name=csrf-token]').attr('content');
 
             if (this.formInputs.email == "") {

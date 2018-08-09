@@ -6,6 +6,17 @@
       permanent
       app
     >
+      <v-dialog v-model="logout" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">Logout</v-card-title>
+            <v-card-text>Are you sure you want to logout.</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" flat @click="logout = false">Disagree</v-btn>
+              <v-btn color="green darken-1" flat @click="logUserOut()">Agree</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
     <v-toolbar flat class="transparent">
         <v-list class="pa-0">
           <v-list-tile avatar>
@@ -35,7 +46,7 @@
             <v-list-tile-title>Responses</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
-         <v-list-tile @click="logout()">
+         <v-list-tile @click="logout = true">
           <v-list-tile-action>
             <v-icon>power_settings_new</v-icon>
           </v-list-tile-action>
@@ -54,7 +65,7 @@
     <v-toolbar-title> <img src="static/logo/logo.png" alt="logo" style="width:200px"></v-toolbar-title>
     <v-spacer></v-spacer>
       <v-badge left>
-          <!-- <span slot="badge">6</span> -->
+          <span slot="badge">{{ResponseAmount}}</span>
          <v-icon large color="grey lighten-1">notification_important</v-icon>
       </v-badge>
   </v-toolbar>
@@ -71,6 +82,7 @@
  export default {
     data() {
       return {
+        logout: false,
         response_count: 0,
         dialog: false,
         loading: false,
@@ -81,9 +93,18 @@
         maxSize: 1105535,
       }
     },
+    computed: {
+       ...mapGetters([
+        'ResponseAmount'
+      ]),
+    },
     created() {
       this.user_name = localStorage.getItem('user_name')
       var online = navigator.onLine;
+      var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+      this.db = db
+      var user_id = localStorage.getItem('user_id')
+      this.$store.dispatch('getResponses', db)
     },
     methods: {
       refresh(){
@@ -99,8 +120,7 @@
       setting(){
 
       },
-
-      logout(){
+      logUserOut() {
          var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
          this.$store.dispatch('dropDatabase', db)
          localStorage.removeItem("user_id");
@@ -108,7 +128,7 @@
          localStorage.removeItem("user_name");
          this.$router.push({name: 'Login'});
          location.reload();
-      }
+      },
     }
  }
 </script>

@@ -1,4 +1,4 @@
-import { FeedbackResource, QuestionResource, AnswerResource, MatrixResource, SliderResource } from './resources'
+import { FeedbackResource, QuestionResource, AnswerResource, MatrixResource, SliderResource, SurveyImageResource, VideoResource } from './resources'
 
 export default {
   getSurveyTitle: function (id) {
@@ -15,5 +15,11 @@ export default {
   },
   getSurveySlider: function (id) {
     return SliderResource.get({user_id: id})
+  },
+  getBackgroundImage: function(id) {
+     return SurveyImageResource.get({id})
+  },
+  getSurveyImage: function (id) {
+    return VideoResource.get({id})
   }
 }

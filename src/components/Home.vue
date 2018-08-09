@@ -159,7 +159,7 @@ export default {
         }
       },
       goToSurvey(fb_id) {
-         this.$router.push({name: 'Intro',  params: { id: fb_id } })
+         this.$router.push({name: 'Intro2',  params: { id: fb_id } })
         //  location.reload();
       },
       showButtonTwo(value) {

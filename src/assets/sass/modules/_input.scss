@@ -1,17 +1,19 @@
 .img-label > input {
   /* HIDE RADIO */
   visibility: hidden;
+   display: none;
+  z-index: -1000;
   /* Makes input not-clickable */
-  position: absolute;
+  position: relative;
   /* Remove input from document flow */
-  z-index: -1000 !important;
 }
 
-.img-label > input + img {
+.img-label > img {
+ 
   /* IMAGE STYLES */
+
   cursor: pointer;
   border: 2px solid transparent;
-
     border-radius: 50%;
   -webkit-transition: -webkit-transform .8s ease-in-out;
           transition:         transform .8s ease-in-out;
@@ -22,7 +24,6 @@
   /* (RADIO CHECKED) IMAGE STYLES */
   background-color: #efefef;
   border: 1px solid #ccc;
-  z-index: -1000 !important;
  }
 
 
