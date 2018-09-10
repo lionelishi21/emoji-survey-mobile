@@ -32,13 +32,13 @@
                           <div class="">
                            <h2>{{q.question}}</h2>
                            <vue-touch-keyboard
-              id="keyboard"  
-             :layout="layout" 
-             :cancel="hide" 
-             :accept="accept" 
-             :input="input" 
-             :next="next" 
-          />
+                                    id="keyboard"  
+                                   :layout="layout" 
+                                   :cancel="hide" 
+                                   :accept="accept" 
+                                   :input="input" 
+                                   :next="next" 
+                                />
                           </div>
                         </div>
                     </div>
@@ -324,7 +324,14 @@
                                     v-model="email_response[q.id]"
                                     style="color: #fff">
                                  </v-text-field>
-
+                                  <vue-touch-keyboard
+                                    id="keyboard"  
+                                   :layout="layout" 
+                                   :cancel="hide" 
+                                   :accept="accept" 
+                                   :input="input" 
+                                   :next="next" 
+                                />
                                  <span style="color:white">Click above to enter your Email.</span>
                                  <img class="img-responsive emoji-img"  src="static/emoji/veryhappy.svg" style="width: 30px">
                               </div>
