@@ -27,7 +27,23 @@
     },
     "com.moust.cordova.videoplayer": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
+    },
+    "uk.co.workingedge.cordova.plugin.sqliteporter": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-sslcertificatechecker": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-http": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    }
+  }
 }

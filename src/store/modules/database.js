@@ -27,7 +27,7 @@ const actions = {
 	    question_id INTEGER NOT NULL, left TEXT NOT NULL, right TEXT NOT NULL, label TEXT )`, [])
 
 	    tx.executeSql(`CREATE TABLE IF NOT EXISTS responses (id INTEGER PRIMARY KEY AUTOINCREMENT, multiple_choice TEXT, 
-	    matrix TEXT, slider TEXT, range TEXT, suggestion TEXT, email TEXT, number TEXT, feedback_id INTEGER )`, [])
+	    matrix TEXT, slider TEXT, range TEXT, suggestion TEXT, email TEXT, number TEXT, shorttext TEXT, feedback_id INTEGER )`, [])
 
 	    tx.executeSql(`CREATE TABLE IF NOT EXISTS questions (id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
 	  	feedback_question TEXT NOT NULL, type INTEGER NOT NULL, 

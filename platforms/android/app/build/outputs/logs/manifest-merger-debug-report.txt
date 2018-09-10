@@ -1,14 +1,14 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-27:12
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
 MERGED from [net.zetetic:android-database-sqlcipher:3.5.9] /home/lionel/.gradle/caches/transforms-1/files-1.1/android-database-sqlcipher-3.5.9.aar/eb74fb30f1a6267f7cec59a67f5db430/AndroidManifest.xml:2:1-11:12
 MERGED from [:CordovaLib] /var/www/html/vue/happyreply/happyreply.v1/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:20:1-27:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-27:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-27:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
 	package
 		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:102-132
 		INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml
@@ -125,3 +125,7 @@ uses-permission#android.permission.ACCESS_NETWORK_STATE
 ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:5-79
 	android:name
 		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:22-76
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:27:5-81
+	android:name
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:27:22-78

@@ -10,10 +10,11 @@
       :vertical="mode === 'vertical'"
       v-model="snackbar"
     >
-      {{ text }}
       <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
     </v-snackbar>
-		<div class="container-login100" style="background-image: url('static/survey-themes/breeze-cotton.jpg');">
+		<div class="container-login100" 
+       style="background-image: url('static/survey-themes/breeze-cotton.jpg');"
+     >
 			<div class="wrap-login100 p-t-190 p-b-30">
 				<form class="login100-form validate-form">
 
@@ -460,6 +461,10 @@ iframe {
   justify-content: center;
 }
 
+
+
+
+
 .login100-form-btn {
   font-family: Montserrat-Bold;
   font-size: 15px;
@@ -488,6 +493,10 @@ iframe {
   z-index: 1;
 }
 
+
+
+
+
 .login100-form-btn::before {
   content: "";
   display: block;
@@ -510,14 +519,25 @@ iframe {
   opacity: 0;
 }
 
+
+
+
+
 .login100-form-btn:hover {
   background: transparent;
   color: #fff;
 }
 
+
+
+
+
 .login100-form-btn:hover:before {
   opacity: 1;
 }
+
+
+
 
 /*------------------------------------------------------------------
 [ Button sign in with ]*/
@@ -547,9 +567,15 @@ iframe {
 }
 
 
+
+
 .btn-face {
   color: #3b5998;
 }
+
+
+
+
 
 .btn-face i {
   font-size: 20px;
@@ -557,15 +583,23 @@ iframe {
   padding-bottom: 1px;
 }
 
+
+
+
 .btn-google {
   color: #555555;
 }
+
+
 
 .btn-google img {
   width: 19px;
   margin-right: 10px;
   padding-bottom: 1px;
 }
+
+
+
 
 
 .btn-face:hover,
@@ -581,6 +615,10 @@ iframe {
 .validate-input {
   position: relative;
 }
+
+
+
+
 
 .alert-validate::before {
   content: attr(data-validate);
@@ -614,6 +652,9 @@ iframe {
   transition: opacity 0.4s;
 }
 
+
+
+
 .alert-validate::after {
   content: "\f06a";
   font-family: FontAwesome;
@@ -630,10 +671,14 @@ iframe {
   right: 13px;
 }
 
+
+
 .alert-validate:hover:before {
   visibility: visible;
   opacity: 1;
 }
+
+
 
 @media (max-width: 992px) {
   .alert-validate::before {
@@ -641,6 +686,8 @@ iframe {
     opacity: 1;
   }
 }
+
+
 
 
 @media (max-width: 576px) {

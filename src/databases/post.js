@@ -24,7 +24,7 @@ export default {
       console.log('dropping response table after upload to database')
       tx.executeSql('DROP TABLE IF EXISTS responses')
     },
-    saveOfflineUpdate (multpleChoice, matrix, slider, range, comments, email, number, fbId, db) {
+    saveOfflineUpdate (multpleChoice, matrix, slider, range, comments, email, number, shorttext, fbId, db) {
       var mc = JSON.stringify(multpleChoice)
       var matrixAnswers = JSON.stringify(matrix)
       var sliderAnswers = JSON.stringify(slider)
@@ -32,10 +32,19 @@ export default {
       var commentsAnswers = JSON.stringify(comments)
       var emailAnswer = JSON.stringify(email)
       var numberAnswer = JSON.stringify(number)
+      var shorttextAnswer = JSON.stringify(shorttext)
 
       db.transaction(function (tx) {
-        var sql = 'INSERT INTO responses (multiple_choice, matrix, slider, range, suggestion, email, number, feedback_id) VALUES (?,?,?,?,?,?,?,?)'
-        tx.executeSql(sql, [mc, matrixAnswers, sliderAnswers, rangeAnswers, commentsAnswers, emailAnswer, numberAnswer,  fbId])
+        var sql = 'INSERT INTO responses (multiple_choice, matrix, slider, range, suggestion, email, number, shorttext, feedback_id) VALUES (?,?,?,?,?,?,?,?,?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          )'
+        tx.executeSql(sql, [mc, matrixAnswers, sliderAnswers, rangeAnswers, commentsAnswers, emailAnswer, numberAnswer, shorttextAnswer,  fbId], 
+           function (tx, result) {
+            console.log("Query Success");
+          },
+          function (tx, error) {
+            console.log("Query Error: " + error.message);
+          }
+
+          )
       })
 
     },
@@ -50,16 +59,14 @@ export default {
           this.success = false;
         })
     },
-    newSaveResponse (multpleChoice, matrix, slider, range, comments, email, number, lat = null, lng = null, fbId, db) {
-        this.newPostResponse(multpleChoice, matrix, slider, range, comments, email, number, lat, lng, fbId, false, db)
+    newSaveResponse (multpleChoice, matrix, slider, range, comments, email, number, shorttext, lat = null, lng = null, fbId, db) {
+        this.newPostResponse(multpleChoice, matrix, slider, range, comments, email, number, shorttext, lat, lng, fbId, false, db)
         // this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
     },
-    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, lat, lng, fbId, offline, db) {
-      var action = 'https://app.happyreply.com/post-survey-responses2'
+    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, lat, lng, fbId, offline, db) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
      
+      var action = 'https://app.happyreply.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
-      // this.loadButton.loading = true
-      // this.button.loading = true;
       this.$http.post(action,
         { params:
              {
@@ -71,6 +78,7 @@ export default {
                 comment: commentArray,
                 email: emailArray,
                 number: numberArray,
+                shorttext: shorttextArray,
                 lat: lat,
                 lng: lng 
 
@@ -89,7 +97,7 @@ export default {
           // this.button.loading = false
           this.$router.push({ name: 'Intro', params: { id: fbId } })
         }, response => {
-          this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray,  emailArray, numberArray, fbId, db)
+          this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray,  emailArray, numberArray, shorttextArray, fbId, db)
           // this.button.loading = false;
           this.$router.push({ name: 'Intro', params: { id: fbId } })
         });
@@ -129,7 +137,7 @@ export default {
      postResponse1(response, answer_id, question_id, feedback_id, matrix, slider) {
       console.log('saving to server')
       this.$http.get(
-        'https://app.happyreply.com/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
+        'http//app.happyreply.com/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
         .then(response => {
           this.success = true;
           this.connectionStatus = 'true';

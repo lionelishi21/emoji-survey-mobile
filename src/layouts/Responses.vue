@@ -13,13 +13,7 @@
       {{ text }}
       <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
     </v-snackbar>
-	<!-- <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
-      <v-container fill-height>
-        <v-layout row justify-center align-center>
-          <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
-        </v-layout>
-      </v-container>
-    </v-dialog> -->
+   
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
     <h1 class="h2">Offline Responses</h1>
   </div>
@@ -28,10 +22,13 @@
     <v-card-text >
       <p class="text-md-center display-4">{{ResponseAmount}}</p>
       <p class="text-md-center"> Offline Respponse</p>
-       <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
+      <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
           Post Response
         <v-icon right dark>cloud_upload</v-icon>
     </v-btn>
+     <v-btn class="btn btn-default" @click="exportResponseToText()">
+     	Export Responses
+     </v-btn>
     </v-card-text>
   </v-card>
   </v-row>
@@ -46,6 +43,12 @@ export default {
 	},
     data() {
       return {
+      	json_fields: {
+      		"data" : "String",
+      		"Question" : "String",
+      		"Answer" : "String"
+      	},
+      	json_data: [],
       	text: "",
       	snackbar: false,
         value: 0,
@@ -59,10 +62,10 @@ export default {
         feedback_desc: '',
         feedback_slug: '',
          button: {
-          loading: false,
-          'dataStyle': 'expand-left',
-          progress: 0,
-        },
+	          loading: false,
+	          'dataStyle': 'expand-left',
+	          progress: 0,
+          },
       	  response_count: 0,
           database: 'SurveyDb',
           version: '1.0',
@@ -93,18 +96,23 @@ export default {
       ]),
     },
       methods: {
-      	 init() {
-	  	 	 var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-	  	 	 this.db = db
-	      	 var user_id = localStorage.getItem('user_id')
-	      	 this.$store.dispatch('getResponses', db)
-	      	 this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
+      	    init() {
+		  	 	 var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+		  	 	 this.db = db
+		      	 var user_id = localStorage.getItem('user_id')
+		      	 this.$store.dispatch('getResponses', db)
+		      	 this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
 	      	},
 	      	checkResponses() {
 	      		if (this.ResponseAmount < 1) {
 	      			return false
 	      		}
 	      		return true;
+	      	},
+	      	exportResponseToText() {
+	      		var response_loading = true
+	      		this.doc = true
+	      		this.postResponseOffline();
 	      	},
 	      	postResponseOffline () {
 	         this.loading = true
@@ -117,6 +125,7 @@ export default {
 		    },
 			renderResponses1 (tx, results) {
 		      var len = results.rows.length
+		      
 		      for (var i = 0; i < len; i++) {
 		        var mcArray = ''
 		        var matrixArray = ''
@@ -125,6 +134,7 @@ export default {
 		        var commentArray = ''
 		        var emailArray = ''
 		        var numberArray = ''
+		        var shorttextArray = ''
 
 		        if (results.rows.item(i).multiple_choice != '{}') {
 		          mcArray = JSON.parse(results.rows.item(i).multiple_choice)
@@ -154,17 +164,42 @@ export default {
 		          numberArray = JSON.parse(results.rows.item(i).number)
 		        }
 
+		         if (results.rows.item(i).range != '{}') {
+		          shorttextArray = JSON.parse(results.rows.item(i).shorttext)
+		        }
+
 		        var feedbackId = results.rows.item(i).feedback_id;
 		        var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-		        this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, feedbackId, true, db)
-
+		       
+		        if (this.doc == true) {
+		        	this.saveToLocalFile(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray)
+		        }  else {
+		        	 this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, feedbackId, true, db)
+		        }
 		      }
 		    },
-		     newSaveResponse (multpleChoice, matrix, slider, range, comments, fbId, db) {
-		        this.newPostResponse(multpleChoice, matrix, slider, range, comments, fbId, false, db)
+		    saveToLocalFile(json1, json2, json3, json4 , json5 , json6, json7, json8) {
+			    var finalObj = $.merge(json1, json2, json3, json4 , json5 , json6, json7, json8);
+			    window.localStorage.setItem('responses', JSON.stringify(finalObj))
+			    this.saveFile();
 		    },
-		    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, fbId, offline, db) {
-		      var action = 'https://happyreply.appfinitytech.com/post-survey-responses2'
+		    saveFile() {
+		    	var data = window.localStorage.getItem('responses')
+		    	const blob = new Blob([data],{ type: 'text/plain'})
+		    	const e = document.createEvent('MouseEvents');
+		        var a = document.createElement('a');
+			    a.download = "Happyreply.json";
+			    a.href = window.URL.createObjectURL(blob);
+			    a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
+			    e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+			    a.dispatchEvent(e);
+		    	this.doc = false
+		    },
+		    newSaveResponse (multpleChoice, matrix, slider, range, comments,number, email, shorttext, fbId, db) {
+		        this.newPostResponse(multpleChoice, matrix, slider, range, comments, number, email, shortext, fbId, false, db)
+		    },
+		    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, fbId, offline, db) {
+		      var action = 'https://app.happyreply.com/post-survey-responses2'
 		      var csrfToken = $('meta[name=csrf-token]').attr('content')
 		      // this.loadButton.loading = true
 		      // this.button.loading = true;
@@ -173,12 +208,13 @@ export default {
 		           {
 		              feedback_id: fbId,
 		              mc: mcArray,
-		              matrix: matrixArray,
+		              matrix: matrixArray, 
 		              slider: sliderArray,
 		              range: rangeArray,
 		              comment: commentArray,
 		              email: emailArray,
-		              number: numberArray
+		              number: numberArray,
+		              shorttext: shorttextArray
 
 		               }
 		           },
@@ -188,18 +224,23 @@ export default {
 		          }
 		        })
 		        .then(response => {
+		        	 console.log(response)
 		             var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
 		             db.transaction(this.dropResponsesDatabase);
 		             this.text = 'Response has been succesfully post to the servery'
                      this.snackbar = true;
 		             this.loading = false
 		        }, response => {
+		        	 console.log(response)
 		        	//TODO: Snackbar goes here
 		            this.text = 'Responses did not post, something wen wrong'
                     this.snackbar = true;
-		        	his.loading = false
+		        	this.loading = false
 		        	this.init()
 		        });
+		    },
+		    exportResponseFromSqlite() {
+		    	window
 		    },
 		    dropResponsesDatabase (tx) {
 		      console.log('dropping response table after upload to database')

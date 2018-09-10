@@ -1,5 +1,6 @@
 {
-    "SystemConfiguration.framework": 1,
+    "SystemConfiguration.framework": 2,
     "CoreTelephony.framework": 1,
-    "libsqlite3.dylib": 1
+    "libsqlite3.dylib": 1,
+    "Security.framework": 2
 }

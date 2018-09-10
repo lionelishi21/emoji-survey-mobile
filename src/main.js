@@ -30,16 +30,22 @@ import VModal from 'vue-js-modal'
 import Vuetify from 'vuetify'
 import ResponseTheme from './response-main'
 import IdleVue from 'idle-vue'
-import VueGeolocation from 'vue-browser-geolocation';
+import JsonExcel from 'vue-json-excel'
+import VueTouchKeyboard from "vue-touch-keyboard";
+import style from "vue-touch-keyboard/dist/vue-touch-keyboard.css"; // load default style
 
-Vue.use(VueGeolocation);
-const eventsHub = new Vue()
+Vue.use(VueTouchKeyboard);
+Vue.component('downloadExcel', JsonExcel)
+// import VueGeolocation from 'vue-browser-geolocation';
+
+// Vue.use(VueGeolocation);
+// qconst eventsHub = new Vue()
  
 // Vue.use(IdleVue, {
 //   eventEmitter: eventsHub,
 //   idleTime: 60000
 // })
-
+// Vue.component('donwloadExcel', JsonExcel);
 Vue.use(IdleVue, { store })
 Vue.use(ResponseTheme)
 Vue.use(Vuetify)

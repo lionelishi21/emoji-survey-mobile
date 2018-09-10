@@ -140,7 +140,7 @@ export default {
         
       },
       getIntroVideo(feedback_id) {
-         this.$http.get('https://happyreply.com/api/get/video-link/'+feedback_id)
+         this.$http.get('/api/get/video-link/'+feedback_id)
           .then(response => {
             this.videoId = response.body
             if (this.videoId !== '') {

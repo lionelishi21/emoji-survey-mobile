@@ -29,11 +29,24 @@
     <feature name="SQLitePlugin">
         <param name="ios-package" value="SQLitePlugin" />
     </feature>
+    <feature name="SSLCertificateChecker">
+        <param name="ios-package" value="SSLCertificateChecker" />
+    </feature>
+    <feature name="File">
+        <param name="ios-package" value="CDVFile" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="CordovaHttpPlugin">
+        <param name="ios-package" value="CordovaHttpPlugin" />
+    </feature>
+    <feature name="Keyboard">
+        <param name="ios-package" onload="true" value="CDVKeyboard" />
+    </feature>
     <name>HappyReply</name>
     <description>
         Emoji survey app
     </description>
-    <author email="support@appfinity.com" href="http://appfinity.com">
+    <author email="support@appfinity.com" href="https://app.appfinity.com">
        AppFinity Technologies
     </author>
     <content src="index.html" />

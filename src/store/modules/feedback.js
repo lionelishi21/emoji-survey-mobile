@@ -22,7 +22,7 @@ const actions = {
         .then( response => {
             var image = response.body
             if (image != "") {
-              commit('setSurveyBackgrounImage', 'happyreply.appfinitytech.com/'+image )
+              commit('setSurveyBackgrounImage', 'https://app.happyreply.com/'+image )
             }
         })
     },
