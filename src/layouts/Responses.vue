@@ -1,4 +1,5 @@
 <template>
+<v-app>
 <div>
 	 <v-snackbar
       :timeout="timeout"
@@ -32,6 +33,7 @@
   </v-card>
   </v-row>
  </div>
+</v-app>
 </template>
 <script>
 import { mapGetters } from 'vuex';
@@ -70,7 +72,7 @@ export default {
           version: '1.0',
           dbDisplay: 'ServeyDatabase',
           maxSize: 1105535,
-          db: "",
+          db: ""
 		 }
 	  },
 	  watch: {
@@ -81,7 +83,7 @@ export default {
 	        this.feedback_title = this.feedbackInfo[0].feedback_title
 	        this.feedback_desc = this.feedbackInfo[0].feedback_desc
 	        this.feedback_slug = this.feedbackInfo[0].feedback_slug
-        } 
+        }
 	  },
 	  created() {
 	  	this.init()
@@ -197,7 +199,7 @@ export default {
 		        this.newPostResponse(multpleChoice, matrix, slider, range, comments, number, email, shortext, fbId, false, db)
 		    },
 		    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, fbId, offline, db) {
-		      var action = 'https://jncb.happyreply.com/post-survey-responses2'
+		      var action = 'https://jifs.happyreply.com/post-survey-responses2'
 		      var csrfToken = $('meta[name=csrf-token]').attr('content')
 		      // this.loadButton.loading = true
 		      // this.button.loading = true;

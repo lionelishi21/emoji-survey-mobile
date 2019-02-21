@@ -15,7 +15,6 @@
     <v-spacer />
     <v-toolbar-items>
       <v-flex
-        align-center
         layout
         py-2
       >
@@ -32,7 +31,7 @@
           content-class="dropdown-menu"
           offset-y
           transition="slide-y-transition">
-          <router-link
+          <!-- <router-link
             v-ripple
             slot="activator"
             class="toolbar-items"
@@ -47,7 +46,7 @@
               </template>
               <v-icon color="tertiary">notification_important</v-icon>
             </v-badge>
-          </router-link>
+          </router-link> -->
           <v-card>
             <v-list dense>
               <v-list-tile
@@ -62,13 +61,13 @@
             </v-list>
           </v-card>
         </v-menu>
-        <router-link
+       <!--  <router-link
           v-ripple
           class="toolbar-items"
           to="/user-profile"
         >
           <v-icon color="tertiary">account_circl</v-icon>
-        </router-link>
+        </router-link> -->
      </v-flex>
     </v-toolbar-items>
  </v-toolbar>

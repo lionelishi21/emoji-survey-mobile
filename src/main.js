@@ -61,7 +61,7 @@ Vue.use(VueYoutube)
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
 Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
-Vue.http.options.root = 'https://happyreply.appfinitytech.com'
+Vue.http.options.root = 'https://jifs.happyreply.com'
 Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
 
 export var router = new VueRouter({

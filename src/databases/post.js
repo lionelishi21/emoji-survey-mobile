@@ -64,7 +64,7 @@ export default {
         // this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
     },
     newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, nps, lat, lng, fbId, offline, db) {
-      var action = 'https://happyreply.appfinitytech.com/post-survey-responses2'
+      var action = 'https://jifs.happyreply.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
       this.$http.post(action,
         { params:
@@ -141,7 +141,7 @@ export default {
      postResponse1(response, answer_id, question_id, feedback_id, matrix, slider) {
       console.log('saving to server')
       this.$http.get(
-        '/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
+        'https://jifs.happyreply.com/post-survey-responses2/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
         .then(response => {
           this.success = true;
           this.connectionStatus = 'true';

@@ -135,7 +135,7 @@ export default {
             },
             submitForm: function(event) {
 
-            var action = 'https://happyreply.appfinitytech.com/api/authenticate';
+            var action = 'https://jifs.happyreply.com/api/authenticate';
             var csrfToken = $('meta[name=csrf-token]').attr('content');
 
             if (this.formInputs.email == "") {

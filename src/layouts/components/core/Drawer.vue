@@ -47,7 +47,7 @@
 					v-text="link.main"
 			    />
                 </v-list-tile>
-              <v-list-tile 
+      <!--         <v-list-tile 
                  :active-class="color"
                  :to="'/surveys'"
                  avatar 
@@ -59,7 +59,7 @@
 			    <v-list-tile-title
 					v-text="link.sur"
 			    />
-                </v-list-tile>
+                </v-list-tile> -->
                <v-list-tile
                	   :active-class="color"
                    :to="'/response'"

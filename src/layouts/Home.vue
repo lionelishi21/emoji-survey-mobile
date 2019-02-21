@@ -1,5 +1,18 @@
 <template>
 <div>
+
+    <!--=====================================
+    =           Loader sectuibcomment            =
+    ======================================-->
+    <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+      <v-container fill-height>
+        <v-layout row justify-center align-center>
+          <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+        </v-layout>
+      </v-container>
+    </v-dialog>
+    <!--====  End of Section comment  ====-->
+
     <!--=====================================
     =            Section comment            =
     ======================================-->
@@ -8,7 +21,7 @@
       grid-list-lg
     >
       <v-layout row wrap>
-        <v-flex xs5>
+        <v-flex xs4>
           <v-card color="white" class="blue--text">
             <v-card-title primary-title>
               <div>
@@ -16,8 +29,13 @@
                 <span>{{feedback_desc}}</span>
               </div>
             </v-card-title>
+            <v-card-title primary-title>
+              <div>
+                <div class="headline">Questions: {{ QuestionAmount }}</div>
+              </div>
+            </v-card-title>
             <v-card-actions>
-              <v-btn @click="goToSurvey()" class="blue--text" flat dark>Take now</v-btn>
+              <v-btn @click="goToSurvey()" class="blue--text" flat dark>Take Now</v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -127,7 +145,14 @@ export default {
       loadingButton(load){
         return load;
       },
-
+      logout(){
+         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+         this.$store.dispatch('dropDatabase', db)
+         localStorage.removeItem("user_id");
+         localStorage.removeItem("feedback_id");
+         this.$router.push({name: 'Login'});
+         location.reload();
+      },
 
       // createDatabases(db) {
       //     db.transaction(function (tx) {
