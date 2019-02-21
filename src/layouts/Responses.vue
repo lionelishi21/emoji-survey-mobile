@@ -13,26 +13,25 @@
       {{ text }}
       <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
     </v-snackbar>
-   
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
     <h1 class="h2">Offline Responses</h1>
   </div>
   <v-row>
    <v-card class="text-center">
-    <v-card-text >
+    <v-card-text>
       <p class="text-md-center display-4">{{ResponseAmount}}</p>
       <p class="text-md-center"> Offline Respponse</p>
       <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
           Post Response
         <v-icon right dark>cloud_upload</v-icon>
-    </v-btn>
+     </v-btn>
      <v-btn class="btn btn-default" @click="exportResponseToText()">
      	Export Responses
      </v-btn>
     </v-card-text>
   </v-card>
   </v-row>
- </div>	
+ </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
@@ -72,7 +71,6 @@ export default {
           dbDisplay: 'ServeyDatabase',
           maxSize: 1105535,
           db: "",
-       
 		 }
 	  },
 	  watch: {
@@ -125,7 +123,7 @@ export default {
 		    },
 			renderResponses1 (tx, results) {
 		      var len = results.rows.length
-		      
+		      console.log('response '+len)
 		      for (var i = 0; i < len; i++) {
 		        var mcArray = ''
 		        var matrixArray = ''
@@ -199,7 +197,7 @@ export default {
 		        this.newPostResponse(multpleChoice, matrix, slider, range, comments, number, email, shortext, fbId, false, db)
 		    },
 		    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, fbId, offline, db) {
-		      var action = 'https://app.happyreply.com/post-survey-responses2'
+		      var action = 'https://jncb.happyreply.com/post-survey-responses2'
 		      var csrfToken = $('meta[name=csrf-token]').attr('content')
 		      // this.loadButton.loading = true
 		      // this.button.loading = true;

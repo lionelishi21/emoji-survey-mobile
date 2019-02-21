@@ -1,0 +1,37 @@
+.question-wrapper {
+   padding: 5px;
+   max-height: 90%;
+   
+   h2 {
+     color: $text-color-light;
+     font-style: bold;
+
+   }
+
+  h4 {
+      color: $text-color-light;
+      font-size: 20px;
+   }
+
+   p {
+      color: $text-color-light;
+   }
+
+   .answer-body {
+     height: 62vh; 
+     overflow-y: auto;
+   }
+}
+
+
+.answer_content {
+   h3 {
+      color: $text-color-light;
+      font-size: 20px;
+   }
+
+}
+
+.center_check{
+  text-align: center;
+}

@@ -17,6 +17,7 @@
     <allow-intent href="geo:*" />
     <icon density="mdpi" height="57" platform="android" src="static/icon/happyreply.png" width="57" />
     <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
     <preference name="SplashScreenDelay" value="10000" />
     <preference name="orientation" value="landscape" />
 </widget>

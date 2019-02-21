@@ -1,64 +1,39 @@
 <template>
-  <div>
-          <v-snackbar
-      :timeout="timeout"
-      :top="y === 'top'"
-      :bottom="y === 'bottom'"
-      :right="x === 'right'"
-      :left="x === 'left'"
-      :multi-line="mode === 'multi-line'"
-      :vertical="mode === 'vertical'"
-      v-model="snackbar"
+<div>
+    <!--=====================================
+    =            Section comment            =
+    ======================================-->
+    <v-container
+      fluid
+      grid-list-lg
     >
-      {{ text }}
-      <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
-    </v-snackbar>
-      <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
-      <v-container fill-height>
-        <v-layout row justify-center align-center>
-          <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
-        </v-layout>
-      </v-container>
-    </v-dialog>
+      <v-layout row wrap>
+        <v-flex xs5>
+          <v-card color="white" class="blue--text">
+            <v-card-title primary-title>
+              <div>
+                <div class="headline">{{feedback_title}}</div>
+                <span>{{feedback_desc}}</span>
+              </div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn @click="goToSurvey()" class="blue--text" flat dark>Take now</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <!--====  End of Section comment  ====-->
 
-   <v-layout row wrap>
-      <v-subheader><h2>Surveys</h2></v-subheader>
-      <v-btn @click="loadSurveys()"
-        color="pink" dark bottom fixed
-        right fab >
-         <v-icon>refresh</v-icon>
-      </v-btn>
-   </v-layout>
-   </v-layout>
-      <v-flex xs6>
-
-        <div @click="goToSurvey()">
-         <v-card  >
-              <v-container fluid grid-list-lg>
-                <v-layout row>
-                  <v-flex xs7>
-                    <div>
-                      <div class="headline fadein">{{feedback_title}}</div>
-                      <div>{{feedback_desc}}</div>
-                     
-                    </div>
-                  </v-flex>
-                  <v-flex xs5 style="background: #96281B; color: #fff">
-                    <v-card-text class="text-center">
-                      <h1>
-                        {{ QuestionAmount }}
-                      </h1>
-                       <v-spacer></v-spacer>
-                       <p>Questions</p>
-                    </v-card-text>
-                    
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card>
-          </div>
-      </v-flex>
-</v-layout>
+    <!--=====================================
+    =            Fab comment            =
+    ======================================-->
+    <v-btn @click="loadSurveys()"
+      color="pink" dark bottom fixed
+      right fab >
+       <v-icon>refresh</v-icon>
+    </v-btn>
+    <!--====  End of Section comment  ====-->
 </div>
 </template>
 <script>
@@ -113,10 +88,6 @@ export default {
     created(){
       this.checkUserLogin();
       this.initilizeDatabase();
-     
-    },
-    mounted() {
-      
     },
     components: {
       OfflineIndicator,
@@ -140,7 +111,7 @@ export default {
       ]),
       online () {
         return VueOnline.isOnline
-      }, 
+      },
     },
     methods:{
       initilizeDatabase() {
@@ -156,25 +127,18 @@ export default {
       loadingButton(load){
         return load;
       },
-      logout(){
 
-         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-         this.$store.dispatch('dropDatabase', db)
-         localStorage.removeItem("user_id");
-         localStorage.removeItem("feedback_id");
-         this.$router.push({name: 'Login'});
-         location.reload();
-      },
-      createDatabases(db) {
-          db.transaction(function (tx) {
-            tx.executeSql(`CREATE TABLE IF NOT EXISTS questions (id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
-              feedback_question TEXT NOT NULL, type INTEGER NOT NULL, feedback_id INTEGER NOT NULL, answer_count INTEGER)`, [])
-            tx.executeSql(`CREATE TABLE IF NOT EXISTS feedbacks (feedback_id INTEGER,
-            feedback_title TEXT, feedback_desc TEXT, feedback_slug Text)`, [])
-            tx.executeSql(`CREATE TABLE IF NOT EXISTS answers (id INTEGER NOT NULL,
-              answer TEXT NOT NULL, emoji TEXT, feedback_id INTEGER NOT NULL,  question_id INTEGER NOT NULL)`, [])
-          })
-      },
+
+      // createDatabases(db) {
+      //     db.transaction(function (tx) {
+      //       tx.executeSql(`CREATE TABLE IF NOT EXISTS questions (id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
+      //         feedback_question TEXT NOT NULL, type INTEGER NOT NULL, feedback_id INTEGER NOT NULL, answer_count INTEGER)`, [])
+      //       tx.executeSql(`CREATE TABLE IF NOT EXISTS feedbacks (feedback_id INTEGER,
+      //       feedback_title TEXT, feedback_desc TEXT, feedback_slug Text)`, [])
+      //       tx.executeSql(`CREATE TABLE IF NOT EXISTS answers (id INTEGER NOT NULL,
+      //         answer TEXT NOT NULL, emoji TEXT, feedback_id INTEGER NOT NULL,  question_id INTEGER NOT NULL)`, [])
+      //     })
+      // },
       refresh(loaded) {
           location.reload();
       },
@@ -184,7 +148,6 @@ export default {
         }
       },
       goToSurvey() {
-
          this.$router.push({name: 'Intro',  params: { id: this.feedback_slug } })
       },
       loadSurveys() {
@@ -196,10 +159,10 @@ export default {
             this.loading = false
             return
         }
-        
+
         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
         var user_id = localStorage.getItem('user_id')
-        
+
         this.$store.dispatch('reCreateDatabases', db)
         this.$store.dispatch('getFeedback', {user_id, db})
         this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
@@ -207,7 +170,8 @@ export default {
         this.$store.dispatch('getAnswers',  {user_id, db})
         this.$store.dispatch('getMatrixs',  {user_id, db})
         this.$store.dispatch('getSliders',  {user_id, db})
-        
+        // this,$store.dispatch('FETCH_CUSTOMER', {user_id, db})
+
         var self = this
         setTimeout(function(){
 

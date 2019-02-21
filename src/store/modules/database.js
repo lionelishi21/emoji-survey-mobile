@@ -47,12 +47,10 @@ const actions = {
 		dispatch('dropDatabase', db)
 		dispatch('creatingDatabase', db)
 		  // Retrieve
-		
 	},
 	reloadingQuestionAnswer({commit, dispatch}, db) {
 		console.log('loading all question and answer')
 		var user_id = localStorage.getItem('user_id')
-		
 	}
 }
 

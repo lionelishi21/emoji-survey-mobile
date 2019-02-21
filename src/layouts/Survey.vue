@@ -1,44 +1,36 @@
 <template>
   <div>
-    <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
-      <v-container fill-height>
-        <v-layout row justify-center align-center>
-          <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
-        </v-layout>
-      </v-container>
-    </v-dialog>
+  <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+    <v-container fill-height>
+      <v-layout row justify-center align-center>
+        <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+      </v-layout>
+    </v-container>
+  </v-dialog>
   <div class="survey-intro video_overlay ">
-    <v-dialog v-model="dialog3" 
-       max-width="500px" 
-       content-class="text-center" 
-       transition="zoomUp">
+    <v-dialog v-model="dialog3"
+       max-width="500px"
+       content-class="text-center"
+       transition="fadeLeft">
         <v-card  style="color: #fff; background: transparent">
           <v-card-text>
-              <img :src="'static/emoji/'+modal.emoji+'.svg'" class="img-responsive" width="300px"/>
+              <img :src="'static/emoji/'+modal.emoji" class="img-responsive" width="300px"/>
                   <v-spacer></v-spacer>
              <h3><b> {{modal.answer}}</b></h3>
           </v-card-text>
         </v-card>
       </v-dialog>
-    <img :src="pic_url " id="youtube_media" v-show="showBackgroundImage()" >
+    <img :src="getBgImage" id="youtube_media" v-show="showBackgroundImage()" >
     <transition-group name="fadeLeft">
-      <section  v-for="(q, key) in  getAllQuestions" 
-       v-show="showQuestion(key, q.id, q.recieved_logic)"  :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'">
-          <div  v-if="showMultipleChoiceQuestions(q.type)" :key="key">
+      <section  v-for="(q, key) in  getAllQuestions" v-show="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'">
+        <!-- <qrscanner-cmp></qrscanner-cmp> -->
+          <div v-if="showMultipleChoiceQuestions(q.type)" :key="key">
               <div class="question-wrapper">
                   <div class="row">
                     <div class="col-md-12">
                         <div class="m-b-5">
                           <div class="">
                            <h2>{{q.question}}</h2>
-                           <vue-touch-keyboard
-                                    id="keyboard"  
-                                   :layout="layout" 
-                                   :cancel="hide" 
-                                   :accept="accept" 
-                                   :input="input" 
-                                   :next="next" 
-                                />
                           </div>
                         </div>
                     </div>
@@ -52,20 +44,19 @@
                                       <input
                                       style="z-index: -10000"
                                       v-model="mc_responses[q.id]"
-                                      type="radio"        
+                                      type="radio"
                                       id:checked="answer.id"
                                       :name="'answers_mc['+q.id+']'"
-                                      :class="'emoji stats'+answer.id" 
+                                      :class="'emoji stats'+answer.id"
                                       :value="answer.id"
                                       :id="'mc_'+answer.id"
                                        @change="showAlert(answer.id, answer.emoji, answer.answer, key, 'input', answer.logic)"
                                       />
-
                                       <img
 
                                        style="z-index: -10000"
                                        :id="'emojimage_'+answer.id"
-                                        :src="'static/emoji/'+answer.emoji+'.svg'"
+                                        :src="'static/emoji/'+answer.emoji"
                                         class="img-responsive emoji-img "
                                        />
                                   </label>
@@ -75,6 +66,43 @@
                       </div>
                    </div>
                 </div>
+          </div>
+           <div v-if="showNetPromoterScore(q.type)" :key="key">
+              <div class="question-wrapper">
+                  <div class="row">
+                      <div class="col-md-12">
+                          <div class="m-b-5">
+                              <h2>{{q.question}}</h2>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row mb-5 m-l-10">
+                        <div v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" class="col-md-1 col-xm-1 col-sm-1" id="emoji-size"  v-if="answer.question_id == q.id">
+                                    <div :class="'survey-card answer_content p-0 '+cardSelect(net_responses[q.id], answer.id)" :id="'card_select_'+answer.id" style="radius: 0px" >
+                                        <div class="survey-card-body text-center p-0 elevation-10" @click="triggerClicks(answer.id)">
+                                            <label class="img-label text-center p-0 r-10 P-0" :id="answer.id">
+                                                <input
+                                                    v-model="net_responses[q.id]"
+                                                    type="radio"        
+                                                    id:checked="answer.id"
+                                                    :name="'answers_mc['+q.id+']'"
+                                                    :class="'emoji stats'+answer.id" 
+                                                    :value="answer.id"
+                                                    :id="'mc_'+answer.id"
+                                                    @change="showAlert(answer.id, answer.emoji, answer.answer, key, 'input', answer.logic)"
+                                                    />
+                                                    <img
+                                                    :id="' emojimage_'+answer.id"
+                                                    :src="'./static/emoji/'+answer.emoji"
+                                                    class="emoji-img nps-size"
+                                                    />
+                                                </label>
+                                            <h1 class="badge badge-primary btn btn-block r-10" :style="netColorChange(answer_key)"  style="font-size: 30px">{{answer.answer}}</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                  </div>
+              </div>
           </div>
           <div v-if="showMatrixQuestions(q.type)" :key="key">
                 <div class="question-wrapper">
@@ -97,9 +125,9 @@
                                         <th></th>
                                         <th v-for="(mt, header_key) in getAllMatrixs" v-if="q.id == mt.question_id" :key="header_key">
                                             <div class="text-center">
-                                                <div class="circle">
+                                                <div class="">
                                                     <img class="img-responsive emoji-img " style="margin: 0 auto;"
-                                                        :src="'static/emoji/'+mt.emoji+'.svg'">
+                                                        :src="'static/emoji/'+mt.emoji">
                                                 </div>
                                                 <h4 class="text-center">{{mt.matrix}}</h4>
                                             </div>
@@ -149,19 +177,32 @@
                       </div>
                 </div>
               </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                        <div class="survey-card answer_content">
-                           <div class="survey-card-body text-center">
-                              <div class="form-group">
-                                  <textarea class="form-control" v-model="comments_response[q.id]"  :name="'answers_comment['+q.id+']'" rows="7" id="textArea"></textarea>
-                                  <span style="color:white">Click above to enter your comment.</span>
-                                   <img class="img-responsive emoji-img" src="static/emoji/veryhappy.svg" style="width: 30px">
-                              </div>
+                <div class="row">
+                  <div class="col-md-12">
+                      <div class="survey-card answer_content">
+                         <div class="survey-card-body text-center">
+                            <div class="form-group">
+                                 <v-textarea
+                                  solo
+                                  id="textArea"
+                                  @focus="showFocus"
+                                  readonly
+                                  autofocus
+                                  :name="'answers_comment['+q.id+']'"
+                                  v-model="comments_response[q.id]"
+                                  style="color:#fff"
+                                  name="input-7-4"
+                                  label="Solo textarea"
+                                  value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+                                ></v-textarea>
+`                                <vue-touch-keyboard id="keyboard1"  :layout="kbCustom" :cancel="hide" :accept="accept" :input="input" :next="next " :change="manualDispatch"/>
+                                <span style="color:white">Click above to enter your comment.</span>
+                                 <img class="img-responsive emoji-img" src="static/emoji/veryhappy.svg" style="width: 30px">
                             </div>
-                        </div>
-                   </div>
-                </div>
+                          </div>
+                      </div>
+                 </div>
+              </div>
            </div>
            <div class="question-wrapper" v-if="showSliderQuestions(q.type)" :key="key" >
               <div class="row">
@@ -205,12 +246,11 @@
                     </div>
                    </div>
                    <div class="row">
-                      <div class="col-md-4" v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id == q.id">
+                      <div class="col-md-4" v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id === q.id">
                          <div :class="'survey-card answer_content '+cardSelect(range_questions[q.id], answer.id)" :id="'card_select_'+answer.id">
                         <div class="survey-card-body text-center" @click="triggerClicks(answer.id)">
-                           <label class="img-label text-center m-r-20 " :id="answer.id">
+                           <label class="img-label text-center m-r-20 " :id="answer.id" >
                                     <input
-                                  
                                     v-model="range_questions[q.id]"
                                     type="radio"        
                                     v-bind:checked="answer.id"
@@ -222,10 +262,11 @@
                                     />
                                     <img
                                      :id="'emojimage_'+answer.id"
-                                      :src="'static/emoji/'+answer.emoji+'.svg'"
+                                      :src="'static/emoji/'+answer.emoji"
                                       class="img-responsive emoji-img "
                                      />
                                 </label>
+                                {{answer.emoji}}
                                 <h3 v-html="modifyAnswers(answer.answer)"></h3>
                         </div>
                       </div>
@@ -250,15 +291,19 @@
                            <div class="survey-card-body text-center">
                               <div class="form-group">
                                    <v-text-field
+                                    @focus="showFocus"
                                     autofocus
+                                     readonly
                                     v-model="shorttext_response[q.id]"
-                                    class="c-white"
+                                    class="c-white w-bg"
                                     :rules="[rules.counter]"
                                     style="color: #fff"
                                     single-line
                                     box
                                   >
                                  </v-text-field>
+                                <br>
+                                 <vue-touch-keyboard id="keyboard"  layout="normal" :cancel="hide" :accept="accept" :input="input" :next="next " :change="manualDispatch"/>
                                   <span style="color:white">Click above to enter your full name.</span>
                                    <img class="img-responsive emoji-img" 
                                      src="static/emoji/veryhappy.svg" 
@@ -285,15 +330,20 @@
                            <div class="survey-card-body text-center">
                               <div class="form-group">
                                  <v-text-field
+                                    @focus="showFocus"
                                     autofocus
                                     v-model="number_response[q.id]"
-                                    class="c-white"
+                                    class="c-white w-bg"
+                                    box
+                                     readonly
                                     :rules="[rules.phonenumber]"
                                     placeholder="(876) 999-9999"
-                                    style="color: #fff"
                                     :mask="mask" 
                                   >
+
                                  </v-text-field>
+                                 <br>
+                                   <vue-touch-keyboard id="keyboard"  layout="numeric" :cancel="hide" :accept="accept" :input="input" :next="next " :change="manualDispatch"/>
                                   <span style="color:white">Click above to enter your phone number.</span>
                                    <img class="img-responsive emoji-img"  src="static/emoji/veryhappy.svg" style="width: 30px">
                               </div>
@@ -318,20 +368,18 @@
                            <div class="survey-card-body text-center">
                               <div class="form-group">
                                  <v-text-field
-                                    autofocus
+                                    class="c-white-s"
+                                    style="color: #fff"
+                                    @focus="showFocus"
+                                    readonly
+                                
                                     :rules="[rules.email]"
                                     placeholder="Type your email here"
                                     v-model="email_response[q.id]"
-                                    style="color: #fff">
+                                    >
                                  </v-text-field>
-                                  <vue-touch-keyboard
-                                    id="keyboard"  
-                                   :layout="layout" 
-                                   :cancel="hide" 
-                                   :accept="accept" 
-                                   :input="input" 
-                                   :next="next" 
-                                />
+                                  <br>
+                                  <vue-touch-keyboard id="keyboard"  :layout="kbCustom" :cancel="hide" :accept="accept" :input="input" :next="next " :change="manualDispatch"/>
                                  <span style="color:white">Click above to enter your Email.</span>
                                  <img class="img-responsive emoji-img"  src="static/emoji/veryhappy.svg" style="width: 30px">
                               </div>
@@ -389,150 +437,207 @@ import { mapGetters } from 'vuex'
 import multipleChoice from './components/MultipleChoiceQuestion'
 import Intro from './components/Intro'
 import Post from '../databases/post';
+import qrscannerCmp from './components/qrScanner/index.vue'
 
 export default {
     mixins: [Post],
 		data() {
 			return {
-         visible: false,
+         styleRed: {
+                background: 'red',
+            },
+            styleYellow: {
+                background: '#bc5100',
+            },
+            styleGreen: {
+                background: 'green',
+            },
+        visible: true,
         layout: "normal",
         input: null,
+        net_responses: {},
         options: {
-          useKbEvents: false
+            useKbEvents: false
+        },
+        kbCustom: {
+         _meta: {
+              "tab": { key: "\t", text: "Tab", width: 60},
+              "shiftl": { keySet: "shifted", text: "Shift", width: 100},
+              "shiftr": { keySet: "shifted", text: "Shift", width: 100},
+              "caps": { keySet: "capsed", text: "Caps lock", width: 80},
+              "space": { key: " ", text: "Space", width: 180},
+              "enter": { key: "\r\n", text: "Enter", width: 80},
+              "backspace": { func: "backspace", classes: "backspace", width: 65},
+              "next": { func: "next", text: "Next", classes: "featured"},
+              "accept": { func: "accept", text: "Close", classes: "close featured"},
+              "@": { key: "@", text: "@", classes: "email featured", width: 15},
+              "gmail": { key: "@gmail.com", text: "@gmail.com", classes: "email featured"},
+              "hotmail": { key: "@hotmail.com", text: "@hotmail.com", classes: "email featured"},
+              "live": { key: "@live.com", text: "@live.com", classes: "email featured"},
+              "yahoo_us": { key: "@yahoo.com", text: "@yahoo.com", classes: "email featured"},
+              "yahoo_br": { key: "@yahoo.com", text: "@yahoo.com.br", classes: "email featured"},
+              "mac": { key: "@mac.com", text: "@mac.com", classes: "email featured"},
+              "me": { key: "@me.com", text: "@me.com", classes: "email featured"},
+          },
+          default: [
+              "{@} {gmail} {hotmail} {live} {yahoo_us} {yahoo_br} {mac_us} {me_us}",
+              "` 1 2 3 4 5 6 7 8 9 0 - = {backspace}",
+              "{tab} q w e r t y u i o p [ ] \\",
+              "{caps} a s d f g h j k l ; ' {enter}",
+              "{shiftl} z x c v b n m , . / {shiftr}",
+              "{next} {space} {accept}"
+          ],
+          shifted: [
+              "{@} {gmail} {hotmail} {live} {yahoo_us} {yahoo_br} {mac_us} {me_us}",
+              "~ ! @ # $ % ^ & * ( ) _ + {backspace}",
+              "{tab} Q W E R T Y U I O P { } |",
+              "{caps} A S D F G H J K L : \" {enter}",
+              "{shiftl} Z X C V B N M < > ? {shiftr}",
+              "{next} {space} {accept}"
+          ],
+          
+          capsed: [
+              "{@} {gmail} {hotmail} {live} {yahoo_us} {yahoo_br} {mac_us} {me_us}",
+              "` 1 2 3 4 5 6 7 8 9 0 - = {backspace}",
+              "{tab} Q W E R T Y U I O P [ ] \\",
+              "{caps} A S D F G H J K L ; ' {enter}",
+              "{shiftl} Z X C V B N M , . / {shiftr}", 
+              "{next} {space} {accept}"
+          ]      
         },
         rules: {
-          required: value => !!value || 'Required.',
-          counter: value =>  value.length <= 20 || 'Max 20 characters',
-          phonenumber: value => {
-            console.log(value.length)
-              if (value.length  > 0 && value.length < 10) {
-                this.phone_number_valid = false
-                return 'Invalid phone number'
-              } else {
-                this.phone_number_valid = true
-              }
-          },
-          email: value => {
-             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-             
-             if (pattern.test(value) == false && value.length > 0) {
-               this.valid = false
-             } else {
-               this.valid = true
-             }
-             return pattern.test(value) || 'Invalid e-mail.'
-          }
-        },
-        phone_number_valid:true,
-        mask: 'phone',
-        valid: true,
-        location: {
-          lat: '',
-          long: ''
-        },
-        animate: true,
-        current_answer_array: [],
-        matrix_answer_count: 0,
-        current_answer: 0,
-        surveybgimage:'',
-        appTimeout: 100000,
-        answer_id: 0,
-        loading: false,
-        backgroundImage: true,
-        value1: 0,
-        slug: '',
-        isSlider: 0,
-        question_type: 0,
-        dialog3: false,
-        current_question: 0,
-        question_increment: [],
-        step: 0,
-        show: false,
-        feedback_title: '',
-        sliderValue: 50,
-        success: false,
-        amount_answer: '',
-        feedback_id: '',
-        pic_url: '',
-        feedback_desc: '',
-        database: 'SurveyDb',
-        version: '1.0',
-        dbDisplay: 'ServeyDatabase',
-        maxSize: 1105535,
-        db: '',
-        mc_responses: {},
-        matrix_responses: {},
-        range_questions: {},
-        comments_response: {},
-        slider_questions: {},
-        email_response: {},
-        number_response: {},
-        shorttext_response: {},
-				index: 0,
-        keytype: false,
-				count: 0,
-				questions: null,
-        count_mcq: 0,
-        range_count: '',
-				surveys: '',
-        hash: '',
-        showSliderQue: false,
-        showMatrixQue: false,
-        showRangeQue: false,
-        showCommentQue: false,
-        showMcQue: false,
-        modal: {
-          answer: '',
-          emoji: ''
-        },
-        button: {
-          loading: false,
-          'dataStyle': 'expand-left',
-          progress: 0,
-        },
-        goback: false,
-        isLogic: false,
-        logic_question_id: '',
-        before_logic_step: '',
-        connectionStatus: '',
-         slider_options: {
-            width: "100%",
-            height: 60,
-            dotSize: 60,
-            show: true,
-            interval: 1,
-            lazy:true,
-            max: 5,
-            min: 0,
-            tooltip: "always",
-            piecewise: true,
-            piecewiseLabel: true,
-
-            style: {
-              "color": 'red',
-              "width": "100%",
-              "border-radius": "100px"
+            required: value => !!value || 'Required.',
+            counter: value =>  value.length <= 20 || 'Max 20 characters',
+            phonenumber: value => {
+              console.log(value.length)
+                if (value.length  > 0 && value.length < 10) {
+                  this.phone_number_valid = false
+                  return 'Invalid phone number'
+                } else {
+                  this.phone_number_valid = true
+                }
             },
-            labelStyle: {
-              "background-image": "/static/emoji/kissing.svg",
-              'color': '#fff'
-            },
-            bgStyle: {
-              "backgroundColor": "#ECECEC",
-              "border-radius": "100px",
-            },
-            sliderStyle: {
-                "backgroundColor": "#59ABE",
-                "background-image": "/static/emoji/kissing.svg"
-            },
-            piecewiseStyle: {
-              "border-radius": "100px",
-                "width": "50px",
-              "background-image": "static/emoji/kissing.svg"
+            email: value => {
+               const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+               
+               if (pattern.test(value) == false && value.length > 0) {
+                 this.valid = false
+               } else {
+                 this.valid = true
+               }
+               return pattern.test(value) || 'Invalid e-mail.'
             }
-        }
+          },
+          phone_number_valid:true,
+          mask: 'phone',
+          valid: true,
+          location: {
+            lat: '',
+            long: ''
+          },
+          animate: true,
+          current_answer_array: [],
+          matrix_answer_count: 0,
+          current_answer: 0,
+          surveybgimage:'',
+          appTimeout: 100000,
+          answer_id: 0,
+          loading: false,
+          backgroundImage: true,
+          value1: 0,
+          slug: '',
+          isSlider: 0,
+          question_type: 0,
+          dialog3: false,
+          current_question: 0,
+          question_increment: [],
+          step: 0,
+          show: false,
+          feedback_title: '',
+          sliderValue: 50,
+          success: false,
+          amount_answer: '',
+          feedback_id: '',
+          pic_url: '',
+          feedback_desc: '',
+          database: 'SurveyDb',
+          version: '1.0',
+          dbDisplay: 'ServeyDatabase',
+          maxSize: 1105535,
+          db: '',
+          mc_responses: {},
+          matrix_responses: {},
+          range_questions: {},
+          comments_response: {},
+          slider_questions: {},
+          email_response: {},
+          number_response: {},
+          shorttext_response: {},
+  				index: 0,
+          keytype: false,
+  				count: 0,
+  				questions: null,
+          count_mcq: 0,
+          range_count: '',
+  				surveys: '',
+          hash: '',
+          showSliderQue: false,
+          showMatrixQue: false,
+          showRangeQue: false,
+          showCommentQue: false,
+          showMcQue: false,
+          modal: {
+            answer: '',
+            emoji: ''
+          },
+          button: {
+            loading: false,
+            'dataStyle': 'expand-left',
+            progress: 0,
+          },
+          goback: false,
+          isLogic: false,
+          logic_question_id: '',
+          before_logic_step: '',
+          connectionStatus: '',
+           slider_options: {
+              width: "100%",
+              height: 60,
+              dotSize: 60,
+              show: true,
+              interval: 1,
+              lazy:true,
+              max: 5,
+              min: 0,
+              tooltip: "always",
+              piecewise: true,
+              piecewiseLabel: true,
 
-			}
+              style: {
+                "color": 'red',
+                "width": "100%",
+                "border-radius": "100px"
+              },
+              labelStyle: {
+                "background-image": "/static/emoji/kissing.svg",
+                'color': '#fff'
+              },
+              bgStyle: {
+                "backgroundColor": "#ECECEC",
+                "border-radius": "100px",
+              },
+              sliderStyle: {
+                  "backgroundColor": "#59ABE",
+                  "background-image": "/static/emoji/kissing.svg"
+              },
+              piecewiseStyle: {
+                "border-radius": "100px",
+                  "width": "50px",
+                "background-image": "static/emoji/kissing.svg"
+              }
+          }
+
+  			}
     },
     watch: {
      
@@ -583,52 +688,61 @@ export default {
       swiperSlide,
       'vue-ladda': VueLadda,
       RangeSlider,
-      Intro
+      Intro,
+      'qrscanner-cmp': qrscannerCmp
     },
   	methods: {
-       accept(text) {
+      manualDispatch () {
+          this.input.dispatchEvent(new Event('input', { bubbles: true }));
+      },
+      accept(text) {
           console.log("Input text: " + text);
           this.hide();
-        },
-
-        showKeyboard(e) {
+      },
+     showNetPromoterScore(value) {
+          if (value == 11) {
+              return true;
+          }
+          return false
+      },
+      showFocus(e) {
           this.input = e.target;
           this.layout = e.target.dataset.layout;
 
-          if (!this.visible) {
-            this.visible = true
-          }
-        },
-
-        hide() {
+          if (!this.visible)
+              this.visible = true
+      },
+      hide() {
           this.visible = false;
-        },
-        
-        next() {
+      },
+      next() {
           let inputs = document.querySelectorAll("input");
           let found = false;
           [].forEach.call(inputs, (item, i) => {
-            if (!found && item == this.input && i < inputs.length - 1) {
-              found = true;
-              this.$nextTick(() => {
-                inputs[i+1].focus();
-              });
-            }
+              if (!found && item == this.input && i < inputs.length - 1) {
+                  found = true;
+                  this.$nextTick(() => {
+                      inputs[i + 1].focus();
+                  });
+              }
           });
           if (!found) {
-            this.input.blur();
-            this.hide();
+              this.input.blur();
+              this.hide();
           }
-        },       
-      keyboard() {
-        if (this.keytype == true) {
-          return false
-        }
-        return false
-      },
-      keyboardFn(e){
-        this.keytype = true
-      },
+      }, 
+      netColorChange(n) {
+            if (n > 8) {
+                return this.styleYellow
+              }
+              if (n < 7) {
+                  return this.styleRed
+              }
+
+              if (n > 8) {
+                  return this.styleGreen
+              }
+          },
       getUserLocation() {
          var bool = true
          var int = 0
@@ -646,7 +760,7 @@ export default {
       emailValidationOptions() {
         if (this.valid == false ) {
            this.modal.answer = 'Something is wrong with your email address'
-           this.modal.emoji = 'sad' 
+           this.modal.emoji = 'sad.svg' 
            this.dialog3 = true;
           return true
         }
@@ -655,7 +769,7 @@ export default {
       phoneValidationOptions() {
         if (this.phone_number_valid == false) {
            this.modal.answer = 'Something is wrong with your phone number'
-           this.modal.emoji = 'sad' 
+           this.modal.emoji = 'sad.svg' 
            this.dialog3 = true;
            return true
         }
@@ -728,11 +842,20 @@ export default {
       },
       showAlert(id, emoji, answer, key , value, logic_question_id = '') {
 
+        if (answer == '') {
+            answer = "Express Yourself!!"
+        }
+
        this.animateEmoji(emoji)
        this.modal.answer = answer
        this.modal.emoji = emoji 
        this.dialog3 = true;
         
+
+        if (answer == 'Express Yourself!!') {
+            return
+        }
+
         var self = this;
         setTimeout(function(){
            self.dialog3 = false;
@@ -780,7 +903,8 @@ export default {
             return false;
       },
      showMatrixAlert (matrix_key, answer_id, answer_count, question_id, question_key, emoji, matrix_text) {
-
+        this.current_answer_array = []
+        
         if (this.current_question == 0) {
             this.attemptMatrixQuestion(answer_id, question_id)
         }
@@ -788,7 +912,6 @@ export default {
         if (this.current_question != question_id) {
             his.attemptMatrixQuestion(answer_id, question_id)
         }
-
 
         if (this.current_question == question_id) {
             if (this.current_answer == answer_id) {
@@ -825,7 +948,7 @@ export default {
            // windows.location('#showsubmit')
         } else {
            this.modal.answer = 'You have to select at lease one answer'
-           this.modal.emoji = 'sad' 
+           this.modal.emoji = 'sad.svg' 
             this.dialog3 = true;
             var self = this;
         }
@@ -860,7 +983,7 @@ export default {
       // created response database
       var db
       db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-      this.newSaveResponse( this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, this.email_response, this.number_response, this.shorttext_response, this.lat, this.lng, fbId, db)
+      this.newSaveResponse( this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, this.email_response, this.number_response, this.shorttext_response, this.net_responses, this.lat, this.lng, fbId, db)
       this.clearFormData();
      },
     clearFormData() {
@@ -870,6 +993,7 @@ export default {
       this.range_questions = {}
       this.comments_response = {}
       this.shorttext_response = {}
+      this.net_responses = {}
     },
     isEmpty(obj) {
       for(var key in obj) {
@@ -898,7 +1022,8 @@ export default {
         this.isEmpty(this.range_questions) === true &&
         this.isEmpty(this.comments_response) === true &&
         this.isEmpty(this.email_response) === true &&
-        this.isEmpty(this.number_response) === true
+        this.isEmpty(this.number_response) === true &&
+        this.isEmpty(this.net_responses)
         ) {
           return false;
         }
@@ -992,6 +1117,8 @@ export default {
           }
       },
       getNextPage(key, answer_id, logic_question_id) {
+         this.input = null
+
           if (this.emailValidationOptions() == true) {
            return 
          }
@@ -1041,6 +1168,7 @@ export default {
          }
       },
       getPrevPage(key) {
+         this.input = null
         this.goback = true
         if (key == 0) {
           this.step = 1;
@@ -1071,7 +1199,7 @@ export default {
     },
     animateEmoji(emoji) {
       this.animate = true
-      var emo = 'static/emoji/'+emoji+'.svg'
+      var emo = 'static/emoji/'+emoji
       var data = '<div class="webloder"';
         for (var i = 1; i <= 40; i++) {
            if(i==1 || i==11 || i==21) {
@@ -1093,7 +1221,9 @@ export default {
 </script>
 
 <style lang="scss">
-
+    .c-white-s{
+      color: #fff !important;
+    }
     .table th, .table td {
         border: 0 !important;
     }
@@ -1378,5 +1508,9 @@ export default {
 
 #app_ {
   transform: rotate(90deg);
+}
+
+.w-bg {
+  background: #cfcfcf !important;
 }
 </style>

@@ -51,7 +51,7 @@ export default {
     postResponse (response, answer_id, question_id, feedback_id, matrix, slider) {
       console.log('saving to server')
       this.$http
-        .get('https://app.happyreply.com/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
+        .get('/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
         .then(response => {
           this.success = true;
           this.connectionStatus = 'true';
@@ -59,13 +59,12 @@ export default {
           this.success = false;
         })
     },
-    newSaveResponse (multpleChoice, matrix, slider, range, comments, email, number, shorttext, lat = null, lng = null, fbId, db) {
-        this.newPostResponse(multpleChoice, matrix, slider, range, comments, email, number, shorttext, lat, lng, fbId, false, db)
+    newSaveResponse (multpleChoice, matrix, slider, range, comments, email, number, shorttext, nps, lat = null, lng = null, fbId, db) {
+        this.newPostResponse(multpleChoice, matrix, slider, range, comments, email, number, shorttext, nps, lat, lng, fbId, false, db)
         // this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
     },
-    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, lat, lng, fbId, offline, db) {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-     
-      var action = 'https://app.happyreply.com/post-survey-responses2'
+    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, nps, lat, lng, fbId, offline, db) {
+      var action = 'https://happyreply.appfinitytech.com/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
       this.$http.post(action,
         { params:
@@ -79,9 +78,11 @@ export default {
                 email: emailArray,
                 number: numberArray,
                 shorttext: shorttextArray,
+                nps: nps,
                 lat: lat,
-                lng: lng 
-
+                lng: lng,
+                customer_email:'',
+                tablet: true
                }
            },
          {
@@ -90,13 +91,16 @@ export default {
           }
         })
         .then(response => {
-          if (offline == 'ture') {
+          console.log(response)
+
+          if (offline == true) {
              var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
              db.transaction(this.dropResponsesDatabase, this.nullHandler);
           }
           // this.button.loading = false
           this.$router.push({ name: 'Intro', params: { id: fbId } })
         }, response => {
+           console.log(response)
           this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray,  emailArray, numberArray, shorttextArray, fbId, db)
           // this.button.loading = false;
           this.$router.push({ name: 'Intro', params: { id: fbId } })
@@ -137,7 +141,7 @@ export default {
      postResponse1(response, answer_id, question_id, feedback_id, matrix, slider) {
       console.log('saving to server')
       this.$http.get(
-        'http//app.happyreply.com/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
+        '/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
         .then(response => {
           this.success = true;
           this.connectionStatus = 'true';

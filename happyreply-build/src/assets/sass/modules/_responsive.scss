@@ -1,0 +1,97 @@
+@media screen and (max-width: 480px) {
+  html, body#survey-body {
+    min-width: 320px;
+  }
+  .survey-features section {
+    padding: 2em 1.5em 0.1em 1.5em;
+    .icon {
+      left: 0;
+      position: relative;
+      top: 0;
+    }
+  }
+}
+
+@media screen and (min-width: 736px) and (max-width: 800px) {
+  h1.survey-title-header {
+    font-size: 2em;
+  }
+  h2.survey-question-header {
+    font-size: 1.25em;
+  }
+  h3.survey-h3 {
+    font-size: 1em;
+  }
+  h4.survey-h4 {
+    font-size: 0.8em;
+  }
+  .intro1 .survey-question-wrapper .question-overlay.main-question-section {
+    padding-top: 8em;
+  }
+  .survey-question-wrapper .question-overlay.main-question-section {
+    padding: 2em 2em 0em 2em;
+  }
+  .survey-features section {
+    padding: 2.5em 1.5em 0.1em 5.5em;
+    .icon {
+      left: 1.5em;
+      top: 2em;
+    }
+  }
+  .survey-question-wrapper > .inner {
+    padding: 3em 2em 1em 2em;
+  }
+  #survey-body .survey-question-wrapper.fullscreen {
+    padding: 2em 0;
+    min-height: 0;
+  }
+  body#survey-body.is-ie .survey-question-wrapper.fullscreen {
+    height: auto;
+  }
+}
+@media screen and (max-width: 980px) {
+  .survey-features {
+    display: block;
+    section {
+      border-top-width: 1px !important;
+      border-left-width: 0 !important;
+      width: 100%;
+      &:first-child {
+        border-top-width: 0 !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .intro1 .question-overlay.main-question-section {
+    padding-top: 16em !important;
+  }
+  .survey-question-wrapper .question-overlay.main-question-section {
+    padding: 6em 5em 0em 2em;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .survey-question-wrapper > .inner {
+    width: 100%;
+  }
+  #survey-body .survey-question-wrapper.fullscreen {
+    min-height: 100vh;
+    background-attachment: fixed;
+  }
+  body.is-ie #survey-body .survey-question-wrapper.fullscreen {
+    min-height: 100vh;
+  }
+}
+
+@media screen and (min-width: 1367px) {
+  .inner {
+  }
+}
+
+@media screen and (max-width: 1680px) {
+  .survey-question-wrapper > .inner {
+    padding: 2em 2em 2em 2em;
+  }
+}

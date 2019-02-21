@@ -9,7 +9,6 @@
   </v-container>
 </v-dialog>
 <section class="survey-intro video_overlay">
-
     <youtube 
       id="youtube_media" 
       :video-id="getVideoId()" 
@@ -101,7 +100,8 @@ export default {
     var feedback_id = this.$route.params.id
     var user_id = localStorage.getItem('user_id')
     this.$store.dispatch('getFeedbackTitleFromSqlLite', db);
-    this.$store.dispatch('getIntroVideo', feedback_id)
+    // this.$store.dispatch('getIntroVideo', feedback_id)
+    
     this.getIntroVideo(feedback_id)
   },
   methods: {
@@ -140,7 +140,7 @@ export default {
         
       },
       getIntroVideo(feedback_id) {
-         this.$http.get('/api/get/video-link/'+feedback_id)
+         this.$http.get('https://happyreply.appfinitytech.com/api/get/video-link/'+feedback_id)
           .then(response => {
             this.videoId = response.body
             if (this.videoId !== '') {
