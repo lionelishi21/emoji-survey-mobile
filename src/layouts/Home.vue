@@ -21,11 +21,12 @@
       grid-list-lg
     >
       <v-layout row wrap>
-        <v-flex xs4>
+        <v-flex xs5  sm5>
           <v-card color="white" class="blue--text">
             <v-card-title primary-title>
               <div>
                 <div class="headline">{{feedback_title}}</div>
+                <hr>
                 <span>{{feedback_desc}}</span>
               </div>
             </v-card-title>
@@ -204,7 +205,7 @@ export default {
         self.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
         self.$store.dispatch('getQuestionCount', db)
           self.loading = false
-          this.initilizeDatabase();
+          self.initilizeDatabase();
         }, 4000);
       }
     }

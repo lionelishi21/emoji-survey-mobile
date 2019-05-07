@@ -1,4 +1,4 @@
-import { FeedbackResource, QuestionResource, AnswerResource, MatrixResource, SliderResource, SurveyImageResource, VideoResource } from './resources'
+import { FeedbackResource, PostQrcodeResource, QuestionResource, AnswerResource, MatrixResource, SliderResource, SurveyImageResource, VideoResource } from './resources'
 
 export default {
   getSurveyTitle: function (id) {
@@ -21,5 +21,8 @@ export default {
   },
   getSurveyImage: function (id) {
     return VideoResource.get({id})
+  },
+  PostQrcode: function (email) {
+    return PostQrcodeResource.get({param: email})
   }
 }

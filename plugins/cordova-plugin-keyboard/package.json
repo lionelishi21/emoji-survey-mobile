@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-keyboard",
+  "_from": "cordova-plugin-keyboard@^1.2.0",
   "_id": "cordova-plugin-keyboard@1.2.0",
   "_inBundle": false,
   "_integrity": "sha512-Zng4SgDQQ2BCqeDOvrsgNlM9tcjnxmJoh0Qhex0KltMsoR0g/ONbMTpaVvI8EhNKVO8HJPnhFxxzHxrCPLQ7sQ==",
   "_location": "/cordova-plugin-keyboard",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "cordova-plugin-keyboard",
+    "raw": "cordova-plugin-keyboard@^1.2.0",
     "name": "cordova-plugin-keyboard",
     "escapedName": "cordova-plugin-keyboard",
-    "rawSpec": "",
+    "rawSpec": "^1.2.0",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^1.2.0"
   },
   "_requiredBy": [
     "#USER",
@@ -21,7 +21,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-keyboard/-/cordova-plugin-keyboard-1.2.0.tgz",
   "_shasum": "8445812643e4763e7beffed39d279f151bb89aeb",
-  "_spec": "cordova-plugin-keyboard",
+  "_spec": "cordova-plugin-keyboard@^1.2.0",
   "_where": "/var/www/html/vue/happyreply/happyreply.v1",
   "author": {
     "name": "Apache Software Foundation"

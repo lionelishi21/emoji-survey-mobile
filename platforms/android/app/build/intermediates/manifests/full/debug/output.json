@@ -1,1 +1,1 @@
-[{"outputType":{"type":"MERGED_MANIFESTS"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":10008},"path":"AndroidManifest.xml","properties":{"packageId":"io.cordova.appfinity","split":"","minSdkVersion":"21"}}]
+[{"outputType":{"type":"MERGED_MANIFESTS"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":10008},"path":"AndroidManifest.xml","properties":{"packageId":"io.cordova.appfinity","split":"","minSdkVersion":"19"}}]

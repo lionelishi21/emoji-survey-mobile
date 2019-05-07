@@ -8,6 +8,8 @@ import slider from './modules/slider'
 import response from './modules/response'
 import database from './modules/database'
 import post from './modules/post'
+import customer from './modules/customer'
+import dialog from './modules/dialogs.js'
 
 Vue.use(Vuex)
 Vue.config.debug = true
@@ -21,6 +23,8 @@ export default new Vuex.Store({
     matrix,
     slider,
     database,
-    post
+    post,
+    customer,
+    dialog
   }
 })

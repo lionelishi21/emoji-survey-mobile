@@ -8,9 +8,9 @@
     </v-container>
   </v-dialog>
   <div class="survey-intro video_overlay ">
-    <v-dialog v-model="dialog3" 
-       max-width="500px" 
-       content-class="text-center" 
+    <v-dialog v-model="dialog3"
+       max-width="500px"
+       content-class="text-center"
        transition="fadeLeft">
         <v-card  style="color: #fff; background: transparent">
           <v-card-text>
@@ -23,7 +23,8 @@
     <img :src="getBgImage" id="youtube_media" v-show="showBackgroundImage()" >
     <transition-group name="fadeLeft">
       <section  v-for="(q, key) in  getAllQuestions" v-show="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'">
-          <div  v-if="showMultipleChoiceQuestions(q.type)" :key="key">
+        <!-- <qrscanner-cmp></qrscanner-cmp> -->
+          <div v-if="showMultipleChoiceQuestions(q.type)" :key="key">
               <div class="question-wrapper">
                   <div class="row">
                     <div class="col-md-12">
@@ -43,15 +44,14 @@
                                       <input
                                       style="z-index: -10000"
                                       v-model="mc_responses[q.id]"
-                                      type="radio"        
+                                      type="radio"
                                       id:checked="answer.id"
                                       :name="'answers_mc['+q.id+']'"
-                                      :class="'emoji stats'+answer.id" 
+                                      :class="'emoji stats'+answer.id"
                                       :value="answer.id"
                                       :id="'mc_'+answer.id"
                                        @change="showAlert(answer.id, answer.emoji, answer.answer, key, 'input', answer.logic)"
                                       />
-
                                       <img
 
                                        style="z-index: -10000"
@@ -77,31 +77,30 @@
                       </div>
                   </div>
                   <div class="row mb-5 m-l-10">
-                      <div v-for="(answer, answer_key) in q.answers_array" :key="answer_key" class="col-md-1">
-                          <div :class="'survey-card answer_content p-0 '+cardSelect(net_responses[q.id], answer.id)" :id="'card_select_'+answer.id">
-                              <div class="survey-card-body text-center p-0" @click="triggerClicks(answer.id)" >
-                                  <label class="img-label text-center " :id="answer.id">
-                                      <input
-                                          v-model="net_responses[q.id]"
-                                          type="radio"        
-                                          id:checked="answer.id"
-                                          :name="'answers_mc['+q.id+']'"
-                                          :class="'emoji stats'+answer.id" 
-                                          :value="answer.id"
-                                          :id="'mc_'+answer.id"
-                                          @change="showAlert(answer.id, answer.emoji, answer.answer, key, 'input', answer.logic)"
-                                          />
-                                          <img
-                                          :id="'emojimage_'+answer.id"
-                                          :src="'/css/emoji/'+answer.emoji"
-                                          class="img-responsive emoji-img "
-                                          />
-                                      </label>
-                                  <h1 class="badge badge-primar" style="font-size: 30px">{{answer.answer}}</h1>
-                                  <h3></h3>
-                              </div>
-                          </div>
-                      </div>
+                        <div v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" class="col-md-1 col-xm-1 col-sm-1" id="emoji-size"  v-if="answer.question_id == q.id">
+                                    <div :class="'survey-card answer_content p-0 '+cardSelect(net_responses[q.id], answer.id)" :id="'card_select_'+answer.id" style="radius: 0px" >
+                                        <div class="survey-card-body text-center p-0 elevation-10" @click="triggerClicks(answer.id)">
+                                            <label class="img-label text-center p-0 r-10 P-0" :id="answer.id">
+                                                <input
+                                                    v-model="net_responses[q.id]"
+                                                    type="radio"        
+                                                    id:checked="answer.id"
+                                                    :name="'answers_mc['+q.id+']'"
+                                                    :class="'emoji stats'+answer.id" 
+                                                    :value="answer.id"
+                                                    :id="'mc_'+answer.id"
+                                                    @change="showAlert(answer.id, answer.emoji, answer.answer, key, 'input', answer.logic)"
+                                                    />
+                                                    <img
+                                                    :id="' emojimage_'+answer.id"
+                                                    :src="'./static/emoji/'+answer.emoji"
+                                                    class="emoji-img nps-size"
+                                                    />
+                                                </label>
+                                            <h1 class="badge badge-primary btn btn-block r-10" :style="netColorChange(answer_key)"  style="font-size: 30px">{{answer.answer}}</h1>
+                                        </div>
+                                    </div>
+                                </div>
                   </div>
               </div>
           </div>
@@ -126,11 +125,11 @@
                                         <th></th>
                                         <th v-for="(mt, header_key) in getAllMatrixs" v-if="q.id == mt.question_id" :key="header_key">
                                             <div class="text-center">
-                                                <div class="circle">
+                                                <div class="">
                                                     <img class="img-responsive emoji-img " style="margin: 0 auto;"
                                                         :src="'static/emoji/'+mt.emoji">
                                                 </div>
-                                                <h4 class="text-center">{{mt.emoji}}</h4>
+                                                <h4 class="text-center">{{mt.matrix}}</h4>
                                             </div>
                                         </th>
                                     </tr>
@@ -247,12 +246,11 @@
                     </div>
                    </div>
                    <div class="row">
-                      <div class="col-md-4" v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id == q.id">
+                      <div class="col-md-4" v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id === q.id">
                          <div :class="'survey-card answer_content '+cardSelect(range_questions[q.id], answer.id)" :id="'card_select_'+answer.id">
                         <div class="survey-card-body text-center" @click="triggerClicks(answer.id)">
-                           <label class="img-label text-center m-r-20 " :id="answer.id">
+                           <label class="img-label text-center m-r-20 " :id="answer.id" >
                                     <input
-                                  
                                     v-model="range_questions[q.id]"
                                     type="radio"        
                                     v-bind:checked="answer.id"
@@ -264,10 +262,11 @@
                                     />
                                     <img
                                      :id="'emojimage_'+answer.id"
-                                      :src="'static/emoji/'+answer.emoji+'.svg'"
+                                      :src="'static/emoji/'+answer.emoji"
                                       class="img-responsive emoji-img "
                                      />
                                 </label>
+                                {{answer.emoji}}
                                 <h3 v-html="modifyAnswers(answer.answer)"></h3>
                         </div>
                       </div>
@@ -438,11 +437,21 @@ import { mapGetters } from 'vuex'
 import multipleChoice from './components/MultipleChoiceQuestion'
 import Intro from './components/Intro'
 import Post from '../databases/post';
+import qrscannerCmp from './components/qrScanner/index.vue'
 
 export default {
     mixins: [Post],
 		data() {
 			return {
+         styleRed: {
+                background: 'red',
+            },
+            styleYellow: {
+                background: '#bc5100',
+            },
+            styleGreen: {
+                background: 'green',
+            },
         visible: true,
         layout: "normal",
         input: null,
@@ -679,7 +688,8 @@ export default {
       swiperSlide,
       'vue-ladda': VueLadda,
       RangeSlider,
-      Intro
+      Intro,
+      'qrscanner-cmp': qrscannerCmp
     },
   	methods: {
       manualDispatch () {
@@ -721,6 +731,18 @@ export default {
               this.hide();
           }
       }, 
+      netColorChange(n) {
+            if (n > 8) {
+                return this.styleYellow
+              }
+              if (n < 7) {
+                  return this.styleRed
+              }
+
+              if (n > 8) {
+                  return this.styleGreen
+              }
+          },
       getUserLocation() {
          var bool = true
          var int = 0
@@ -738,7 +760,7 @@ export default {
       emailValidationOptions() {
         if (this.valid == false ) {
            this.modal.answer = 'Something is wrong with your email address'
-           this.modal.emoji = 'sad' 
+           this.modal.emoji = 'sad.svg' 
            this.dialog3 = true;
           return true
         }
@@ -747,7 +769,7 @@ export default {
       phoneValidationOptions() {
         if (this.phone_number_valid == false) {
            this.modal.answer = 'Something is wrong with your phone number'
-           this.modal.emoji = 'sad' 
+           this.modal.emoji = 'sad.svg' 
            this.dialog3 = true;
            return true
         }
@@ -832,7 +854,6 @@ export default {
 
         if (answer == 'Express Yourself!!') {
             return
-            alert('working')
         }
 
         var self = this;
@@ -882,7 +903,8 @@ export default {
             return false;
       },
      showMatrixAlert (matrix_key, answer_id, answer_count, question_id, question_key, emoji, matrix_text) {
-
+        this.current_answer_array = []
+        
         if (this.current_question == 0) {
             this.attemptMatrixQuestion(answer_id, question_id)
         }
@@ -890,7 +912,6 @@ export default {
         if (this.current_question != question_id) {
             his.attemptMatrixQuestion(answer_id, question_id)
         }
-
 
         if (this.current_question == question_id) {
             if (this.current_answer == answer_id) {
@@ -927,7 +948,7 @@ export default {
            // windows.location('#showsubmit')
         } else {
            this.modal.answer = 'You have to select at lease one answer'
-           this.modal.emoji = 'sad' 
+           this.modal.emoji = 'sad.svg' 
             this.dialog3 = true;
             var self = this;
         }
@@ -1001,7 +1022,8 @@ export default {
         this.isEmpty(this.range_questions) === true &&
         this.isEmpty(this.comments_response) === true &&
         this.isEmpty(this.email_response) === true &&
-        this.isEmpty(this.number_response) === true
+        this.isEmpty(this.number_response) === true &&
+        this.isEmpty(this.net_responses)
         ) {
           return false;
         }
@@ -1177,7 +1199,7 @@ export default {
     },
     animateEmoji(emoji) {
       this.animate = true
-      var emo = 'static/emoji/'+emoji+'.svg'
+      var emo = 'static/emoji/'+emoji
       var data = '<div class="webloder"';
         for (var i = 1; i <= 40; i++) {
            if(i==1 || i==11 || i==21) {

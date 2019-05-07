@@ -40,7 +40,7 @@ const actions = {
       })
     }
   },
-  getFeedbackQuestionsFromSqlLite ({commit}, db) {
+  getFeedbackQuestionsFromSqlLite ({ commit, dispatch }, db) {
      db.transaction(function (tx) {
         tx.executeSql('SELECT * FROM questions;', [], function (tx, results) {
           var len = results.rows.length
@@ -53,6 +53,7 @@ const actions = {
             resultsArray.push(res);
           }
           commit('setQuestions', resultsArray)
+          dispatch('getQuestionCount', db)
 
         }, function(tx, error) {
           console.log(error)

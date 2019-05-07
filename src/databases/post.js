@@ -2,12 +2,16 @@ import { VueOnline } from 'vue-online'
 export default {
   data(){
     return {
+      url: ''
       // button: {
       //   loading: false,
       //   'dataStyle': 'expand-left',
       //   progress: 0,
       // },
     }
+  },
+  created() {
+     this.url = localStorage.getItem("url")
   },
   methods: {
     createResponseDatabase () {
@@ -64,7 +68,7 @@ export default {
         // this.saveOfflineUpdate(multpleChoice, matrix, slider, range, comments, fbId)
     },
     newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, nps, lat, lng, fbId, offline, db) {
-      var action = 'https://jifs.happyreply.com/post-survey-responses2'
+      var action = this.url+'/post-survey-responses2'
       var csrfToken = $('meta[name=csrf-token]').attr('content')
       this.$http.post(action,
         { params:
@@ -137,11 +141,9 @@ export default {
       this.$store.commit('addToResponse', resultsArray)
       this.$store.commit('countResponse', len)
     },
-
-     postResponse1(response, answer_id, question_id, feedback_id, matrix, slider) {
+    postResponse1(response, answer_id, question_id, feedback_id, matrix, slider) {
       console.log('saving to server')
-      this.$http.get(
-        'https://jifs.happyreply.com/post-survey-responses2/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
+      this.$http.get(this.url+'/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
         .then(response => {
           this.success = true;
           this.connectionStatus = 'true';

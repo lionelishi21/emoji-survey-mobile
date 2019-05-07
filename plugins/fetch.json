@@ -1,60 +1,4 @@
 {
-  "cordova-plugin-whitelist": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-whitelist@1"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-sqlite-2": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-sqlite-2"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-splashscreen": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-splashscreen@5.0.2"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-network-information": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-network-information"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-kiosk": {
-    "source": {
-      "type": "registry",
-      "id": "https://github.com/hkalina/cordova-plugin-kiosk.git"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-sqlcipher-adapter": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-sqlcipher-adapter"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "cordova-plugin-websql": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-websql"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "com.moust.cordova.videoplayer": {
     "source": {
       "type": "registry",
@@ -63,10 +7,82 @@
     "is_top_level": true,
     "variables": {}
   },
+  "cordova-plugin-kiosk": {
+    "source": {
+      "type": "registry",
+      "id": "git+https://github.com/hkalina/cordova-plugin-kiosk.git"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-network-information": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-network-information@^2.0.1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-splashscreen": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-splashscreen@^5.0.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-sqlite-2": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-sqlite-2@^1.0.4"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-websql": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-websql@0.0.10"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-keyboard": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-keyboard@^1.2.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-qrscanner": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-qrscanner@^2.6.0"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-add-swift-support": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-add-swift-support"
+    },
+    "is_top_level": false,
+    "variables": {}
+  },
   "uk.co.workingedge.cordova.plugin.sqliteporter": {
     "source": {
       "type": "registry",
-      "id": "uk.co.workingedge.cordova.plugin.sqliteporter"
+      "id": "uk.co.workingedge.cordova.plugin.sqliteporter@^1.0.5"
     },
     "is_top_level": true,
     "variables": {}
@@ -74,7 +90,7 @@
   "cordova-plugin-sslcertificatechecker": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-sslcertificatechecker"
+      "id": "cordova-plugin-sslcertificatechecker@^6.0.0"
     },
     "is_top_level": true,
     "variables": {}
@@ -82,7 +98,7 @@
   "cordova-plugin-http": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-http"
+      "id": "cordova-plugin-http@^1.2.0"
     },
     "is_top_level": true,
     "variables": {}
@@ -95,10 +111,10 @@
     "is_top_level": false,
     "variables": {}
   },
-  "cordova-plugin-keyboard": {
+  "cordova-plugin-camera": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-keyboard"
+      "id": "cordova-plugin-camera@^4.0.3"
     },
     "is_top_level": true,
     "variables": {}

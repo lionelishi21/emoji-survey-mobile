@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-sslcertificatechecker",
+  "_from": "cordova-plugin-sslcertificatechecker@^6.0.0",
   "_id": "cordova-plugin-sslcertificatechecker@6.0.0",
   "_inBundle": false,
   "_integrity": "sha1-q5vbsoUcIjL1WexCkdTME+DxjbM=",
   "_location": "/cordova-plugin-sslcertificatechecker",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "cordova-plugin-sslcertificatechecker",
+    "raw": "cordova-plugin-sslcertificatechecker@^6.0.0",
     "name": "cordova-plugin-sslcertificatechecker",
     "escapedName": "cordova-plugin-sslcertificatechecker",
-    "rawSpec": "",
+    "rawSpec": "^6.0.0",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^6.0.0"
   },
   "_requiredBy": [
     "#USER",
@@ -21,7 +21,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-sslcertificatechecker/-/cordova-plugin-sslcertificatechecker-6.0.0.tgz",
   "_shasum": "ab9bdbb2851c2232f559ec4291d4cc13e0f18db3",
-  "_spec": "cordova-plugin-sslcertificatechecker",
+  "_spec": "cordova-plugin-sslcertificatechecker@^6.0.0",
   "_where": "/var/www/html/vue/happyreply/happyreply.v1",
   "author": {
     "name": "Eddy Verbruggen",

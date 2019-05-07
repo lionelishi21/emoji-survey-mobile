@@ -4,11 +4,14 @@
 </div>
 </template>
 <script>
-  export default {
-    
-  }
+export default {
+
+}
 </script>
-<style>
+<style lang="scss" scoped>
+
+ // @import '../styles/index.scss';
+
 .fade-enter-active, .fade-leave-active {
   transition-property: opacity;
   transition-duration: .25s;
@@ -18,7 +21,9 @@
   transition-delay: .25s;
 }
 
+
 .fade-enter, .fade-leave-active {
   opacity: 0
 }
+
 </style>

@@ -7,26 +7,32 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-sqlite-2": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-network-information": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+    "com.moust.cordova.videoplayer": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "cordova-plugin-kiosk": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-network-information": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-sqlite-2": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "cordova-plugin-websql": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
-    "com.moust.cordova.videoplayer": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-qrscanner": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "uk.co.workingedge.cordova.plugin.sqliteporter": {
       "PACKAGE_NAME": "io.cordova.appfinity"
@@ -37,7 +43,7 @@
     "cordova-plugin-http": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
-    "cordova-plugin-keyboard": {
+    "cordova-plugin-camera": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     }
   },

@@ -2,6 +2,17 @@ import api from '../../api'
 
 const state = {
   feedbacks: [],
+  title: {
+    id: '',
+    slug: '',
+    name: 'Survey Name',
+    desc: 'Survey Description',
+    question_count: ''
+  },
+  dialog: {
+    preloader: false,
+    message: ''
+  },
   image: 'static/survey-themes/breeze-cotton.jpg',
   vide_link: '',
   youtube: '',
@@ -9,7 +20,7 @@ const state = {
 }
 
 const getters = {
-  feedbackInfo: state => state.feedbacks,
+  feedbackInfo: state => state.title,
   getBgImage: state => state.image,
   getVideoLink: state => state.video_link,
   getYoutubeStatus: state => state.youtube
@@ -21,11 +32,12 @@ const actions = {
         .then( response => {
             var image = response.body
             if (image != "") {
-              commit('setSurveyBackgrounImage', 'https://jncb.happyreply.com/'+image )
+              commit('setSurveyBackgrounImage', 'demo.happyreply.com/'+image )
             }
         })
     },
     createFeedbackTable({dispatch}, db) {
+      console.log('initialize creating feeback database')
       db.transaction(function (tx) {
         tx.executeSql('DROP TABLE IF EXISTS feedbacks')
         tx.executeSql(`CREATE TABLE IF NOT EXISTS feedbacks (feedback_id INTEGER,
@@ -36,44 +48,32 @@ const actions = {
       var userId = data['user_id']
       var db = data['db']
       dispatch ("createFeedbackTable", db)
+
       api.getSurveyTitle(userId)
         .then(response => {
           console.log(response)
           return response.json()
         }).then( response => {
+          console.log('save to feedback table')
           dispatch('saveFeedbackInfoToDataBase', { response, db })
         })
     },
     saveFeedbackInfoToDataBase ({commit}, response) {
       var res = response['response']
       var db = response['db']
-      // for (let key in res) {
-      //   db.transaction(function (tx) {
-      //     var sql = 'INSERT INTO feedbacks (feedback_id, feedback_title, feedback_desc, feedback_slug) VALUES (?,?,?,?)';
-      //     tx.executeSql(sql, [ res[key]['feedback_id'], res[key]['feedback_title'], res[key]['feedback_description'],res[key]['feedback_slug']]);
-      //   })
-      // }
       db.transaction(function (tx) {
         var sql = 'INSERT INTO feedbacks (feedback_id, feedback_title, feedback_desc, feedback_slug) VALUES (?,?,?,?)';
         tx.executeSql(sql, [ res['feedback_id'], res['feedback_title'], res['feedback_description'],res['feedback_slug']]);
       })
     },
-    getFeedbackTitleFromSqlLite ({commit}, db) {
-      db.transaction(function (tx) {
-        tx.executeSql('SELECT * FROM feedbacks;', [], function (tx, results) {
-          var len = results.rows.length;
-          var resultsArray = []
-          for (var i = 0; i < len; i++) {
-            var res = {
-              feedback_id: results.rows.item(i).feedback_id,
-              feedback_title: results.rows.item(i).feedback_title,
-              feedback_desc: results.rows.item(i).feedback_desc,
-              feedback_slug: results.rows.item(i).feedback_slug
-            }
-            resultsArray.push(res)
-          }
-
-          commit('setFeedback', resultsArray)
+    getFeedbackTitleFromSqlLite ({commit, dispatch }, db) {
+        db.transaction(function (tx) {
+        tx.executeSql('SELECT * FROM feedbacks;', [], function (tx, results) { 
+         
+          console.log('Getting feeback titles...')
+          console.log(results.rows[0])
+          commit('setFeedbackTitles', results.rows[0])
+          dispatch('getFeedbackQuestionsFromSqlLite', db)
         })
       })
     },
@@ -97,6 +97,11 @@ const actions = {
 const mutations = {
   setFeedback (state, feed) {
     state.feedbacks = feed
+  },
+  setFeedbackTitles( state, title) {
+    state.title.name = title.feedback_title
+    state.title.desc = title.feedback_desc
+    state.title.slug = title.feedback_slug
   },
   setSurveyBackgrounImage( state, img) {
     state.image = img

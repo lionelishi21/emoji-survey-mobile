@@ -17,9 +17,10 @@ const actions = {
   getQuestions ({commit, dispatch}, data) {
     var db = data['db']
     var userId = data['user_id']
-   
     api.getSurveyQuestion(userId)
+
       .then (response => {
+          console.log(response)
         return response.json()
       }).then(response => {
         dispatch('saveQuestionsInfoToDatabase', {response, db})
@@ -52,7 +53,7 @@ const actions = {
             resultsArray.push(res);
           }
           commit('setQuestions', resultsArray)
-          
+
         }, function(tx, error) {
           console.log(error)
         })

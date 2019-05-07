@@ -8,22 +8,24 @@
     </v-layout>
   </v-container>
 </v-dialog>
-
 <section class="survey-intro video_overlay">
-   <img :src="getBgImage" id="youtube_media" >
-<!--    <vue-video 
-     id="youtube_media" 
-     ref="video1" 
-     :options="videoOptions">
-    </vue-video> -->
+    <youtube 
+      id="youtube_media" 
+      :video-id="getVideoId()" 
+      player-width="100%" 
+      :player-vars="playerVars" 
+      @playing="playing" 
+      @ended="ended">
+    </youtube>
     <div class="intro">
         <h1>{{feedbackInfo[0].feedback_title}}</h1>
         <h4><i>{{feedbackInfo[0].feedback_desc}}</i></h4>
+        <!-- <h4><i>{{ getYoutubeStatus }}</i></h4> -->
         <hr>
         <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-intro">Take Survey</button>
     </div>
      <v-btn  @click="exitKioasMode()"
-        color="red" large dark bottom fixed
+        color="red" red dark bottom fixed
         right fab >
          <v-icon>help</v-icon>
       </v-btn>
@@ -82,30 +84,47 @@ export default {
    ...mapGetters([
        'feedbackInfo',
        'getVideoLink',
-       'getYoutubeStatus',
-       'getBgImage'
+       'getYoutubeStatus'
     ]),
+    player () {
+      return this.$refs.youtube.player
+    }
+    
   },
   mounted() {
-     // this.video1 = this.$refs.video1.play();
-     
+     // this.video1 = this.$refs.video1;
   },
   created(){
     var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
     var feedback_id = this.$route.params.id
     var user_id = localStorage.getItem('user_id')
     this.$store.dispatch('getFeedbackTitleFromSqlLite', db);
-    this.$store.dispatch('getBackgroundImage', feedback_id)
-     this.video1 = this.$refs.video1.play();
+    // this.$store.dispatch('getIntroVideo', feedback_id)
 
+    this.getIntroVideo(feedback_id)
   },
   methods: {
      playing() {
        console.log('\o/ we are watching!!!')
      },
+     ended(){
+       location.reload()
+       this.$refs.youtube.player
+     },
+     gotToLocalVideo() {
+         this.$router.push({name: 'Intro2'})
+         // var url = '/intro2/'+this.$route.params.id
+         window.location.href = url
+     },
+     getVideoId() {
+      var video = this.$youtube.getIdFromUrl(this.videoId)
+      this.playerVars.playlist = video
+      return video
+     },
      goToSurvey() {
         this.loading = true
         var self = this
+
         setTimeout(function(){
            self.loading = false;
            self.$router.push({name: 'Survey'})
@@ -118,8 +137,19 @@ export default {
            self.loading = false;
            self.$router.push({name: 'Home'});
         }, 500);
-        
       },
+      getIntroVideo(feedback_id) {
+         this.$http.get('https://psoj.happyreply.com/api/get/video-link/'+feedback_id)
+          .then(response => {
+            this.videoId = response.body
+            if (this.videoId !== '') {
+            } else {
+              this.gotToLocalVideo()
+            }
+          }, response => {
+              this.gotToLocalVideo()
+          })
+      }
   }
 }
 </script>
@@ -131,5 +161,6 @@ export default {
     top: 20px;
     right: 20px;
 }
+
 </style>
 

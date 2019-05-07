@@ -14,7 +14,7 @@
   @include border-radius($card-border-radius);
 
   h3 {
-    
+
     color: #fff;
   }
   label {
@@ -22,8 +22,14 @@
     input {
       z-index: -1000 !important;
     }
+    
+    .nps-size {
+      max-width: 95px !important;
+      // width: 100% !important;
+    }
 
     img {
+      // width: 100%;
       z-index: -1000 !important;
     }
   }
@@ -76,9 +82,7 @@
   }
 }
 
-//
 // Optional textual caps
-//
 
 .survey-card-header {
   padding: $card-spacer-y $card-spacer-x;

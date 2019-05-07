@@ -1,17 +1,24 @@
 const state = {
 	isDroping: false,
+	isLoadSuccessfully: false,
 	isLoading: false,
-	isLoadSuccessfully: false
+    dialog: {
+	   isLoading: false,
+	   message: ''
+	 },
 }
 
 const getters = {
 	getDatabaseStatus: state => state.isDroping,
 	isLoading: state => state.isLoading,
+	loadingDailog: state => dialog,
 	isLoadSuccessfully: state => state.isLoadSuccessfully
 }
 
 const actions = {
 	creatingDatabase({commit, dispatch}, db) {
+		console.log('creating langauge')
+	  commit('startLoading', 'Completed...')
 	  db.transaction(function (tx) {
 
 	  	tx.executeSql(`CREATE TABLE IF NOT EXISTS feedbacks (feedback_id INTEGER, feedback_title TEXT, 
@@ -33,8 +40,10 @@ const actions = {
 	  	feedback_question TEXT NOT NULL, type INTEGER NOT NULL, 
 	  	feedback_id INTEGER NOT NULL,  answer_count INTEGER, isLogic TEXT, recieved_logic INTEGER)`, [])
 	  })
+	   commit('stopLoading')
 	},
 	dropDatabase({commit, dispatch}, db) {
+     commit('startLoading', 'Reloading database...')
 	  db.transaction(function(tx){
 	      tx.executeSql('DROP TABLE IF EXISTS feedbacks')
 	      tx.executeSql('DROP TABLE IF EXISTS questions')
@@ -42,6 +51,7 @@ const actions = {
 	      tx.executeSql('DROP TABLE IF EXISTS matrixs')
 	      tx.executeSql('DROP TABLE IF EXISTS sliders')
 	  })
+	  commit('stopLoading')
 	},
 	reCreateDatabases({commit, dispatch}, db) {
 		dispatch('dropDatabase', db)
@@ -55,7 +65,7 @@ const actions = {
 }
 
 const mutations = {
-  startLoading(state) {
+  startLoading(state, message) {
     state.isLoading = true
   },
   stopLoading(state) {

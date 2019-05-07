@@ -1,3 +1,6 @@
+[v-cloak] > * { display:none }
+[v-cloak]::before { content: "loading…" }
+
 _body {
   font-size: .875rem;
 }
@@ -105,3 +108,33 @@ _body {
 
 .border-top { border-top: 1px solid #e5e5e5; }
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+.dashboard-card .well.card {
+    border-radius: 21px;
+
+    small {
+        font-weight: 500;
+    }
+}
+
+.dashboard-card .badge {
+    border-radius: 50% !important;
+}
+
+.dashboard-card .tab-content {
+    overflow-y: auto;
+    // height: 407px;
+    height: 522px;
+}
+
+.dashboard-card.card {
+    border-radius: 6px !important;
+}
+
+.dashboard-card .table>tbody>tr>td:first-child, .dashboard-card .table>tbody>tr>th:first-child, .dashboard-card .table>tfoot>tr>td:first-child, .dashboard-card .table>tfoot>tr>th:first-child, .dashboard-card .table>thead>tr>td:first-child, .dashboard-card .table>thead>tr>th:first-child {
+    padding-left: 15px;
+}
+
+.dashboard-card .table>tbody>tr:first-child td {
+    border-top: none;
+}

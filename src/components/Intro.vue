@@ -11,16 +11,16 @@
 <section class="survey-intro video_overlay">
     <youtube 
       id="youtube_media" 
-      :video-id="getVideoId()" 
-      player-width="100%" 
-      :player-vars="playerVars" 
-      @playing="playing" 
+      :video-id="getVideoId()"
+      player-width="100%"
+      :player-vars="playerVars"
+      @playing="playing"
       @ended="ended">
     </youtube>
     <div class="intro">
-        <h1>{{feedbackInfo[0].feedback_title}}</h1>
-        <h4><i>{{feedbackInfo[0].feedback_desc}}</i></h4>
-        <!-- <h4><i>{{ getYoutubeStatus }}</i></h4> -->
+        <h1>{{feedbackInfo.name}}</h1>
+        <h4><i>{{feedbackInfo.desc}}</i></h4>
+        <h4><i>{{ getYoutubeStatus }}</i></h4>
         <hr>
         <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-intro">Take Survey</button>
     </div>
@@ -137,10 +137,9 @@ export default {
            self.loading = false;
            self.$router.push({name: 'Home'});
         }, 500);
-        
       },
       getIntroVideo(feedback_id) {
-         this.$http.get('https://jifs.happyreply.com/api/get/video-link/'+feedback_id)
+         this.$http.get('https://happyreply.appfinitytech.com/api/get/video-link/'+feedback_id)
           .then(response => {
             this.videoId = response.body
             if (this.videoId !== '') {

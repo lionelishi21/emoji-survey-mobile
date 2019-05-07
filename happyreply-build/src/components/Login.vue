@@ -135,7 +135,7 @@ export default {
             },
             submitForm: function(event) {
 
-            var action = 'https://happyreply.appfinitytech.com/api/authenticate';
+            var action = 'https://psoj.happyreply.com/api/authenticate';
             var csrfToken = $('meta[name=csrf-token]').attr('content');
 
             if (this.formInputs.email == "") {
@@ -175,8 +175,6 @@ export default {
                        self.button.loading = false;
                        self.$router.push({name: 'Home'});
                    }, 1000);
-                   
-                
               })
               .catch(function (data, status, request) {
                 var errors = data.data;

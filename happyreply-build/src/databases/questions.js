@@ -1,7 +1,7 @@
 export default {
   methods: {
     loadQuestions () {
-      this.$http.get('https://happyreply.com/api/get-questions-by-feedback-id?user_id=' + this.user_id)
+      this.$http.get('https://app.happyreply.com//api/get-questions-by-feedback-id?user_id=' + this.user_id)
         .then(response => {
           return response.json()
         }).then(data => {

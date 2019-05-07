@@ -1,12 +1,20 @@
 .survey-btn {
-  font-family: $font-family-russo;
+   font-family: $font-family-russo;
    display: inline-block;
    font-weight: $survey-btn-weight;
    text-alignt: center;
    white-space: nowrap;
    user-select: none;
+   width: 80%;
    border: $btn-border-width solid transparent;
 }
+
+@media screen and (max-width: 975px) {
+  .survey-btn {
+    width: 100%;
+  }
+}
+
 
 .btn-red {
    background: $brand-color !important;

@@ -72,6 +72,7 @@
 					v-text="link.res"
 			    />
                 </v-list-tile>
+     
                 <v-list-tile
                  :active-class="color"
                  :to="'/qrscanner'"
@@ -83,6 +84,19 @@
                 </v-list-tile-action>
 			    <v-list-tile-title
 					v-text="link.qr"
+			    />
+                </v-list-tile>
+                  <v-list-tile
+                 :active-class="color"
+                 :to="'/settings'"
+                 avatar
+                 class="v-list-item" 
+                 @click="">
+	            <v-list-tile-action>
+                   <v-icon>build</v-icon>
+                </v-list-tile-action>
+			    <v-list-tile-title
+					v-text="link.set"
 			    />
                 </v-list-tile>
                 <v-list-tile avatar class="v-list-item" @click="logout()">
@@ -111,7 +125,8 @@ export default {
 				'qr': 'QrScanner',
 				'res': 'Responses',
 				'sur': 'Surveys',
-				'log': 'logout'
+				'log': 'logout',
+				'set': 'Settings'
 			},
 			color: 'green',
 			dash: 'Dashboad',

@@ -1,6 +1,7 @@
 <template>
+<v-app>
 <div>
-	 <v-snackbar
+   <v-snackbar
       :timeout="timeout"
       :top="y === 'top'"
       :bottom="y === 'bottom'"
@@ -13,26 +14,37 @@
       {{ text }}
       <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
     </v-snackbar>
-   
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
-    <h1 class="h2">Offline Responses</h1>
-  </div>
-  <v-row>
-   <v-card class="text-center">
-    <v-card-text >
-      <p class="text-md-center display-4">{{ResponseAmount}}</p>
-      <p class="text-md-center"> Offline Respponse</p>
-      <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
-          Post Response
-        <v-icon right dark>cloud_upload</v-icon>
-    </v-btn>
-     <v-btn class="btn btn-default" @click="exportResponseToText()">
-     	Export Responses
-     </v-btn>
-    </v-card-text>
-  </v-card>
-  </v-row>
- </div>	
+ </div>
+  <v-container
+      fluid
+      grid-list-lg
+    >
+	  <v-layout row wrap>
+	    <v-flex xs4>
+	    	 <v-row>
+			   <v-card class="text-center">
+			   	 <v-card-title primary-title>
+	              <div>
+	                <div class="headline">Offline Responses</div>
+	              </div>
+	            </v-card-title>
+			    <v-card-text>
+			      <p class="text-md-center display-4">{{ResponseAmount}}</p>
+			      <p class="text-md-center"> Offline Respponse</p>
+			      <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
+			          Post Response
+			        <v-icon right dark>cloud_upload</v-icon>
+			     </v-btn>
+			     <v-btn class="btn btn-default" @click="exportResponseToText()">
+			     	Export Responses
+			     </v-btn>
+			    </v-card-text>
+			  </v-card>
+			 </v-row>
+	    </v-flex>
+	  </v-layout>
+  </v-container>
+</v-app>
 </template>
 <script>
 import { mapGetters } from 'vuex';
@@ -71,8 +83,7 @@ export default {
           version: '1.0',
           dbDisplay: 'ServeyDatabase',
           maxSize: 1105535,
-          db: "",
-       
+          db: ""
 		 }
 	  },
 	  watch: {
@@ -83,7 +94,7 @@ export default {
 	        this.feedback_title = this.feedbackInfo[0].feedback_title
 	        this.feedback_desc = this.feedbackInfo[0].feedback_desc
 	        this.feedback_slug = this.feedbackInfo[0].feedback_slug
-        } 
+        }
 	  },
 	  created() {
 	  	this.init()
@@ -199,7 +210,7 @@ export default {
 		        this.newPostResponse(multpleChoice, matrix, slider, range, comments, number, email, shortext, fbId, false, db)
 		    },
 		    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, fbId, offline, db) {
-		      var action = 'https://app.happyreply.com/post-survey-responses2'
+		      var action = 'https://psoj.happyreply.com/post-survey-responses2'
 		      var csrfToken = $('meta[name=csrf-token]').attr('content')
 		      // this.loadButton.loading = true
 		      // this.button.loading = true;

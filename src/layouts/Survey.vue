@@ -372,7 +372,6 @@
                                     style="color: #fff"
                                     @focus="showFocus"
                                     readonly
-                                
                                     :rules="[rules.email]"
                                     placeholder="Type your email here"
                                     v-model="email_response[q.id]"
@@ -421,7 +420,7 @@
 </div>
 </template>
 <script>
-import vueSlider from 'vue-slider-component/src/vue2-slider.vue'
+// import vueSlider from 'vue-slider-component/src/vue2-slider.vue'
 import { OfflineIndicator, VueOnline } from 'vue-online'
 
 // require styles
@@ -683,7 +682,6 @@ export default {
       this.$store.dispatch('getBackgroundImage', this.feedbackInfo[0].feedback_slug)
     },
     components: {
-      vueSlider,
       swiper,
       swiperSlide,
       'vue-ladda': VueLadda,
@@ -807,7 +805,7 @@ export default {
       },
       clickToSubmit() {
          this.loading = true
-         this.formSubmit(this.feedbackInfo[0].feedback_slug)
+         this.formSubmit(this.slug)
          var self = this
          setTimeout(function(){
           self.loading = false
@@ -983,7 +981,7 @@ export default {
       // created response database
       var db
       db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-      this.newSaveResponse( this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, this.email_response, this.number_response, this.shorttext_response, this.net_responses, this.lat, this.lng, fbId, db)
+      this.newSaveResponse( this.mc_responses, this.matrix_responses, this.slider_questions, this.range_questions, this.comments_response, this.email_response, this.number_response, this.shorttext_response, this.net_responses, this.lat, this.lng, fbId, false, db)
       this.clearFormData();
      },
     clearFormData() {
@@ -1307,40 +1305,40 @@ export default {
         width: 200px;
         z-index: 1000;
     }
-    .emo_1 .vue-slider .vue-slider-dot {
-        background: url('../../static/disappointed.svg') no-repeat !important;
-        background-size: contain;
-        box-shadow: none;
-        border-radius: 0;
-    }
+    // .emo_1 .vue-slider .vue-slider-dot {
+    //     background: url('../../static/disappointed.svg') no-repeat !important;
+    //     background-size: contain;
+    //     box-shadow: none;
+    //     border-radius: 0;
+    // }
 
-    .emo_2 .vue-slider .vue-slider-dot {
-        background: url('../../static/worried.svg') no-repeat !important;
-        background-size: contain;
-        box-shadow: none;
-        border-radius: 0;
-    }
+    // .emo_2 .vue-slider .vue-slider-dot {
+    //     background: url('../../static/worried.svg') no-repeat !important;
+    //     background-size: contain;
+    //     box-shadow: none;
+    //     border-radius: 0;
+    // }
 
-    .emo_3 .vue-slider .vue-slider-dot {
-        background: url('../../static/neutral_face.svg') no-repeat !important;
-        background-size: contain;
-        box-shadow: none;
-        border-radius: 0;
-    }
+    // .emo_3 .vue-slider .vue-slider-dot {
+    //     background: url('../../static/neutral_face.svg') no-repeat !important;
+    //     background-size: contain;
+    //     box-shadow: none;
+    //     border-radius: 0;
+    // }
 
-    .emo_4 .vue-slider .vue-slider-dot {
-        background: url('../../static/smiling.svg') no-repeat !important;
-        background-size: contain;
-        box-shadow: none;
-        border-radius: 0;
-    }
+    // .emo_4 .vue-slider .vue-slider-dot {
+    //     background: url('../../static/smiling.svg') no-repeat !important;
+    //     background-size: contain;
+    //     box-shadow: none;
+    //     border-radius: 0;
+    // }
 
-    .emo_5 .vue-slider .vue-slider-dot {
-        background: url('../../static/veryhappy.svg') no-repeat !important;
-        background-size: contain;
-        box-shadow: none;
-        border-radius: 0;
-    }
+    // .emo_5 .vue-slider .vue-slider-dot {
+    //     background: url('../../static/veryhappy.svg') no-repeat !important;
+    //     background-size: contain;
+    //     box-shadow: none;
+    //     border-radius: 0;
+    // }
 
     .wrapper.fullscreen {
         display: -moz-flex;

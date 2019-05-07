@@ -12,10 +12,35 @@
     >
       <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
     </v-snackbar>
-		<div class="container-login100" 
-       style="background-image: url('static/survey-themes/breeze-cotton.jpg');"
-     >
-			<div class="wrap-login100 p-t-190 p-b-30">
+		<div class="container-login100" style="background-image: url('static/survey-themes/breeze-cotton.jpg');">
+      <div class="wrap-login100 p-t-190 p-b-30" v-if="isCompany">
+        <form class="login100-form validate-form">
+
+          <div class="login100-form-avatar">
+            <img src="static/logo/logo.png" alt="Logo">
+            {{isCompany}}
+          </div>
+
+          <div id="emailInput" :class="'wrap-input100 validate-input m-b-10 '+showError(formErrors['company'])" data-validate="Username is required">
+            <input class="input100 " type="text" name="username" placeholder="Enter Company Name" v-model="company">
+            <span class="focus-input100"></span>
+            <span class="symbol-input100">
+                <v-icon>domain</v-icon>
+          </span>
+
+          </div>
+           <vue-ladda
+             class="login100-form-btn"
+               :loading="button.loading"
+               :data-style="button.dataStyle"
+               :progress="button.progress"
+               @click.prevent="saveCompany()">
+               Save
+             </vue-ladda>
+        </form>
+      </div>
+
+			<div class="wrap-login100 p-t-190 p-b-30" v-else>
 				<form class="login100-form validate-form">
 
           <div class="login100-form-avatar">
@@ -73,40 +98,63 @@ export default {
     'vue-ladda': VueLadda
   },
        data() {
-            return {
-                snackbar: false,
-                y: 'top',
-                x: null,
-                mode: '',
-                timeout: 5000,
-                text: '',
-                database: 'SurveyDb',
-                version: '1.0',
-                dbDisplay: 'ServeyDatabase',
-                maxSize: 1105535,
-                email: null,
-                password: null,
-                formInputs: {
-                  password: "",
-                  email: ""
-                },
-                formErrors: [],
-                error: false,
-                button: {
-                    loading: false,
-                    'dataStyle': 'expand-left',
-                    progress: 0,
-                  }
-               }
+        return {
+            companyName: '',
+            snackbar: false,
+            y: 'top',
+            x: null,
+            mode: '',
+            timeout: 5000,
+            text: '',
+            database: 'SurveyDb',
+            version: '1.0',
+            dbDisplay: 'ServeyDatabase',
+            maxSize: 1105535,
+            email: null,
+            password: null,
+            formInputs: {
+              password: "",
+              email: ""
+            },
+            formErrors: [],
+            error: false,
+            button: {
+                loading: false,
+                'dataStyle': 'expand-left',
+                progress: 0,
+              }
+           }
         },
         created() {
           this.checkUserLogin();
           this.initDatabase();
+          this.checkCompany();
         },
         computed: {
+          isCompany: function() {
+             var companyName = localStorage.getItem('tenant')
+             if (companyName) {
+              return false;
+             }
 
+             return true
+          }
         },
         methods: {
+           methodThatForcesUpdate() {
+              // ...
+              // this.$forceUpdate();  // Notice we have to use a $ here
+              // ...
+              // 
+              window
+            },
+            checkCompany() {
+              this.companyName = localStorage.getItem('tenant')
+            },
+            saveCompany() {
+               localStorage.setItem('tenant', this.company)
+               location.reload();
+            },
             initDatabase() {
                 db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
                 this.$store.dispatch('creatingDatabase', db)
@@ -134,8 +182,7 @@ export default {
               }
             },
             submitForm: function(event) {
-
-            var action = 'https://jifs.happyreply.com/api/authenticate';
+            var action = 'https://happyreply.appfinitytech.com/api/authenticate';
             var csrfToken = $('meta[name=csrf-token]').attr('content');
 
             if (this.formInputs.email == "") {
@@ -160,9 +207,9 @@ export default {
 
              this.button.loading = true;
              this.$http.post(action, this.formInputs, {
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                }
+                // headers: {
+                //     'X-CSRF-TOKEN': csrfToken
+                // }
               })
               .then(function(data) {
                    localStorage.setItem("user_id", data.body.user_id);

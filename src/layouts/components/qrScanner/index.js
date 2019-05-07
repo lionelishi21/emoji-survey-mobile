@@ -1,17 +1,21 @@
+import { mapGetters } from 'vuex';
 export default {
+	props:['scanner'],
 	data() {
 		return {
-			scanner: false,
 			results: ''
 		}
 	},
+	created(){
+
+	},
 	methods: {
 		showQrScanner() {
-			this.scanner = !this.scanner
+		   window.QRScanne.show();
 		},
 		onDecode (result) {
             this.result = result
-            alert(result)
-        },
+            this.$store.dispatch('fetchQrcode', result)
+        }
 	}
 }

@@ -85,7 +85,6 @@ export default {
   },
   mounted() {
      this.video1 = this.$refs.video1.play();
-     
   },
   created(){
     var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)

@@ -28,7 +28,10 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
-    "cordova-sqlcipher-adapter": {
+    "cordova-plugin-keyboard": {
+      "PACKAGE_NAME": "io.cordova.appfinity"
+    },
+    "cordova-plugin-qrscanner": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "uk.co.workingedge.cordova.plugin.sqliteporter": {
@@ -40,7 +43,7 @@
     "cordova-plugin-http": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
-    "cordova-plugin-keyboard": {
+    "cordova-plugin-camera": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     }
   },

@@ -4,10 +4,11 @@
  * ************************************************************************************
  */
 @import url('https://fonts.googleapis.com/css?family=Anton|Bree+Serif|Lato|Russo+One|Teko');
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,600');
 
 // Colors
 $royal-blue:              #4183D7;
-$old-brick:               #96281B;
+$old-brick:               #F44336;
 $black:                    #000;
 $dark:                    #000;
 $white:                    #FFF;
@@ -26,20 +27,24 @@ $text-color-flat-blue: 	  #446CB3;
 $border-width:             3px;
 $border-radius:            5px;
 
+
 //Font
+$font-family-nunito:      'Nunito', sans-serif;
 $font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $font-family-serif:        Georgia, "Times New Roman", Times, serif !default;
 $font-family-lato:         'Lato', sans-serif;  
 $font-family-anton:        'Anton', sans-serif;
 $font-family-serif:        'Bree Serif', serif;
 $font-family-russo:        'Russo One', sans-serif;
+
+
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
 $font-family-base:        $font-family-lato !default;
 
 
 $font-size-base:          14px !default;
-$font-size-intro:          35px !default;
+$font-size-intro:         35px !default;
 $font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
 $font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
 $line-height: 			  4.75em;
@@ -80,7 +85,7 @@ $btn-line-height:           1.5 !default;
 
 $btn-padding-y-lg:          1rem !default;
 $btn-padding-x-lg:          2rem !default;
-$btn-line-height-lg:        2 !default
+$btn-line-height-lg:        2 !default;
 $btn-radius:                3em !default;
 
 
@@ -92,7 +97,7 @@ $card-border-radius:                10px !default;
 $card-border-color:                 #000 !default;
 $card-inner-border-radius:          calc(#{$card-border-radius} - #{$card-border-width}) !default;
 $card-cap-bg:                       rgba($black, .03) !default;
-$card-bg:                           rgba(236, 236, 236, 0.1) !default
+$card-bg:                           rgba(236, 236, 236, 0.1) !default;
 
 $card-img-overlay-padding:          1.25rem !default;
 
@@ -124,11 +129,11 @@ $enable-print-styles:       true !default;
 // adapting to different screen sizes, for use in media queries.
 
 $grid-breakpoints: (
-  xs: 0,
-  sm: 576px,
-  md: 768px,
-  lg: 992px,
-  xl: 1200px
+	  xs: 0,
+	  sm: 576px,
+	  md: 768px,
+	  lg: 992px,
+	  xl: 1200px
 ) !default;
 
 // @include _assert-ascending($grid-breakpoints, "$grid-breakpoints");

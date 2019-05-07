@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-http",
+  "_from": "cordova-plugin-http@^1.2.0",
   "_id": "cordova-plugin-http@1.2.0",
   "_inBundle": false,
   "_integrity": "sha1-hUqixhWMCa7FzBOhHObahcnEqhc=",
   "_location": "/cordova-plugin-http",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "cordova-plugin-http",
+    "raw": "cordova-plugin-http@^1.2.0",
     "name": "cordova-plugin-http",
     "escapedName": "cordova-plugin-http",
-    "rawSpec": "",
+    "rawSpec": "^1.2.0",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^1.2.0"
   },
   "_requiredBy": [
     "#USER",
@@ -21,7 +21,7 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-http/-/cordova-plugin-http-1.2.0.tgz",
   "_shasum": "854aa2c6158c09aec5cc13a11ce6da85c9c4aa17",
-  "_spec": "cordova-plugin-http",
+  "_spec": "cordova-plugin-http@^1.2.0",
   "_where": "/var/www/html/vue/happyreply/happyreply.v1",
   "author": {
     "name": "Wymsee"

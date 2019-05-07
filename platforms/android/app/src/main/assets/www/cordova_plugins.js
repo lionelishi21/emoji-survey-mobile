@@ -50,11 +50,19 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-sqlcipher-adapter.SQLitePlugin",
-    "file": "plugins/cordova-sqlcipher-adapter/www/SQLitePlugin.js",
-    "pluginId": "cordova-sqlcipher-adapter",
+    "id": "cordova-plugin-keyboard.keyboard",
+    "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+    "pluginId": "cordova-plugin-keyboard",
     "clobbers": [
-      "SQLitePlugin"
+      "window.Keyboard"
+    ]
+  },
+  {
+    "id": "cordova-plugin-qrscanner.QRScanner",
+    "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
+    "pluginId": "cordova-plugin-qrscanner",
+    "clobbers": [
+      "QRScanner"
     ]
   },
   {
@@ -255,11 +263,35 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-keyboard.keyboard",
-    "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
-    "pluginId": "cordova-plugin-keyboard",
+    "id": "cordova-plugin-camera.Camera",
+    "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+    "pluginId": "cordova-plugin-camera",
     "clobbers": [
-      "window.Keyboard"
+      "Camera"
+    ]
+  },
+  {
+    "id": "cordova-plugin-camera.CameraPopoverOptions",
+    "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+    "pluginId": "cordova-plugin-camera",
+    "clobbers": [
+      "CameraPopoverOptions"
+    ]
+  },
+  {
+    "id": "cordova-plugin-camera.camera",
+    "file": "plugins/cordova-plugin-camera/www/Camera.js",
+    "pluginId": "cordova-plugin-camera",
+    "clobbers": [
+      "navigator.camera"
+    ]
+  },
+  {
+    "id": "cordova-plugin-camera.CameraPopoverHandle",
+    "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
+    "pluginId": "cordova-plugin-camera",
+    "clobbers": [
+      "CameraPopoverHandle"
     ]
   }
 ];
@@ -270,15 +302,16 @@ module.exports.metadata =
   "cordova-plugin-kiosk": "0.2",
   "cordova-plugin-network-information": "2.0.1",
   "cordova-plugin-splashscreen": "5.0.2",
-  "cordova-plugin-sqlite-2": "1.0.4",
+  "cordova-plugin-sqlite-2": "1.0.6",
   "cordova-plugin-websql": "0.0.10",
-  "cordova-plugin-whitelist": "1.3.1",
-  "cordova-sqlcipher-adapter": "0.1.12-rc2",
-  "uk.co.workingedge.cordova.plugin.sqliteporter": "1.0.5",
+  "cordova-plugin-whitelist": "1.3.3",
+  "cordova-plugin-keyboard": "1.2.0",
+  "cordova-plugin-qrscanner": "2.6.0",
+  "uk.co.workingedge.cordova.plugin.sqliteporter": "1.1.0",
   "cordova-plugin-sslcertificatechecker": "6.0.0",
   "cordova-plugin-file": "6.0.1",
   "cordova-plugin-http": "1.2.0",
-  "cordova-plugin-keyboard": "1.2.0"
+  "cordova-plugin-camera": "4.0.3"
 };
 // BOTTOM OF METADATA
 });

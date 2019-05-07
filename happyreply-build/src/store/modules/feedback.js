@@ -2,7 +2,6 @@ import api from '../../api'
 
 const state = {
   feedbacks: [],
-  //Default background image
   image: 'static/survey-themes/breeze-cotton.jpg',
   vide_link: '',
   youtube: '',
@@ -18,11 +17,11 @@ const getters = {
 
 const actions = {
     getBackgroundImage({commit, dispatch}, id) {
-      api.getBackgroundImage(id)
+      api.getBackgroundImage
         .then( response => {
             var image = response.body
             if (image != "") {
-              commit('setSurveyBackgrounImage', 'https://app.happyreply.com/'+image )
+              commit('setSurveyBackgrounImage', 'https://jncb.happyreply.com/'+image )
             }
         })
     },
@@ -39,6 +38,7 @@ const actions = {
       dispatch ("createFeedbackTable", db)
       api.getSurveyTitle(userId)
         .then(response => {
+          console.log(response)
           return response.json()
         }).then( response => {
           dispatch('saveFeedbackInfoToDataBase', { response, db })
@@ -47,12 +47,16 @@ const actions = {
     saveFeedbackInfoToDataBase ({commit}, response) {
       var res = response['response']
       var db = response['db']
-      for (let key in res) {
-        db.transaction(function (tx) {
-          var sql = 'INSERT INTO feedbacks (feedback_id, feedback_title, feedback_desc, feedback_slug) VALUES (?,?,?,?)';
-          tx.executeSql(sql, [ res[key]['feedback_id'], res[key]['feedback_title'], res[key]['feedback_description'],res[key]['feedback_slug']]);
-        })
-      }
+      // for (let key in res) {
+      //   db.transaction(function (tx) {
+      //     var sql = 'INSERT INTO feedbacks (feedback_id, feedback_title, feedback_desc, feedback_slug) VALUES (?,?,?,?)';
+      //     tx.executeSql(sql, [ res[key]['feedback_id'], res[key]['feedback_title'], res[key]['feedback_description'],res[key]['feedback_slug']]);
+      //   })
+      // }
+      db.transaction(function (tx) {
+        var sql = 'INSERT INTO feedbacks (feedback_id, feedback_title, feedback_desc, feedback_slug) VALUES (?,?,?,?)';
+        tx.executeSql(sql, [ res['feedback_id'], res['feedback_title'], res['feedback_description'],res['feedback_slug']]);
+      })
     },
     getFeedbackTitleFromSqlLite ({commit}, db) {
       db.transaction(function (tx) {
@@ -82,7 +86,6 @@ const actions = {
              var youtube = true
              commit('setYoutubeVideoLink', videoId)
              commit('setVideoType', youtube)
-            
           }
         }, response => {
             this.youtube = false

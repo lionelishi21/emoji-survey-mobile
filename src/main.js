@@ -14,19 +14,19 @@ import Survey from './layouts/Survey.vue'
 import Surveys from './layouts/Surveys.vue'
 import Dashboard from './layouts/Dashboard.vue'
 import Login from './components/Login.vue'
-import Home from './layouts/Home.vue'
+import Home from './layouts/home/index.vue'
 import Response from './layouts/Responses'
 import Completed from './components/Completed'
-import Intro from './components/Intro'
+import Intro from './layouts/survey/start.vue'
 import Intro2 from './components/Intro2'
+import Settings from './layouts/settings/index.vue'
 import store  from './store/';
 import 'font-awesome/css/font-awesome.css'
-// import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.css'
 import auth from './auth/auth'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 import Notifications from 'vue-notification'
 import VueYoutube from 'vue-youtube'
-import VueUp from 'vueup'
 import VModal from 'vue-js-modal'
 import Vuetify from 'vuetify'
 import ResponseTheme from './response-main'
@@ -37,12 +37,15 @@ import style from "vue-touch-keyboard/dist/vue-touch-keyboard.css"; // load defa
 import VueQrcodeReader from 'vue-qrcode-reader'
 import Qrscanner from './layouts/Scanner.vue'
 import NxCard from 'nx-card'
+import VueCordova from 'vue-cordova'
+
 
 // Components
 // import './components'
 
 // Plugins
 // import './plugins'
+Vue.use(VueCordova)
 Vue.use(NxCard)
 Vue.use(VueQrcodeReader)
 Vue.use(VueTouchKeyboard);
@@ -61,9 +64,11 @@ Vue.use(VueYoutube)
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
 Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
-Vue.http.options.root = 'https://jifs.happyreply.com'
+Vue.http.options.root = localStorage.getItem('url')
 Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
 
+
+import Starting from './pages/getstarted.vue'
 export var router = new VueRouter({
 routes: [
      {
@@ -71,6 +76,7 @@ routes: [
       name: 'Login',
       component: Login
     },
+    { path: '/started', name: 'Starting', component: Starting },
     {
       path: '/dashboard',
       component: Dashboard,
@@ -80,7 +86,12 @@ routes: [
         { path: '/response', name:'Response', component: Response },
         {
           path: '/qrscanner', name: 'QrcodeScanner', component: Qrscanner
-        }
+        },
+        {
+          path: '/settings',
+          name: 'Settings',
+          component: Settings
+        },
         // { path: '/settings', component: SurveyStart },
       ]
     },
@@ -95,7 +106,8 @@ routes: [
       component: Completed
     },
     { path: '/intro/:id', name: 'Intro', component: Intro },
-    { path: '/intro2/:id', name: 'Intro2', component: Intro2 }
+  
+    // { path: '/intro2/:id', name: 'Intro2', component: Intro2 }
   ]
 });
 

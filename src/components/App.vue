@@ -10,7 +10,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 
- @import '../styles/index.scss';
+ // @import '../styles/index.scss';
 
 .fade-enter-active, .fade-leave-active {
   transition-property: opacity;

@@ -1,7 +1,7 @@
 <template>
 <v-app>
 <div>
-	 <v-snackbar
+   <v-snackbar
       :timeout="timeout"
       :top="y === 'top'"
       :bottom="y === 'bottom'"
@@ -14,25 +14,36 @@
       {{ text }}
       <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
     </v-snackbar>
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
-    <h1 class="h2">Offline Responses</h1>
-  </div>
-  <v-row>
-   <v-card class="text-center">
-    <v-card-text>
-      <p class="text-md-center display-4">{{ResponseAmount}}</p>
-      <p class="text-md-center"> Offline Respponse</p>
-      <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
-          Post Response
-        <v-icon right dark>cloud_upload</v-icon>
-     </v-btn>
-     <v-btn class="btn btn-default" @click="exportResponseToText()">
-     	Export Responses
-     </v-btn>
-    </v-card-text>
-  </v-card>
-  </v-row>
  </div>
+  <v-container
+      fluid
+      grid-list-lg
+    >
+	  <v-layout row wrap>
+	    <v-flex xs4>
+	    	 <v-row>
+			   <v-card class="text-center">
+			   	 <v-card-title primary-title>
+	              <div>
+	                <div class="headline">Offline Responses</div>
+	              </div>
+	            </v-card-title>
+			    <v-card-text>
+			      <p class="text-md-center display-4">{{ResponseAmount}}</p>
+			      <p class="text-md-center"> Offline Respponse</p>
+			      <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
+			          Post Response
+			        <v-icon right dark>cloud_upload</v-icon>
+			     </v-btn>
+			     <v-btn class="btn btn-default" @click="exportResponseToText()">
+			     	Export Responses
+			     </v-btn>
+			    </v-card-text>
+			  </v-card>
+			 </v-row>
+	    </v-flex>
+	  </v-layout>
+  </v-container>
 </v-app>
 </template>
 <script>

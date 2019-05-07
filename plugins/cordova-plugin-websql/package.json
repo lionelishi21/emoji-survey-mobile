@@ -1,19 +1,19 @@
 {
-  "_from": "cordova-plugin-websql",
+  "_from": "cordova-plugin-websql@0.0.10",
   "_id": "cordova-plugin-websql@0.0.10",
   "_inBundle": false,
   "_integrity": "sha1-vsKqiRDgU9/rL8O5+tQINSVBqMA=",
   "_location": "/cordova-plugin-websql",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "version",
     "registry": true,
-    "raw": "cordova-plugin-websql",
+    "raw": "cordova-plugin-websql@0.0.10",
     "name": "cordova-plugin-websql",
     "escapedName": "cordova-plugin-websql",
-    "rawSpec": "",
+    "rawSpec": "0.0.10",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "0.0.10"
   },
   "_requiredBy": [
     "#USER",
@@ -21,8 +21,8 @@
   ],
   "_resolved": "https://registry.npmjs.org/cordova-plugin-websql/-/cordova-plugin-websql-0.0.10.tgz",
   "_shasum": "bec2aa8910e053dfeb2fc3b9fad408352541a8c0",
-  "_spec": "cordova-plugin-websql",
-  "_where": "/var/www/html/vue/happyreply",
+  "_spec": "cordova-plugin-websql@0.0.10",
+  "_where": "/var/www/html/vue/happyreply/happyreply.v1",
   "author": {
     "name": "Microsoft Open Technologies Inc"
   },

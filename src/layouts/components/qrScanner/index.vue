@@ -4,7 +4,7 @@
        <div class="row">
          <div class="col-md-4"></div>
          <div class="col-md-4">
-             <qrcode-stream v-if="scanner" @decode="onDecode" @init="onInit" />
+             <qrcode-stream @decode="onDecode" />
          </div>
          <div class="col-md-4"></div>
        </div>
@@ -13,7 +13,7 @@
         @click="showQrScanner()"
         color="pink"
         absolute
-        bottom
+        top
         right
         dark
         fab
