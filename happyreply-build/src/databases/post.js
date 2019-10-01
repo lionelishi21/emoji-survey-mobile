@@ -97,13 +97,13 @@ export default {
              var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
              db.transaction(this.dropResponsesDatabase, this.nullHandler);
           }
-          // this.button.loading = false
           this.$router.push({ name: 'Intro', params: { id: fbId } })
+
         }, response => {
-           console.log(response)
+
           this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray,  emailArray, numberArray, shorttextArray, fbId, db)
-          // this.button.loading = false;
           this.$router.push({ name: 'Intro', params: { id: fbId } })
+
         });
     },
 

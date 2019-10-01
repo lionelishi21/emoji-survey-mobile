@@ -31,7 +31,7 @@
           content-class="dropdown-menu"
           offset-y
           transition="slide-y-transition">
-          <!-- <router-link
+          <router-link
             v-ripple
             slot="activator"
             class="toolbar-items"
@@ -42,24 +42,11 @@
               overlap
             >
               <template slot="badge">
-                {{ notifications.length }}
+                <!-- {{ notifications.length }} -->
               </template>
               <v-icon color="tertiary">notification_important</v-icon>
             </v-badge>
-          </router-link> -->
-          <v-card>
-            <v-list dense>
-              <v-list-tile
-                v-for="notification in notifications"
-                :key="notification"
-                @click="onClick"
-              >
-                <v-list-tile-title
-                  v-text="notification"
-                />
-              </v-list-tile>
-            </v-list>
-          </v-card>
+          </router-link>
         </v-menu>
        <!--  <router-link
           v-ripple
@@ -85,6 +72,9 @@ export default {
 	      'Another One'
 	    ],
    	}
+   },
+   methods: {
+     
    }
 }
 </script>

@@ -1,6 +1,7 @@
 <template>
 <v-app>
 <div>
+   <snackbar-cmp></snackbar-cmp>
    <v-snackbar
       :timeout="timeout"
       :top="y === 'top'"
@@ -12,7 +13,7 @@
       v-model="snackbar"
     >
       {{ text }}
-      <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
+      <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>l;.
     </v-snackbar>
  </div>
   <v-container
@@ -30,12 +31,12 @@
 	            </v-card-title>
 			    <v-card-text>
 			      <p class="text-md-center display-4">{{ResponseAmount}}</p>
-			      <p class="text-md-center"> Offline Respponse</p>
-			      <v-btn :loading="loading" :disabled="loading" v-if="checkResponses()" color="blue-grey" class="white--text"@click="postResponseOffline()">
-			          Post Response
+			      <p class="text-md-center"> Offline Respponses</p>
+			     <v-btn :loading="loading" :disabled="loading" v-if="ResponseAmount" color="blue-grey" class="white--text"@click="postResponseOffline()">
+			          Post Responses
 			        <v-icon right dark>cloud_upload</v-icon>
 			     </v-btn>
-			     <v-btn class="btn btn-default" @click="exportResponseToText()">
+			     <v-btn class="btn btn-default" @click="exportResponseToText()" v-if="ResponseAmount">
 			     	Export Responses
 			     </v-btn>
 			    </v-card-text>
@@ -47,11 +48,11 @@
 </v-app>
 </template>
 <script>
-import { mapGetters } from 'vuex';
-import VueLadda from 'vue-ladda'
+import { mapGetters, mapMutations } from 'vuex';
+import SnackbarCmp from '../components/Snackbar.vue'
 export default {
 	components: {
-		 'vue-ladda': VueLadda,
+	   SnackbarCmp
 	},
     data() {
       return {
@@ -78,6 +79,7 @@ export default {
 	          'dataStyle': 'expand-left',
 	          progress: 0,
           },
+          snackName: '',
       	  response_count: 0,
           database: 'SurveyDb',
           version: '1.0',
@@ -101,162 +103,92 @@ export default {
 	  },
 	 computed: {
       ...mapGetters([
-      	'feedbackInfo',
-        'GetAllResponses',
-        'ResponseAmount'
+	      	'feedbackInfo',
+	        'GetAllResponses',
+	        'ResponseAmount'
       ]),
+     checkResponses() {
+      	   if (this.ResponseAmount < 1) {
+      		   return false
+      		}
+      		return true;
+       }
     },
       methods: {
-      	    init() {
-		  	 	 var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-		  	 	 this.db = db
-		      	 var user_id = localStorage.getItem('user_id')
-		      	 this.$store.dispatch('getResponses', db)
-		      	 this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
-	      	},
-	      	checkResponses() {
-	      		if (this.ResponseAmount < 1) {
-	      			return false
-	      		}
-	      		return true;
-	      	},
-	      	exportResponseToText() {
-	      		var response_loading = true
-	      		this.doc = true
-	      		this.postResponseOffline();
-	      	},
-	      	postResponseOffline () {
-	         this.loading = true
-	         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-		     db.transaction(this.getResponsesFromSqlite)
-		     this.loading = false;
-		    },
-		    getResponsesFromSqlite (tx) {
-		      tx.executeSql('SELECT * FROM responses;', [], this.renderResponses1)
-		    },
-			renderResponses1 (tx, results) {
-		      var len = results.rows.length
-		      console.log('response '+len)
-		      for (var i = 0; i < len; i++) {
-		        var mcArray = ''
-		        var matrixArray = ''
-		        var sliderArray = ''
-		        var rangeArray = ''
-		        var commentArray = ''
-		        var emailArray = ''
-		        var numberArray = ''
-		        var shorttextArray = ''
 
-		        if (results.rows.item(i).multiple_choice != '{}') {
-		          mcArray = JSON.parse(results.rows.item(i).multiple_choice)
-		        }
+       /**
+        * z
+        * @return {[type]} [description]
+        */
+  	   init() {
+  	 	  var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+      	  var user_id = localStorage.getItem('user_id')
+      	  this.$store.dispatch('getResponses', db)
+          this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
+      	},
 
-		        if (results.rows.item(i).matrix != '{}') {
-		          matrixArray = JSON.parse(results.rows.item(i).matrix)
-		        }
+      	/**
+      	 * [exportResponseToText description]
+      	 * @return {[type]} [description]
+      	 */
+      	exportResponseToText() {
+      		var response_loading = true
+      		this.doc = true
+      		this.postResponseOffline();
+      	},
 
-		        if (results.rows.item(i).slider != '{}') {
-		          sliderArray = JSON.parse(results.rows.item(i).slider)
-		        }
+      	/**
+      	 * ********************************************************
+      	 * This function post response that alread store online
+      	 * *******************************************************
+      	 * @return {[type]} [description]
+      	 * *******************************************************
+      	 */
+	    postResponseOffline () {
+	     	var params = {
+	     	 	database: this.database,
+	     	 	version: this.version,
+	     	 	dbDisplay: this.dbDisplay,
+	     	 	maxSize: this.maxSize,
+	     	 	doc: false
+	     	}
+	       	this.$store.dispatch('postResponseOffline', params)
+		 },
 
-		        if (results.rows.item(i).range != '{}') {
-		          rangeArray = JSON.parse(results.rows.item(i).range)
-		        }
+		 /**
+		  * *****************************************************
+		  * Save File to csv 
+		  * *****************************************************
+		  * [SaveFileToTable description]
+		  */
+		 SaveFileToTable() {
+		 	 var params = {
+	     	 	database: this.database,
+	     	 	version: this.version,
+	     	 	dbDisplay: this.dbDisplay,
+	     	 	maxSize: this.maxSize,
+	     	 	doc: true
+	     	 }
+	       	this.$store.dispatch('postResponseOffline', params)
+		 },
 
-		        if (results.rows.item(i).range != '{}') {
-		          commentArray = JSON.parse(results.rows.item(i).suggestion)
-		        }
+		 /**
+		  * [snackTime description]
+		  * @param  {[type]} snack [description]
+		  * @return {[type]}       [description]
+		  */
+	    snackTime: function (snack) {
+	      this.setSnack(this.snackName)
+	      // this.$router.push('/')
+	    },
 
-		        if (results.rows.item(i).range != '{}') {
-		          emailArray = JSON.parse(results.rows.item(i).email)
-		        }
-
-		        if (results.rows.item(i).range != '{}') {
-		          numberArray = JSON.parse(results.rows.item(i).number)
-		        }
-
-		         if (results.rows.item(i).range != '{}') {
-		          shorttextArray = JSON.parse(results.rows.item(i).shorttext)
-		        }
-
-		        var feedbackId = results.rows.item(i).feedback_id;
-		        var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-		       
-		        if (this.doc == true) {
-		        	this.saveToLocalFile(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray)
-		        }  else {
-		        	 this.newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, feedbackId, true, db)
-		        }
-		      }
-		    },
-		    saveToLocalFile(json1, json2, json3, json4 , json5 , json6, json7, json8) {
-			    var finalObj = $.merge(json1, json2, json3, json4 , json5 , json6, json7, json8);
-			    window.localStorage.setItem('responses', JSON.stringify(finalObj))
-			    this.saveFile();
-		    },
-		    saveFile() {
-		    	var data = window.localStorage.getItem('responses')
-		    	const blob = new Blob([data],{ type: 'text/plain'})
-		    	const e = document.createEvent('MouseEvents');
-		        var a = document.createElement('a');
-			    a.download = "Happyreply.json";
-			    a.href = window.URL.createObjectURL(blob);
-			    a.dataset.downloadurl = ['text/json', a.download, a.href].join(':');
-			    e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-			    a.dispatchEvent(e);
-		    	this.doc = false
-		    },
-		    newSaveResponse (multpleChoice, matrix, slider, range, comments,number, email, shorttext, fbId, db) {
-		        this.newPostResponse(multpleChoice, matrix, slider, range, comments, number, email, shortext, fbId, false, db)
-		    },
-		    newPostResponse(mcArray, matrixArray, sliderArray, rangeArray, commentArray, emailArray, numberArray, shorttextArray, fbId, offline, db) {
-		      var action = 'https://jifs.happyreply.com/post-survey-responses2'
-		      var csrfToken = $('meta[name=csrf-token]').attr('content')
-		      // this.loadButton.loading = true
-		      // this.button.loading = true;
-		      this.$http.post(action,
-		        { params:
-		           {
-		              feedback_id: fbId,
-		              mc: mcArray,
-		              matrix: matrixArray, 
-		              slider: sliderArray,
-		              range: rangeArray,
-		              comment: commentArray,
-		              email: emailArray,
-		              number: numberArray,
-		              shorttext: shorttextArray
-
-		               }
-		           },
-		         {
-		          headers: {
-		            'X-CSRF-TOKEN': csrfToken
-		          }
-		        })
-		        .then(response => {
-		        	 console.log(response)
-		             var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-		             db.transaction(this.dropResponsesDatabase);
-		             this.text = 'Response has been succesfully post to the servery'
-                     this.snackbar = true;
-		             this.loading = false
-		        }, response => {
-		        	 console.log(response)
-		        	//TODO: Snackbar goes here
-		            this.text = 'Responses did not post, something wen wrong'
-                    this.snackbar = true;
-		        	this.loading = false
-		        	this.init()
-		        });
-		    },
-		    exportResponseFromSqlite() {
-		    	window
-		    },
-		    dropResponsesDatabase (tx) {
-		      console.log('dropping response table after upload to database')
-		      tx.executeSql('DROP TABLE IF EXISTS responses')
-		    },
-      }   	
+	    /**
+	     * [setSnack description]
+	     * @type {String}
+	     */
+	    ...mapMutations({
+	      setSnack: 'snackbar/setSnack'
+	    })
+      }
 }
 </script>

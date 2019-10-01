@@ -22,13 +22,13 @@
         <h4><i>{{feedbackInfo[0].feedback_desc}}</i></h4>
         <!-- <h4><i>{{ getYoutubeStatus }}</i></h4> -->
         <hr>
-        <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-intro">Take Survey</button>
+        <!-- <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-intro">Take Survey</button> -->
     </div>
-     <v-btn  @click="exitKioasMode()"
+    <!--  <v-btn  @click="exitKioasMode()"
         color="red" red dark bottom fixed
         right fab >
          <v-icon>help</v-icon>
-      </v-btn>
+      </v-btn> -->
 </section>
 </div>
 </template>

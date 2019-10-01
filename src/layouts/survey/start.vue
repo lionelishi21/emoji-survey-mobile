@@ -19,20 +19,31 @@
     </youtube>
     <div class="intro">
         <h1>{{feedbackInfo.name}}</h1>
-        <h4><i>{{feedbackInfo.desc}}</i></h4>
+        <h4 dark class="color--white"><i>{{feedbackInfo.desc}}</i></h4>
         <h4><i>{{ getYoutubeStatus }}</i></h4>
         <v-divider dark></v-divider>
-        <button @click="goToSurvey()" class="survey-btn btn-red btn-survey-intro">
-          <img :src="'static/emoji/thumpsup.gif'" class="emoji-img nps-size">
-            Begin Survey
-         <img :src="'static/emoji/thumpsup.gif'" class="emoji-img nps-size">
-        </button>
+          <v-btn
+            style="width: auto; height: auto; border-radius: 100px"
+            large
+             color="red"
+             class="white--texts survey-btn btn-red btn-survey-intro" 
+            @click="goToSurvey()"
+           >
+           <img :src="'static/emoji/thumpsup.gif'" class="emoji-img nps-size">
+           <h2>Begin Survey</h2>
+           <img :src="'static/emoji/thumpsup.gif'" class="flip-emoji emoji-img nps-size">
+    </v-btn>
     </div>
      <v-btn  @click="exitKioasMode()"
         color="red" red dark bottom fixed
         right fab >
          <v-icon>help</v-icon>
       </v-btn>
+<!--        <v-btn  @click="disableKioskMode()"
+        color="red" red dark bottom fixed
+        left fab >
+         Kiosk
+      </v-btn> -->
 </section>
 </div>
 </template>
@@ -94,6 +105,9 @@ export default {
     this.getIntroVideo(feedback_id)
   },
   methods: {
+     disableKioskMode() {
+        KioskPlugin.exitKiosk();
+     },
      playing() {
        console.log('\o/ we are watching!!!')
      },
@@ -148,6 +162,16 @@ export default {
     z-index: 1000;
     top: 20px;
     right: 20px;
+}
+
+.survey-btn {
+
+  display: relative !important;
+}
+
+.flip-emoji {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 </style>
 

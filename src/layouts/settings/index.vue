@@ -35,7 +35,7 @@
           </v-flex>
            <v-flex xs2 sm2>
               <v-card-title>
-              <v-btn @click="save()" large class="white--text red">Save</v-btn>
+              <v-btn @click="setTenantData()" large class="white--text red">Save</v-btn>
             </v-card-title>
           </v-flex>
         </v-layout>
@@ -60,8 +60,8 @@
         invites: false,
 
         company: '',
-        url: '.iledgers.io',
-        url2: 'http://'
+        url: '.happyreply.com',
+        url2: 'https://'
       }
     },
     created() {
@@ -73,21 +73,22 @@
       }
     },
     methods: {
-      save () {
-        localStorage.setItem("url", this.address)
-        localStorage.setItem('company', this.company_url)
-        this.logout();
+      setTenantData() {
+        this.dialog = true
+        var self = this
+         setTimeout(function() {
+            self.dialog = false
+            localStorage.setItem("url", self.address)
+            localStorage.setItem('company', self.company_url)
+            self.logoutUser();
+         }, 1000)
       },
-      logout(){
-         var self = this
-         this.dialog = true
-         setTimeout(function(){
-           this.dialog = false
-           // var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
-           // this.$store.dispatch('logoutUser', db)
-           // location.reload();
-         }, 1000);
-      },
+      logoutUser(){
+         var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+         this.$store.dispatch('logoutUser', db)
+         this.$router.push({name: 'Login'});
+         location.reload();
+      }
     }
   }
 </script>

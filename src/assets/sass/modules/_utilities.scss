@@ -11,10 +11,12 @@
 		h2 {
 			font-family: $font-family-nunito;
 			font-weight: 600;
+			color: black;
 		}
 
 		h3 {
 			// font-family: 'Open Sans';
+		  color: black ;
 		}
 	} 
 
@@ -51,7 +53,8 @@
 }
 
 .video_overlay {
-	background-color: rgba(0, 0, 0, 0.8);
+	color: grey !important;
+	background-color: rgba(238, 238, 238, 0.9);
 }
 	
 

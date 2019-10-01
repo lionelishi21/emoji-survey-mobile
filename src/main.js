@@ -13,7 +13,7 @@ import App from './components/App.vue'
 import Survey from './layouts/Survey.vue'
 import Surveys from './layouts/Surveys.vue'
 import Dashboard from './layouts/Dashboard.vue'
-import Login from './components/Login.vue'
+
 import Home from './layouts/home/index.vue'
 import Response from './layouts/Responses'
 import Completed from './components/Completed'
@@ -38,8 +38,11 @@ import VueQrcodeReader from 'vue-qrcode-reader'
 import Qrscanner from './layouts/Scanner.vue'
 import NxCard from 'nx-card'
 import VueCordova from 'vue-cordova'
+// import VueEcho from 'vue-echo-laravel';
+// window.io = require('socket.io-client')
 
-
+import Keyboard from "simple-keyboard";
+import "simple-keyboard/build/css/index.css";
 // Components
 // import './components'
 
@@ -57,9 +60,15 @@ Vue.use(VModal)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
+
 // this a test
 Vue.use(Notifications)
 Vue.use(VueYoutube)
+// Vue.use(VueEcho, {
+//     broadcaster: 'socket.io',
+//     host: `http://${localStorage.getItem('tenant')}.iledgers.io:6001`,
+// });
+
 
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
@@ -67,8 +76,9 @@ Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_
 Vue.http.options.root = localStorage.getItem('url')
 Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
 
+import Login from './layouts/login/index.vue';
+import Starting from './pages/getstarted.vue';
 
-import Starting from './pages/getstarted.vue'
 export var router = new VueRouter({
 routes: [
      {
@@ -106,7 +116,6 @@ routes: [
       component: Completed
     },
     { path: '/intro/:id', name: 'Intro', component: Intro },
-  
     // { path: '/intro2/:id', name: 'Intro2', component: Intro2 }
   ]
 });
@@ -128,3 +137,15 @@ new Vue({
   store: store,
   render: h => h(App)
 })
+
+
+
+export const state = () => ({
+  snack: ''
+})
+
+export const mutations = {
+  setSnack (state, snack) {
+    state.snack = snack
+  }
+}

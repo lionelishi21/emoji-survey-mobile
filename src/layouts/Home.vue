@@ -154,17 +154,6 @@ export default {
          this.$router.push({name: 'Login'});
          location.reload();
       },
-
-      // createDatabases(db) {
-      //     db.transaction(function (tx) {
-      //       tx.executeSql(`CREATE TABLE IF NOT EXISTS questions (id INTEGER NOT NULL PRIMARY KEY UNIQUE, 
-      //         feedback_question TEXT NOT NULL, type INTEGER NOT NULL, feedback_id INTEGER NOT NULL, answer_count INTEGER)`, [])
-      //       tx.executeSql(`CREATE TABLE IF NOT EXISTS feedbacks (feedback_id INTEGER,
-      //       feedback_title TEXT, feedback_desc TEXT, feedback_slug Text)`, [])
-      //       tx.executeSql(`CREATE TABLE IF NOT EXISTS answers (id INTEGER NOT NULL,
-      //         answer TEXT NOT NULL, emoji TEXT, feedback_id INTEGER NOT NULL,  question_id INTEGER NOT NULL)`, [])
-      //     })
-      // },
       refresh(loaded) {
           location.reload();
       },
@@ -177,8 +166,8 @@ export default {
          this.$router.push({name: 'Intro',  params: { id: this.feedback_slug } })
       },
       loadSurveys() {
-        this.loading = true
 
+        this.loading = true
         if (this.online == false) {
             this.text = 'Internet connection is unavailable'
             this.snackbar = true;

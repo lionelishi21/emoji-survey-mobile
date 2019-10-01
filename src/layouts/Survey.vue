@@ -1,4 +1,4 @@
-<template>
+x`<template>
   <div>
   <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
     <v-container fill-height>
@@ -20,12 +20,12 @@
           </v-card-text>
         </v-card>
       </v-dialog>
-    <img :src="getBgImage" id="youtube_media" v-show="showBackgroundImage()" >
+   <img :src="getBgImage" id="youtube_media" v-show="showBackgroundImage()" >
     <transition-group name="fadeLeft">
       <section  v-for="(q, key) in  getAllQuestions" v-show="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'">
         <!-- <qrscanner-cmp></qrscanner-cmp> -->
-          <div v-if="showMultipleChoiceQuestions(q.type)" :key="key">
-              <div class="question-wrapper">
+          <div v-if="showMultipleChoiceQuestions(q.type)" :key="key" class="card">
+              <div class="question-wrapper text-center card-body">
                   <div class="row">
                     <div class="col-md-12">
                         <div class="m-b-5">
@@ -38,8 +38,8 @@
                    <div class="row">
                       <div v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id == q.id" 
                       :class="changeClass(q.answer_count)">
-                        <div :class="'survey-card answer_content '+cardSelect(mc_responses[q.id], answer.id)" :id="'card_select_'+answer.id">
-                          <div class="survey-card-body text-center"  @click="triggerClicks(answer.id)" style="z-index: 1000;">
+                        <div :class="'answer_content '+cardSelect(mc_responses[q.id], answer.id)" :id="'card_select_'+answer.id">
+                          <div class="text-center"  @click="triggerClicks(answer.id)" style="z-index: 1000;">
                              <label class="img-label text-center m-r-20 " :id="answer.id">
                                       <input
                                       style="z-index: -10000"
@@ -186,7 +186,6 @@
                                   solo
                                   id="textArea"
                                   @focus="showFocus"
-                                  readonly
                                   autofocus
                                   :name="'answers_comment['+q.id+']'"
                                   v-model="comments_response[q.id]"
@@ -195,7 +194,6 @@
                                   label="Solo textarea"
                                   value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
                                 ></v-textarea>
-`                                <vue-touch-keyboard id="keyboard1"  :layout="kbCustom" :cancel="hide" :accept="accept" :input="input" :next="next " :change="manualDispatch"/>
                                 <span style="color:white">Click above to enter your comment.</span>
                                  <img class="img-responsive emoji-img" src="static/emoji/veryhappy.svg" style="width: 30px">
                             </div>
@@ -293,7 +291,6 @@
                                    <v-text-field
                                     @focus="showFocus"
                                     autofocus
-                                     readonly
                                     v-model="shorttext_response[q.id]"
                                     class="c-white w-bg"
                                     :rules="[rules.counter]"
@@ -302,8 +299,7 @@
                                     box
                                   >
                                  </v-text-field>
-                                <br>
-                                 <vue-touch-keyboard id="keyboard"  layout="normal" :cancel="hide" :accept="accept" :input="input" :next="next " :change="manualDispatch"/>
+                                   <br>
                                   <span style="color:white">Click above to enter your full name.</span>
                                    <img class="img-responsive emoji-img" 
                                      src="static/emoji/veryhappy.svg" 
@@ -330,12 +326,12 @@
                            <div class="survey-card-body text-center">
                               <div class="form-group">
                                  <v-text-field
+                                     autofocus
                                     @focus="showFocus"
-                                    autofocus
                                     v-model="number_response[q.id]"
                                     class="c-white w-bg"
                                     box
-                                     readonly
+                                    readonly
                                     :rules="[rules.phonenumber]"
                                     placeholder="(876) 999-9999"
                                     :mask="mask" 
@@ -343,8 +339,7 @@
 
                                  </v-text-field>
                                  <br>
-                                   <vue-touch-keyboard id="keyboard"  layout="numeric" :cancel="hide" :accept="accept" :input="input" :next="next " :change="manualDispatch"/>
-                                  <span style="color:white">Click above to enter your phone number.</span>
+                                   <span style="color:white">Click above to enter your phone number.</span>
                                    <img class="img-responsive emoji-img"  src="static/emoji/veryhappy.svg" style="width: 30px">
                               </div>
                             </div>
@@ -378,7 +373,6 @@
                                     >
                                  </v-text-field>
                                   <br>
-                                  <vue-touch-keyboard id="keyboard"  :layout="kbCustom" :cancel="hide" :accept="accept" :input="input" :next="next " :change="manualDispatch"/>
                                  <span style="color:white">Click above to enter your Email.</span>
                                  <img class="img-responsive emoji-img"  src="static/emoji/veryhappy.svg" style="width: 30px">
                               </div>
@@ -388,7 +382,7 @@
                 </div>
         </div>
 
-          <div class="row">
+          <div class="row" style="padding-top: 50px">
                <div class="col-md-6">
                  <button @click="backToIntro()" v-if="key == 0" class="survey-btn pull-left btn-red btn-survey-lg">Back to Introduction </button>
                   <button v-else @click="getPrevPage(key)" class="survey-btn pull-left btn-red btn-survey-lg">Previous Question </button>
@@ -440,8 +434,8 @@ import qrscannerCmp from './components/qrScanner/index.vue'
 
 export default {
     mixins: [Post],
-		data() {
-			return {
+    data() {
+      return {
          styleRed: {
                 background: 'red',
             },
@@ -479,7 +473,7 @@ export default {
               "me": { key: "@me.com", text: "@me.com", classes: "email featured"},
           },
           default: [
-              "{@} {gmail} {hotmail} {live} {yahoo_us} {yahoo_br} {mac_us} {me_us}",
+              "{@} {gmail} {hotmail} {live} {yahoo_us} {mac_us} {me_us}",
               "` 1 2 3 4 5 6 7 8 9 0 - = {backspace}",
               "{tab} q w e r t y u i o p [ ] \\",
               "{caps} a s d f g h j k l ; ' {enter}",
@@ -572,13 +566,13 @@ export default {
           email_response: {},
           number_response: {},
           shorttext_response: {},
-  				index: 0,
+          index: 0,
           keytype: false,
-  				count: 0,
-  				questions: null,
+          count: 0,
+          questions: null,
           count_mcq: 0,
           range_count: '',
-  				surveys: '',
+          surveys: '',
           hash: '',
           showSliderQue: false,
           showMatrixQue: false,
@@ -636,7 +630,7 @@ export default {
               }
           }
 
-  			}
+        }
     },
     watch: {
      
@@ -689,7 +683,7 @@ export default {
       Intro,
       'qrscanner-cmp': qrscannerCmp
     },
-  	methods: {
+    methods: {
       manualDispatch () {
           this.input.dispatchEvent(new Event('input', { bubbles: true }));
       },
@@ -1166,7 +1160,17 @@ export default {
          }
       },
       getPrevPage(key) {
-         this.input = null
+        
+
+         if (this.emailValidationOptions() == true) {
+           return 
+         }
+
+         if (this.phoneValidationOptions() == true) {
+           return
+         }
+
+        this.input = null
         this.goback = true
         if (key == 0) {
           this.step = 1;
@@ -1214,8 +1218,8 @@ export default {
            self.animate = false
         }, 2900);
     }
-	 }
-	}
+   }
+  }
 </script>
 
 <style lang="scss">

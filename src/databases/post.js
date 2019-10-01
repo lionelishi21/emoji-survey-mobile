@@ -29,6 +29,7 @@ export default {
       tx.executeSql('DROP TABLE IF EXISTS responses')
     },
     saveOfflineUpdate (multpleChoice, matrix, slider, range, comments, email, number, shorttext, fbId, db) {
+
       var mc = JSON.stringify(multpleChoice)
       var matrixAnswers = JSON.stringify(matrix)
       var sliderAnswers = JSON.stringify(slider)
@@ -51,17 +52,6 @@ export default {
           )
       })
 
-    },
-    postResponse (response, answer_id, question_id, feedback_id, matrix, slider) {
-      console.log('saving to server')
-      this.$http
-        .get('/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)
-        .then(response => {
-          this.success = true;
-          this.connectionStatus = 'true';
-        }, response => {
-          this.success = false;
-        })
     },
     newSaveResponse (multpleChoice, matrix, slider, range, comments, email, number, shorttext, nps, lat = null, lng = null, fbId, db) {
         this.newPostResponse(multpleChoice, matrix, slider, range, comments, email, number, shorttext, nps, lat, lng, fbId, false, db)
@@ -98,15 +88,26 @@ export default {
           console.log(response)
 
           if (offline == true) {
-             var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
+            var  database = 'SurveyDb';
+            var  version = '1.0';
+            var  dbDisplay = 'ServeyDatabase';
+            var maxSize =  '1105535';
+
+             var db = openDatabase(database, version, dbDisplay, maxSize)
              db.transaction(this.dropResponsesDatabase, this.nullHandler);
           }
-          // this.button.loading = false
+
           this.$router.push({ name: 'Intro', params: { id: fbId } })
+
         }, response => {
-           console.log(response)
+
+           var  database = 'SurveyDb';
+           var  version = '1.0';
+           var  dbDisplay = 'ServeyDatabase';
+           var maxSize =  '1105535'
+
+          var db = openDatabase(database, version, dbDisplay, maxSize)
           this.saveOfflineUpdate(mcArray, matrixArray, sliderArray, rangeArray, commentArray,  emailArray, numberArray, shorttextArray, fbId, db)
-          // this.button.loading = false;
           this.$router.push({ name: 'Intro', params: { id: fbId } })
         });
     },
@@ -136,11 +137,22 @@ export default {
         }
 
         resultsArray.push(res)
-        // this.postResponse(response, answer_id, question_id, feedback_id, matrix, slider);
       }
+
       this.$store.commit('addToResponse', resultsArray)
       this.$store.commit('countResponse', len)
     },
+
+    /**
+     * [postResponse1 description]
+     * @param  {[type]} response    [description]
+     * @param  {[type]} answer_id   [description]
+     * @param  {[type]} question_id [description]
+     * @param  {[type]} feedback_id [description]
+     * @param  {[type]} matrix      [description]
+     * @param  {[type]} slider      [description]
+     * @return {[type]}             [description]
+     */
     postResponse1(response, answer_id, question_id, feedback_id, matrix, slider) {
       console.log('saving to server')
       this.$http.get(this.url+'/post-survey-responses?response=' + response + '&answer_id=' + answer_id + '&question_id=' + question_id + '&feedback_id=' + feedback_id + '&matrix=' + matrix + '&slider=' + slider)

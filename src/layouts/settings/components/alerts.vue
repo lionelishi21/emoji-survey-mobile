@@ -1,6 +1,7 @@
 <template>
+
     <v-dialog
-      v-model="alerts"
+      v-model="alert"
       hide-overlay
       persistent
       width="300"
@@ -22,6 +23,6 @@
 </template>
 <script>
 	export default {
-		props: ['alerts', 'messages']
+		props: ['alert', 'messages']
 	}
 </script>

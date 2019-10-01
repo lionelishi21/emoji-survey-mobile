@@ -1,17 +1,9 @@
 <template>
-<div class="">
-    <router-view></router-view>
-</div>
+	<div>
+	    <router-view></router-view>
+	</div>
 </template>
-<script>
-export default {
-
-}
-</script>
 <style lang="scss" scoped>
-
- // @import '../styles/index.scss';
-
 .fade-enter-active, .fade-leave-active {
   transition-property: opacity;
   transition-duration: .25s;

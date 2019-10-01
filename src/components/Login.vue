@@ -18,11 +18,15 @@
 
           <div class="login100-form-avatar">
             <img src="static/logo/logo.png" alt="Logo">
-            {{isCompany}}
           </div>
 
           <div id="emailInput" :class="'wrap-input100 validate-input m-b-10 '+showError(formErrors['company'])" data-validate="Username is required">
-            <input class="input100 " type="text" name="username" placeholder="Enter Company Name" v-model="company">
+           <v-text-field
+              class="input100"
+               v-model="company_url"
+              type="text" 
+              name="username" 
+              placeholder="Company Name"></v-text-field>
             <span class="focus-input100"></span>
             <span class="symbol-input100">
                 <v-icon>domain</v-icon>
@@ -79,8 +83,8 @@
 						</a>
 					</div>
 					<div class="text-center w-full">
-						<a class="txt1" href="https://happyreply.com/register">
-							Create new account
+						<a class="txt1" @click="startOver()">
+							Start Over
 							<i class="fa fa-long-arrow-right"></i>
 						</a>
 					</div>
@@ -99,6 +103,7 @@ export default {
   },
        data() {
         return {
+            dialog: false,
             companyName: '',
             snackbar: false,
             y: 'top',
@@ -116,8 +121,13 @@ export default {
               password: "",
               email: ""
             },
+            company_url: 'demo',
             formErrors: [],
+            company: '',
+            url: '.happyreply.com',
+            url2: 'https://',
             error: false,
+            isCompany: true,
             button: {
                 loading: false,
                 'dataStyle': 'expand-left',
@@ -126,34 +136,38 @@ export default {
            }
         },
         created() {
-          this.checkUserLogin();
-          this.initDatabase();
-          this.checkCompany();
+          this.initlizeApp()
+        },
+        beforeEnter() {
+
         },
         computed: {
-          isCompany: function() {
-             var companyName = localStorage.getItem('tenant')
-             if (companyName) {
-              return false;
-             }
+          // isCompany: function() {
+          //    var companyName = localStorage.getItem('company')
+          //    if (companyName) {
+          //     return false;
+          //    }
 
-             return true
-          }
+          //    return true
+          // },
+          address() {
+             return this.url2+''+this.company_url+''+this.url
+         }
         },
         methods: {
-           methodThatForcesUpdate() {
-              // ...
-              // this.$forceUpdate();  // Notice we have to use a $ here
-              // ...
-              // 
-              window
+            initlizeApp() {
+                this.checkUserLogin();
+                this.initDatabase();
+                this.checkCompany();
+            },
+            startOver() {
+               localStorage.removeItem('company')
+               setTimeout(function(){
+                    location.reload();
+               }, 1000);
             },
             checkCompany() {
-              this.companyName = localStorage.getItem('tenant')
-            },
-            saveCompany() {
-               localStorage.setItem('tenant', this.company)
-               location.reload();
+              this.companyName = localStorage.getItem('company')
             },
             initDatabase() {
                 db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
@@ -176,18 +190,28 @@ export default {
                 return 'alert-validate';
               }
             },
+           saveCompany() {
+                this.dialog = true
+                var self = this
+                 setTimeout(function() {
+                    self.dialog = false
+                    localStorage.setItem("url", self.address)
+                    localStorage.setItem('company', self.company_url)
+                     self.isCompany = false
+                 }, 1000)
+              },
             checkUserLogin() {
               if (localStorage.getItem("user_id") != null) {
                   this.$router.push({name: 'Home'});
               }
             },
             submitForm: function(event) {
-            var action = 'https://happyreply.appfinitytech.com/api/authenticate';
             var csrfToken = $('meta[name=csrf-token]').attr('content');
+            var action = this.address;
 
             if (this.formInputs.email == "") {
                $('#emailInput').addClass('alert-validate');
-              $('#passwordInput').addClass('alert-validate');
+               $('#passwordInput').addClass('alert-validate');
                this.text = 'Email and password is required'
                this.snackbar = true;
                return
@@ -196,20 +220,18 @@ export default {
              }
 
             if (this.formInputs.password == "") {
-              this.text = 'Password is required'
+               this.text = 'Password is required'
                this.snackbar = true;
                return
                $('#passwordInput').addClass('alert-validate');
              } else {
                 $('#passwordInput').removeClass('alert-validate');
              }
-
-
              this.button.loading = true;
-             this.$http.post(action, this.formInputs, {
-                // headers: {
-                //     'X-CSRF-TOKEN': csrfToken
-                // }
+             this.$http.post(action+'/api/authenticate', this.formInputs, {
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                }
               })
               .then(function(data) {
                    localStorage.setItem("user_id", data.body.user_id);

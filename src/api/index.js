@@ -1,4 +1,13 @@
-import { FeedbackResource, PostQrcodeResource, QuestionResource, AnswerResource, MatrixResource, SliderResource, SurveyImageResource, VideoResource } from './resources'
+import { ResponseResources, 
+    FeedbackResource, 
+    PostQrcodeResource, 
+    QuestionResource, 
+    AnswerResource, 
+    MatrixResource, 
+    SliderResource, 
+    SurveyImageResource, 
+    VideoResource 
+  } from './resources'
 
 export default {
   getSurveyTitle: function (id) {
@@ -24,5 +33,9 @@ export default {
   },
   PostQrcode: function (email) {
     return PostQrcodeResource.get({param: email})
+  },
+  postResponses: function (payload) {
+    console.log(payload)
+    return ResponseResources.save({ params: payload })
   }
 }
