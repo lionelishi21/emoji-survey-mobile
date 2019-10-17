@@ -2,13 +2,13 @@ import Vue from 'vue';
 import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
-// var url = localStorage.getItem("url")
+var url = localStorage.getItem("url")
 
 
 // if (url != undefined) {
 //   url = localStorage.getItem("url")
 // } else {
-	var url = 'http://happyreplydev.com';
+// 	// var url = 'http://happyreplydev.com';
 // }
 
 export const ResponseResources = Vue.resource(url+'/post-survey-responses2')

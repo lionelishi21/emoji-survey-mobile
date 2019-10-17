@@ -1,4 +1,5 @@
-x`<template>
+
+<template>
   <div>
   <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
     <v-container fill-height>
@@ -19,13 +20,13 @@ x`<template>
              <h3><b> {{modal.answer}}</b></h3>
           </v-card-text>
         </v-card>
-      </v-dialog>
+   </v-dialog>
    <img :src="getBgImage" id="youtube_media" v-show="showBackgroundImage()" >
     <transition-group name="fadeLeft">
       <section  v-for="(q, key) in  getAllQuestions" v-show="showQuestion(key)" :key="key" :class="key+' wrapper fullscreen matrix_content question-bg-1'">
         <!-- <qrscanner-cmp></qrscanner-cmp> -->
-          <div v-if="showMultipleChoiceQuestions(q.type)" :key="key" class="card">
-              <div class="question-wrapper text-center card-body">
+          <div v-if="showMultipleChoiceQuestions(q.type)" :key="key">
+              <div class="question-wrapper">
                   <div class="row">
                     <div class="col-md-12">
                         <div class="m-b-5">
@@ -38,8 +39,8 @@ x`<template>
                    <div class="row">
                       <div v-for="(answer, answer_key) in getAllAnswers" :key="answer_key" v-if="answer.question_id == q.id" 
                       :class="changeClass(q.answer_count)">
-                        <div :class="'answer_content '+cardSelect(mc_responses[q.id], answer.id)" :id="'card_select_'+answer.id">
-                          <div class="text-center"  @click="triggerClicks(answer.id)" style="z-index: 1000;">
+                        <div :class="'survey-card answer_content '+cardSelect(mc_responses[q.id], answer.id)" :id="'card_select_'+answer.id">
+                          <div class="survey-card-body text-center"  @click="triggerClicks(answer.id)" style="z-index: 1000;">
                              <label class="img-label text-center m-r-20 " :id="answer.id">
                                       <input
                                       style="z-index: -10000"
@@ -331,7 +332,6 @@ x`<template>
                                     v-model="number_response[q.id]"
                                     class="c-white w-bg"
                                     box
-                                    readonly
                                     :rules="[rules.phonenumber]"
                                     placeholder="(876) 999-9999"
                                     :mask="mask" 
@@ -366,7 +366,6 @@ x`<template>
                                     class="c-white-s"
                                     style="color: #fff"
                                     @focus="showFocus"
-                                    readonly
                                     :rules="[rules.email]"
                                     placeholder="Type your email here"
                                     v-model="email_response[q.id]"
@@ -673,7 +672,7 @@ export default {
       this.$store.dispatch('getFeedbackMatixFromSqlLite', db)
       this.$store.dispatch('getFeedbackTitleFromSqlLite', db)
       this.$store.dispatch('getFeedbackSliderFromSqlLite', db)
-      this.$store.dispatch('getBackgroundImage', this.feedbackInfo[0].feedback_slug)
+      this.$store.dispatch('getBackgroundImage', this.slug)
     },
     components: {
       swiper,
@@ -1514,5 +1513,9 @@ export default {
 
 .w-bg {
   background: #cfcfcf !important;
+}
+
+h2, h3  {
+  color: white !important;
 }
 </style>

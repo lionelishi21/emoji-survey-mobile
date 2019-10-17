@@ -1,7 +1,7 @@
 <template>
 <v-app>
   <tool-bar></tool-bar>
-  <loader-component></loader-component>
+  <!-- <loader-component></loader-component> -->
   <nav-drawer></nav-drawer>
   <mainView></mainView>
 </v-app>

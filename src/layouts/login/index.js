@@ -84,6 +84,7 @@ export default {
        	 	  self.dialog = false
        	  	localStorage.setItem("url", self.address)
             localStorage.setItem('company', self.company_url)
+            console.log(self.address)
             self.isCompany = false
             location.reload()
        	 }, 2000)
@@ -92,8 +93,9 @@ export default {
        // log user in
        submitForm: function(event) {
 
+          var url = localStorage.getItem("url")
        	   var csrfToken = $('meta[name=csrf-token]').attr('content');
-       	   this.$http.post('http://happyreplydev.com/api/authenticate', this.formInputs, {
+       	   this.$http.post(url+'/api/authenticate', this.formInputs, {
                 headers: {
                     'X-CSRF-TOKEN': csrfToken
                 }

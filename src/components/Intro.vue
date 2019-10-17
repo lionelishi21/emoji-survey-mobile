@@ -40,6 +40,9 @@ export default {
   data(){
     return {
         local: false,
+         company_url: 'demo',
+         url: '.happyreply.com',
+         url2: 'https://',
         loading: false,
         id: '',
         videoId: '',
@@ -89,7 +92,10 @@ export default {
     ]),
     player () {
       return this.$refs.youtube.player
-    }
+    },
+    address() {
+       return this.url2+''+this.company_url+''+this.url
+    },
     
   },
   mounted() {
@@ -140,7 +146,10 @@ export default {
         }, 500);
       },
       getIntroVideo(feedback_id) {
-         this.$http.get('https://happyreply.appfinitytech.com/api/get/video-link/'+feedback_id)
+
+         var tenant =  localStorage.getItem('company');
+         var url = this->url2+ '' +tenant+ '' +this.url
+         this.$http.get(url+'/api/get/video-link/'+feedback_id)
           .then(response => {
             this.videoId = response.body
             if (this.videoId !== '') {

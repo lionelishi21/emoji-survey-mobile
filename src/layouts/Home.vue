@@ -25,6 +25,7 @@
           <v-card color="white" class="blue--text">
             <v-card-title primary-title>
               <div>
+                {{loadingBtn}}
                 <div class="headline">{{feedback_title}}</div>
                 <hr>
                 <span>{{feedback_desc}}</span>
@@ -47,11 +48,7 @@
     <!--=====================================
     =            Fab comment            =
     ======================================-->
-    <v-btn @click="loadSurveys()"
-      color="pink" dark bottom fixed
-      right fab >
-       <v-icon>refresh</v-icon>
-    </v-btn>
+
     <!--====  End of Section comment  ====-->
 </div>
 </template>
@@ -66,6 +63,7 @@ export default {
     data() {
       return {
         text: "",
+        loadingBtn: false,
         logout: false,
         snackbar: false,
         loading: false,
@@ -101,7 +99,8 @@ export default {
             loading: false,
             'dataStyle': 'expand-left',
             progress: 0,
-        }
+        },
+
       }
     },
     created(){
@@ -166,7 +165,7 @@ export default {
          this.$router.push({name: 'Intro',  params: { id: this.feedback_slug } })
       },
       loadSurveys() {
-
+        this.loadingBtn = false
         this.loading = true
         if (this.online == false) {
             this.text = 'Internet connection is unavailable'
@@ -195,7 +194,8 @@ export default {
         self.$store.dispatch('getQuestionCount', db)
           self.loading = false
           self.initilizeDatabase();
-        }, 4000);
+          self.loadingBtn = true
+        }, 10000);
       }
     }
 }

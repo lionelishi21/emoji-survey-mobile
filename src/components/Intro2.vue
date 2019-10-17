@@ -53,6 +53,10 @@ export default {
           playlist: '',
           suggestedQuality: 'large'
         },
+         company_url: 'demo',
+        url: '.happyreply.com',
+        url2: 'https://',
+        isCompany : '',
         feedback_video: '',
         hasVideo:false,
         pic_url: 'static/survey-themes/bg.jpg',
@@ -88,7 +92,10 @@ export default {
     ]),
     player () {
       return this.$refs.youtube.player
-    }
+    },
+   address() {
+        return this.url2+''+this.company_url+''+this.url
+     },
     
   },
   mounted() {
@@ -98,6 +105,10 @@ export default {
     var db = openDatabase(this.database, this.version, this.dbDisplay, this.maxSize)
     var feedback_id = this.$route.params.id
     var user_id = localStorage.getItem('user_id')
+    var company  =  localStorage.getItem('company');
+     if ( company == null ) {
+         this.isCompany = false
+     }
     this.$store.dispatch('getFeedbackTitleFromSqlLite', db);
     // this.$store.dispatch('getIntroVideo', feedback_id)
 

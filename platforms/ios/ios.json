@@ -37,19 +37,7 @@
               "count": 1
             },
             {
-              "xml": "<feature name=\"Camera\"><param name=\"ios-package\" value=\"CDVCamera\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<preference name=\"CameraUsesGeolocation\" value=\"false\" />",
-              "count": 1
-            },
-            {
               "xml": "<feature name=\"CameraPreview\"><param name=\"ios-package\" onload=\"true\" value=\"CameraPreview\" /></feature>",
-              "count": 1
-            },
-            {
-              "xml": "<feature name=\"QRScanner\"><param name=\"ios-package\" value=\"QRScanner\" /></feature>",
               "count": 1
             }
           ]
@@ -57,12 +45,7 @@
       },
       "*-Info.plist": {
         "parents": {
-          "NSCameraUsageDescription": [
-            {
-              "xml": "<string>The camera is used to scan QR codes.</string>",
-              "count": 1
-            }
-          ]
+          "NSCameraUsageDescription": []
         }
       }
     }
@@ -104,16 +87,10 @@
     "cordova-plugin-keyboard": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
-    "cordova-plugin-camera": {
-      "PACKAGE_NAME": "io.cordova.appfinity"
-    },
     "cordova-plugin-camera-preview": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "cordova-plugin-add-swift-support": {
-      "PACKAGE_NAME": "io.cordova.appfinity"
-    },
-    "cordova-plugin-qrscanner": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     }
   },
@@ -374,51 +351,11 @@
       ]
     },
     {
-      "id": "cordova-plugin-camera.Camera",
-      "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "Camera"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.CameraPopoverOptions",
-      "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "CameraPopoverOptions"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.camera",
-      "file": "plugins/cordova-plugin-camera/www/Camera.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "navigator.camera"
-      ]
-    },
-    {
-      "id": "cordova-plugin-camera.CameraPopoverHandle",
-      "file": "plugins/cordova-plugin-camera/www/ios/CameraPopoverHandle.js",
-      "pluginId": "cordova-plugin-camera",
-      "clobbers": [
-        "CameraPopoverHandle"
-      ]
-    },
-    {
       "id": "cordova-plugin-camera-preview.CameraPreview",
       "file": "plugins/cordova-plugin-camera-preview/www/CameraPreview.js",
       "pluginId": "cordova-plugin-camera-preview",
       "clobbers": [
         "CameraPreview"
-      ]
-    },
-    {
-      "id": "cordova-plugin-qrscanner.QRScanner",
-      "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
-      "pluginId": "cordova-plugin-qrscanner",
-      "clobbers": [
-        "QRScanner"
       ]
     }
   ],
@@ -435,9 +372,7 @@
     "cordova-plugin-file": "6.0.1",
     "cordova-plugin-http": "1.2.0",
     "cordova-plugin-keyboard": "1.2.0",
-    "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-camera-preview": "0.10.0",
-    "cordova-plugin-add-swift-support": "1.7.2",
-    "cordova-plugin-qrscanner": "2.6.0"
+    "cordova-plugin-add-swift-support": "1.7.2"
   }
 }

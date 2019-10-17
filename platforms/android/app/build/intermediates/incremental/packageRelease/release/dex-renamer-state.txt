@@ -1,0 +1,4 @@
+#Tue Oct 08 12:03:08 EST 2019
+base.0=/var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/build/intermediates/transforms/dex/release/0
+path.0=classes.dex
+renamed.0=classes.dex

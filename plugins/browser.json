@@ -31,9 +31,6 @@
     "cordova-plugin-keyboard": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
-    "cordova-plugin-qrscanner": {
-      "PACKAGE_NAME": "io.cordova.appfinity"
-    },
     "uk.co.workingedge.cordova.plugin.sqliteporter": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
@@ -41,9 +38,6 @@
       "PACKAGE_NAME": "io.cordova.appfinity"
     },
     "cordova-plugin-http": {
-      "PACKAGE_NAME": "io.cordova.appfinity"
-    },
-    "cordova-plugin-camera": {
       "PACKAGE_NAME": "io.cordova.appfinity"
     }
   },

@@ -23,6 +23,7 @@ export default {
         slug: '',
         feedback_id: "",
         pic_url: 'static/survey-themes/people-image.png',
+        loadingBtn: true
       }
     },
     created(){
@@ -101,6 +102,8 @@ export default {
        */
       loadSurveys() {
 
+        this.loadingBtn = false
+        this.loading = true
         /**
          *****************************************************************************
          * [loading description]
@@ -109,13 +112,12 @@ export default {
          * *
          */
         
-        // this.loading = true
-        // if (this.online == false) {
-        //     this.text = 'Internet connection is unavailable'
-        //     this.snackbar = true;
-        //     this.loading = false
-        //   return
-        // }
+        if (this.online == false) {
+            this.text = 'Internet connection is unavailable'
+            this.snackbar = true;
+            this.loading = false
+          return
+        }
 
         /**
          *
@@ -154,8 +156,9 @@ export default {
           self.$store.dispatch('getFeedbackQuestionsFromSqlLite', db)
           self.$store.dispatch('getQuestionCount', db)
           self.loading = false
+          self.loadingBtn = true
           // self.initilizeDatabase();
-        }, 1000);
+        }, 4000);
     },
 
     /**

@@ -1,6 +1,17 @@
 <template>
 	<div>
-
+    
+        <!--=====================================
+    =           Loader sectuibcomment            =
+    ======================================-->
+    <v-dialog v-model="loading" persistent fullscreen content-class="loading-dialog">
+      <v-container fill-height>
+        <v-layout row justify-center align-center>
+          <v-progress-circular indeterminate :size="70" :width="7" color="purple"></v-progress-circular>
+        </v-layout>
+      </v-container>
+    </v-dialog>
+    <!--====  End of Section comment  ====-->
 
     <!--====================================
     =            Section comment            =
@@ -41,7 +52,7 @@
     <!--=====================================
     =            Fab comment            =
     ======================================-->
-    <v-btn @click="loadSurveys()" color="pink" dark bottom fixed right fab >
+    <v-btn @click="loadSurveys()" color="pink" v-show="loadingBtn" dark bottom fixed right fab >
        <v-icon>refresh</v-icon>
     </v-btn>
     <!--====  End of Section comment  ====-->

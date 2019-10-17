@@ -1,4 +1,5 @@
 import api from '../../api'
+import { DatabaseSetting } from '../../config/variables.js'
 
 const state = {
   feedbacks: [],
@@ -36,11 +37,13 @@ const actions = {
      * @return {[type]}                  [description]
      */
     getBackgroundImage({commit, dispatch}, id) {
-      api.getBackgroundImage
+
+      api.getBackgroundImage(id)
         .then( response => {
             var image = response.body
             if (image != "") {
-              commit('setSurveyBackgrounImage', 'demo.happyreply.com/'+image )
+              var url = localStorage.getItem("url")
+              commit('setSurveyBackgrounImage', url+'/'+image )
             }
         })
     },
@@ -85,6 +88,8 @@ const actions = {
           })
     },
 
+
+    
     /**
      * [saveFeedbackInfoToDataBase description]
      * @param  {[type]} options.commit [description]

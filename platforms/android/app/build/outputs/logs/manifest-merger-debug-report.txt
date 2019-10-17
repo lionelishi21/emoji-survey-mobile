@@ -1,29 +1,15 @@
 -- Merging decision tree log ---
-provider#org.apache.cordova.camera.FileProvider
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:22:9-24:20
-	android:grantUriPermissions
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:22:92-126
-	android:authorities
-		INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:22:19-66
-	android:exported
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:22:67-91
-	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:22:127-180
 manifest
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:17:1-55:12
-MERGED from [com.android.support:appcompat-v7:23.1.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/appcompat-v7-23.1.0.aar/304308f4ddaeb235c2329ed89014a3d8/AndroidManifest.xml:17:1-24:12
-MERGED from [com.android.support:support-v4:24.1.1] /home/lionel/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/2ad6c6036e40678d70fef54251938da5/AndroidManifest.xml:17:1-27:12
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
 MERGED from [:CordovaLib] /var/www/html/vue/happyreply/happyreply.v1/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:20:1-27:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:1-28:12
 	package
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:102-132
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:102-136
 		INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml
 		INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml
 	android:versionName
@@ -33,7 +19,7 @@ INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/s
 	android:hardwareAccelerated
 		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:11-45
 	xmlns:android
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:133-191
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:137-195
 	android:versionCode
 		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:2:46-73
 		INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml
@@ -57,13 +43,7 @@ ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/
 	android:name
 		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:4:22-64
 application
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:5:5-25:19
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:45:5-53:19
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:45:5-53:19
-MERGED from [com.android.support:appcompat-v7:23.1.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/appcompat-v7-23.1.0.aar/304308f4ddaeb235c2329ed89014a3d8/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:appcompat-v7:23.1.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/appcompat-v7-23.1.0.aar/304308f4ddaeb235c2329ed89014a3d8/AndroidManifest.xml:22:5-20
-MERGED from [com.android.support:support-v4:24.1.1] /home/lionel/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/2ad6c6036e40678d70fef54251938da5/AndroidManifest.xml:25:5-20
-MERGED from [com.android.support:support-v4:24.1.1] /home/lionel/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/2ad6c6036e40678d70fef54251938da5/AndroidManifest.xml:25:5-20
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:5:5-22:19
 	android:supportsRtl
 		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:5:114-140
 	android:label
@@ -123,106 +103,30 @@ ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/
 	android:name
 		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:19:25-81
 uses-sdk
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:5-74
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:5-74
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:19:5-43
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:19:5-43
-MERGED from [com.android.support:appcompat-v7:23.1.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/appcompat-v7-23.1.0.aar/304308f4ddaeb235c2329ed89014a3d8/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:appcompat-v7:23.1.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/appcompat-v7-23.1.0.aar/304308f4ddaeb235c2329ed89014a3d8/AndroidManifest.xml:20:5-43
-MERGED from [com.android.support:support-v4:24.1.1] /home/lionel/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/2ad6c6036e40678d70fef54251938da5/AndroidManifest.xml:21:5-23:54
-MERGED from [com.android.support:support-v4:24.1.1] /home/lionel/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/2ad6c6036e40678d70fef54251938da5/AndroidManifest.xml:21:5-23:54
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:23:5-74
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:23:5-74
 MERGED from [:CordovaLib] /var/www/html/vue/happyreply/happyreply.v1/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:25:5-44
 MERGED from [:CordovaLib] /var/www/html/vue/happyreply/happyreply.v1/platforms/android/CordovaLib/build/intermediates/manifests/full/debug/AndroidManifest.xml:25:5-44
-INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:5-74
-	tools:overrideLibrary
-		ADDED from [com.android.support:support-v4:24.1.1] /home/lionel/.gradle/caches/transforms-1/files-1.1/support-v4-24.1.1.aar/2ad6c6036e40678d70fef54251938da5/AndroidManifest.xml:23:9-51
+INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:23:5-74
 	android:targetSdkVersion
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:42-71
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:23:42-71
 	android:minSdkVersion
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:15-41
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:23:15-41
 		INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml
 		INJECTED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml
-uses-permission#android.permission.REORDER_TASKS
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:27:5-72
-	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:27:22-69
-uses-permission#android.permission.SYSTEM_ALERT_WINDOW
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:28:5-78
-	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:28:22-75
-uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:29:5-79
-	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:29:22-76
-uses-permission#android.permission.CAMERA
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:30:5-90
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:21:5-65
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:21:5-65
-	android:required
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:30:63-87
-	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:30:22-62
-uses-feature#android.hardware.camera
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:31:5-85
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:24:5-26:36
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:24:5-26:36
-	android:required
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:31:58-82
-	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:31:19-57
-uses-feature#android.hardware.camera.front
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:32:5-91
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:27:5-29:36
-MERGED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:27:5-29:36
-	android:required
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:32:64-88
-	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:32:19-63
 uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:33:5-81
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:24:5-81
 	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:33:22-78
-meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:23:13-123
-	android:resource
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:23:75-120
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:24:22-78
+uses-permission#android.permission.REORDER_TASKS
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:25:5-72
 	android:name
-		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:23:24-74
-uses-feature#android.hardware.camera.autofocus
-ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:32:5-34:36
-	android:required
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:34:9-33
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:25:22-69
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:5-78
 	android:name
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:33:9-57
-uses-feature#android.hardware.camera.flash
-ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:35:5-37:36
-	android:required
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:37:9-33
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:26:22-75
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:27:5-79
 	android:name
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:36:9-53
-uses-feature#android.hardware.screen.landscape
-ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:38:5-40:36
-	android:required
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:40:9-33
-	android:name
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:39:9-57
-uses-feature#android.hardware.wifi
-ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:41:5-43:36
-	android:required
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:43:9-33
-	android:name
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:42:9-45
-activity#com.journeyapps.barcodescanner.CaptureActivity
-ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:46:9-52:63
-	android:screenOrientation
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:49:13-56
-	android:clearTaskOnLaunch
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:48:13-45
-	android:stateNotNeeded
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:50:13-42
-	android:windowSoftInputMode
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:52:13-60
-	android:theme
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:51:13-54
-	android:name
-		ADDED from [com.journeyapps:zxing-android-embedded:3.3.0] /home/lionel/.gradle/caches/transforms-1/files-1.1/zxing-android-embedded-3.3.0.aar/4aab8111fe0bfb2daf7159e7287ad411/AndroidManifest.xml:47:13-74
+		ADDED from /var/www/html/vue/happyreply/happyreply.v1/platforms/android/app/src/main/AndroidManifest.xml:27:22-76

@@ -9,79 +9,6 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-kiosk.kioskPlugin",
-    "file": "plugins/cordova-plugin-kiosk/kiosk.js",
-    "pluginId": "cordova-plugin-kiosk",
-    "clobbers": [
-      "window.KioskPlugin"
-    ]
-  },
-  {
-    "id": "cordova-plugin-network-information.network",
-    "file": "plugins/cordova-plugin-network-information/www/network.js",
-    "pluginId": "cordova-plugin-network-information",
-    "clobbers": [
-      "navigator.connection",
-      "navigator.network.connection"
-    ]
-  },
-  {
-    "id": "cordova-plugin-network-information.Connection",
-    "file": "plugins/cordova-plugin-network-information/www/Connection.js",
-    "pluginId": "cordova-plugin-network-information",
-    "clobbers": [
-      "Connection"
-    ]
-  },
-  {
-    "id": "cordova-plugin-splashscreen.SplashScreen",
-    "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-    "pluginId": "cordova-plugin-splashscreen",
-    "clobbers": [
-      "navigator.splashscreen"
-    ]
-  },
-  {
-    "id": "cordova-plugin-sqlite-2.sqlitePlugin",
-    "file": "plugins/cordova-plugin-sqlite-2/dist/sqlite-plugin.js",
-    "pluginId": "cordova-plugin-sqlite-2",
-    "clobbers": [
-      "sqlitePlugin"
-    ]
-  },
-  {
-    "id": "cordova-plugin-keyboard.keyboard",
-    "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
-    "pluginId": "cordova-plugin-keyboard",
-    "clobbers": [
-      "window.Keyboard"
-    ]
-  },
-  {
-    "id": "cordova-plugin-qrscanner.QRScanner",
-    "file": "plugins/cordova-plugin-qrscanner/www/www.min.js",
-    "pluginId": "cordova-plugin-qrscanner",
-    "clobbers": [
-      "QRScanner"
-    ]
-  },
-  {
-    "id": "uk.co.workingedge.cordova.plugin.sqliteporter.sqlitePorter",
-    "file": "plugins/uk.co.workingedge.cordova.plugin.sqliteporter/www/sqlitePorter.js",
-    "pluginId": "uk.co.workingedge.cordova.plugin.sqliteporter",
-    "clobbers": [
-      "cordova.plugins.sqlitePorter"
-    ]
-  },
-  {
-    "id": "cordova-plugin-sslcertificatechecker.SSLCertificateChecker",
-    "file": "plugins/cordova-plugin-sslcertificatechecker/www/SSLCertificateChecker.js",
-    "pluginId": "cordova-plugin-sslcertificatechecker",
-    "clobbers": [
-      "window.plugins.sslCertificateChecker"
-    ]
-  },
-  {
     "id": "cordova-plugin-file.DirectoryEntry",
     "file": "plugins/cordova-plugin-file/www/DirectoryEntry.js",
     "pluginId": "cordova-plugin-file",
@@ -263,35 +190,68 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-camera.Camera",
-    "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-    "pluginId": "cordova-plugin-camera",
+    "id": "cordova-plugin-keyboard.keyboard",
+    "file": "plugins/cordova-plugin-keyboard/www/keyboard.js",
+    "pluginId": "cordova-plugin-keyboard",
     "clobbers": [
-      "Camera"
+      "window.Keyboard"
     ]
   },
   {
-    "id": "cordova-plugin-camera.CameraPopoverOptions",
-    "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-    "pluginId": "cordova-plugin-camera",
+    "id": "cordova-plugin-kiosk.kioskPlugin",
+    "file": "plugins/cordova-plugin-kiosk/kiosk.js",
+    "pluginId": "cordova-plugin-kiosk",
     "clobbers": [
-      "CameraPopoverOptions"
+      "window.KioskPlugin"
     ]
   },
   {
-    "id": "cordova-plugin-camera.camera",
-    "file": "plugins/cordova-plugin-camera/www/Camera.js",
-    "pluginId": "cordova-plugin-camera",
+    "id": "cordova-plugin-network-information.network",
+    "file": "plugins/cordova-plugin-network-information/www/network.js",
+    "pluginId": "cordova-plugin-network-information",
     "clobbers": [
-      "navigator.camera"
+      "navigator.connection",
+      "navigator.network.connection"
     ]
   },
   {
-    "id": "cordova-plugin-camera.CameraPopoverHandle",
-    "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
-    "pluginId": "cordova-plugin-camera",
+    "id": "cordova-plugin-network-information.Connection",
+    "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+    "pluginId": "cordova-plugin-network-information",
     "clobbers": [
-      "CameraPopoverHandle"
+      "Connection"
+    ]
+  },
+  {
+    "id": "cordova-plugin-splashscreen.SplashScreen",
+    "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+    "pluginId": "cordova-plugin-splashscreen",
+    "clobbers": [
+      "navigator.splashscreen"
+    ]
+  },
+  {
+    "id": "cordova-plugin-sqlite-2.sqlitePlugin",
+    "file": "plugins/cordova-plugin-sqlite-2/dist/sqlite-plugin.js",
+    "pluginId": "cordova-plugin-sqlite-2",
+    "clobbers": [
+      "sqlitePlugin"
+    ]
+  },
+  {
+    "id": "cordova-plugin-sslcertificatechecker.SSLCertificateChecker",
+    "file": "plugins/cordova-plugin-sslcertificatechecker/www/SSLCertificateChecker.js",
+    "pluginId": "cordova-plugin-sslcertificatechecker",
+    "clobbers": [
+      "window.plugins.sslCertificateChecker"
+    ]
+  },
+  {
+    "id": "uk.co.workingedge.cordova.plugin.sqliteporter.sqlitePorter",
+    "file": "plugins/uk.co.workingedge.cordova.plugin.sqliteporter/www/sqlitePorter.js",
+    "pluginId": "uk.co.workingedge.cordova.plugin.sqliteporter",
+    "clobbers": [
+      "cordova.plugins.sqlitePorter"
     ]
   }
 ];
@@ -299,19 +259,18 @@ module.exports.metadata =
 // TOP OF METADATA
 {
   "com.moust.cordova.videoplayer": "1.0.1",
+  "cordova-plugin-add-swift-support": "1.7.2",
+  "cordova-plugin-file": "6.0.1",
+  "cordova-plugin-http": "1.2.0",
+  "cordova-plugin-keyboard": "1.2.0",
   "cordova-plugin-kiosk": "0.2",
   "cordova-plugin-network-information": "2.0.1",
   "cordova-plugin-splashscreen": "5.0.2",
   "cordova-plugin-sqlite-2": "1.0.6",
+  "cordova-plugin-sslcertificatechecker": "6.0.0",
   "cordova-plugin-websql": "0.0.10",
   "cordova-plugin-whitelist": "1.3.3",
-  "cordova-plugin-keyboard": "1.2.0",
-  "cordova-plugin-qrscanner": "2.6.0",
-  "uk.co.workingedge.cordova.plugin.sqliteporter": "1.1.0",
-  "cordova-plugin-sslcertificatechecker": "6.0.0",
-  "cordova-plugin-file": "6.0.1",
-  "cordova-plugin-http": "1.2.0",
-  "cordova-plugin-camera": "4.0.3"
+  "uk.co.workingedge.cordova.plugin.sqliteporter": "1.1.0"
 };
 // BOTTOM OF METADATA
 });
